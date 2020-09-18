@@ -1,3 +1,17 @@
+:root {
+    /* FullColors Customiser */
+    --backgroundBack: #FF9770;
+    --backgroundMedium: #212121;
+    --detailsButtons: #FF5722;
+    --detailsHouver: #FFC914;
+
+    /* % Colors FIXED */
+    --black: #00000070;
+    --bloco: #454952;
+    --bloco25: #45495225;
+    --bloco50: #45495250;
+}
+
 body {
-    color: gray;
+    color: var(--backgroundBack);
 }
