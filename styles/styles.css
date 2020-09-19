@@ -10,8 +10,43 @@
     --bloco: #454952;
     --bloco25: #45495225;
     --bloco50: #45495250;
+    --fonte: whitesmoke;
+}
+
+* {
+    font-family: 'Comfortaa', cursive;
 }
 
 body {
     color: var(--backgroundBack);
+    height: 100vh;
+}
+
+#Login {
+    background-color: var(--backgroundBack);
+
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#Login>img {
+    height: 35vh;
+    padding: 2rem;
+}
+
+#Login>button {
+    height: 5vh;
+    width: 15vw;
+    margin: .5rem;
+
+    background-color: var(--detailsButtons);
+    border: none;
+    border-radius: 5px;
+
+    color: var(--fonte);
+
 }
