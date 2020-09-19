@@ -17,12 +17,7 @@
     font-family: 'Comfortaa', cursive;
 }
 
-body {
-    color: var(--backgroundBack);
-    height: 100vh;
-}
-
-#Login {
+.Login {
     background-color: var(--backgroundBack);
 
     height: 100vh;
@@ -33,12 +28,12 @@ body {
     align-items: center;
 }
 
-#Login>img {
+.login-logo {
     height: 35vh;
     padding: 2rem;
 }
 
-#Login>button {
+.login-button {
     height: 7vh;
     min-width: 200px;
     margin: .5rem;
@@ -48,5 +43,79 @@ body {
     border-radius: 5px;
 
     color: var(--fonte);
+}
 
+.config-container {
+    background-color: var(--backgroundBack);
+}
+
+.item-container {
+    display: flex;
+    align-items: flex-start;
+}
+
+.item {
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--backgroundMedium);
+    border-radius: 5px;
+}
+
+.card-color {
+    display: block;
+    margin: 0 0 0 20px;
+    border-radius: 3px;
+}
+
+.card-color>div {
+    margin: 0;
+    display: inline-block;
+}
+/*Cores dos temas pré-fixados*/
+.cor-um {
+    background-color: #212121;
+}
+.cor-dois {
+    background-color: #FF9770;
+}
+.cor-tres {
+    background-color: #FF5722;
+}
+.cor-quatro {
+    background-color: #FFC914;
+}
+.cor-cinco {
+    background-color: #000000;
+}
+.cor-seis {
+    background-color: #333333;
+}
+.cor-sete {
+    background-color: #230517;
+}
+.cor-oito {
+    background-color: #FFC914;
+}
+.cor-nove {
+    background-color: #2EC4B6;
+}
+.cor-dez {
+    background-color: #FFFFFF;
+}
+.cor-onze {
+    background-color: #FF9F1C;
+}
+.cor-doze {
+    background-color: #CBF3F0;
+}
+
+.config-container {
+    
+}
+
+input[type="color"] {
+    width: 60px;
+    height: 20px;
+    border-radius: 3px;
+    margin-left: 15px;
 }

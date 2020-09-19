@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Código que carrega Google Font-->
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Código que carrega arquivos CSS -->
+    <link rel="stylesheet" href="./../styles/styleReset.css">
+    <link rel="stylesheet" href="./../styles/styles.css">
+</head>
+<body>
+
+    <section class="config-container">
+        <div>
+            <img class="login-logo" src="./../imageSVG/Logo.svg" alt="Logo" title="Logo CD">
+        </div>
+        <div id="config">
+            <label for="temas">TEMAS</label> </br>
+            <ul>
+                <li class="item-container">
+                    <input type="radio" name="temas" id="padrao"> 
+                    <label for="temas">Padrão</label>
+                    <div class="card-color">
+                        <div class="item cor-um"></div>
+                        <div class="item cor-dois"></div>
+                        <div class="item cor-tres"></div>
+                        <div class="item cor-quatro"></div>
+                    </div>
+                </li>
+                <li class="item-container">
+                    <input type="radio" name="temas" id="dark"> 
+                    <label for="temas">Dark</label>
+                    <div class="card-color">
+                        <div class="item cor-cinco"></div>
+                        <div class="item cor-seis"></div>
+                        <div class="item cor-sete"></div>
+                        <div class="item cor-oito"></div>
+                    </div>
+                </li>
+                <li class="item-container">
+                    <input type="radio" name="temas" id="light"> 
+                    <label for="temas">Light</label>
+                    <div class="card-color">
+                        <div class="item cor-nove"></div>
+                        <div class="item cor-dez"></div>
+                        <div class="item cor-onze"></div>
+                        <div class="item cor-doze"></div>
+                    </div>
+                </li>
+            </ul>
+            <label for="temas">CUSTOMIZAR</label> </br>
+            <ul>
+                <li class="item-container">
+                    <label for="custom-background">Cor de fundo: </label>
+                    <input type="color" name="custom-background" value="#212121" class="custom-cd" id="custom-background-um">
+                </li>
+                <li class="item-container">
+                    <label for="custom-background">Detalhes principais: </label>
+                    <input type="color" name="custom-background" value="#FF9770" class="custom-cd" id="custom-background-um">
+                </li>
+                <li class="item-container">
+                    <label for="custom-background">Detalhes pequenos: </label>
+                    <input type="color" name="custom-background" value="#FF5722" class="custom-cd" id="custom-background-um">
+                </li>
+                <li class="item-container">
+                    <label for="custom-background">Sobrepor mouse: </label>
+                    <input type="color" name="custom-background" value="#FFC914" class="custom-cd" id="custom-background-um">
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Código que carrega arquivos JavaScript -->
+    <script src="./../scripts/scripts.js"></script>
+</body>
+</html>
