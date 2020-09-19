@@ -39,8 +39,8 @@ body {
 }
 
 #Login>button {
-    height: 5vh;
-    width: 15vw;
+    height: 7vh;
+    min-width: 200px;
     margin: .5rem;
 
     background-color: var(--detailsButtons);
