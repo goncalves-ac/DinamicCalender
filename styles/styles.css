@@ -45,11 +45,6 @@
     color: var(--fonte);
 }
 
-.config-container {
-    background-color: var(--backgroundMedium);
-    color: #FFFFFF;
-}
-
 .item-container {
     display: flex;
     align-items: flex-start;
@@ -71,6 +66,7 @@
 .card-color>div {
     margin: 0;
     display: inline-block;
+    border: 1px solid #FFFFFF;
 }
 /*Cores dos temas pré-fixados*/
 .cor-um {
@@ -118,6 +114,44 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    background-color: var(--backgroundMedium);
+    color: #FFFFFF;
+}
+
+.perfil-config {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-envio {
+    min-width: 300px;
+    margin: 0.3em;
+
+    background-color: var(--detailsButtons);
+    border-radius: 5px;
+    border: 1px solid var(--detailsButtons);
+    color: #FFFFFF;
+}
+
+input[type="phone"],
+input[type="datetime-Local"],
+input[type="password"],
+input[type="email"],
+input[type="text"] {
+    min-width: 300px;
+    margin: .2em;
+    border-radius: 5px;
+    padding: 2px;
 }
 
 input[type="color"] {
