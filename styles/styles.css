@@ -46,7 +46,8 @@
 }
 
 .config-container {
-    background-color: var(--backgroundBack);
+    background-color: var(--backgroundMedium);
+    color: #FFFFFF;
 }
 
 .item-container {
@@ -110,7 +111,13 @@
 }
 
 .config-container {
-    
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 input[type="color"] {
