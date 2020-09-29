@@ -23,6 +23,8 @@ GetColor.addEventListener('input', function(e) {
 
 /* Fim mudar cor */
 
+/* JS modal */
+
 function iniciaModal(modalID){
     const modal = document.getElementById(modalID);
     if (modal) {
@@ -38,3 +40,5 @@ function iniciaModal(modalID){
 function abreModal () {
     iniciaModal('addEvent');
 }
+
+/* Fim JS modal */
