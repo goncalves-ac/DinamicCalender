@@ -152,11 +152,13 @@ input[type="text"] {
     margin: 0.3em;
     border-radius: 5px;
     padding: 2px;
+    background-color: transparent;
 }
 
 input[type="time"] {
     border-radius: 5px;
     padding: 2px;
+    background-color: transparent;
 }
 
 input[type="color"] {
@@ -164,6 +166,7 @@ input[type="color"] {
     height: 20px;
     border-radius: 3px;
     margin-left: 15px;
+    background-color: var(--backgroundMedium);
 }
 
 input[type="textarea"] {
@@ -171,6 +174,7 @@ input[type="textarea"] {
     height: 70px;
     border-radius: 3px;
     margin: 0.3em;
+    background-color: transparent;
 }
 
 /* CSS DO MODAL */
