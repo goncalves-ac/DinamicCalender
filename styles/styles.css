@@ -29,7 +29,7 @@
 }
 
 .login-logo {
-    height: 35vh;
+    height: 30vh;
     padding: 2rem;
 }
 
@@ -134,8 +134,8 @@ form {
 }
 
 .btn-envio {
-    min-width: 300px;
-    margin: 0.3em;
+    min-width: 250px;
+    margin: 0.5em;
 
     background-color: var(--detailsButtons);
     border-radius: 5px;
@@ -144,12 +144,17 @@ form {
 }
 
 input[type="phone"],
-input[type="datetime-Local"],
+input[type="date"],
 input[type="password"],
 input[type="email"],
 input[type="text"] {
-    min-width: 300px;
-    margin: .2em;
+    min-width: 250px;
+    margin: 0.3em;
+    border-radius: 5px;
+    padding: 2px;
+}
+
+input[type="time"] {
     border-radius: 5px;
     padding: 2px;
 }
@@ -160,3 +165,106 @@ input[type="color"] {
     border-radius: 3px;
     margin-left: 15px;
 }
+
+input[type="textarea"] {
+    min-width: 250px;
+    height: 70px;
+    border-radius: 3px;
+    margin: 0.3em;
+}
+
+/* CSS DO MODAL */
+.modal-container {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,.8);
+    position: fixed;
+    z-index: 999999999999999;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-container.open {
+    display: flex;
+}
+
+.modal {
+    width: 60vw;
+    min-width: 300px;
+    height: 60vh;
+    background-color: #9575CD;
+    padding: .5rem;
+    border: 3px solid var(--backgroundMedium);
+    box-shadow: 0 0 0 10px #9575CD;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes modal {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -60, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.modal-container.open .modal {
+    animation: modal .5s;
+}
+
+.close {
+    position: absolute;
+    font-size: 1.5rem;
+    top: -25px;
+    right: -25px;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 30%;
+    border: 2px solid var(--backgroundMedium);
+    color: var(--backgroundMedium);
+    cursor: pointer;
+    box-shadow: 0 2px 2px 0 #000;
+}
+
+.container-button {
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: var(--backgroundMedium);
+}
+
+.button {
+    width: 160px;
+    height: 80px;
+
+    border-radius: 20px;
+    border: 1px solid var(--detailsButtons);
+
+    background-color: var(--detailsButtons);
+    color: white;
+}
+
+.modal .modal-button {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.modal-button > input {
+    background-color: #9575CD;
+    border-radius: 5px;
+    border: 2px solid var(--backgroundMedium);
+}
+
+button.close {
+    background-color: #9575CD;
+}
+
+/* END-CSS-MODAL */
