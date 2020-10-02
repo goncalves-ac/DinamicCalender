@@ -1,0 +1,188 @@
+:root{
+    --bg-primary: rgb(255, 151, 112);
+    --bg-weekEnd: rgb(249, 211, 197);
+}
+
+*{
+    margin:0;
+    padding:0;
+}
+
+body{
+    background: #333;
+    font-family: 'Comfortaa', cursive;
+}
+
+header{
+    width:100%;
+    height: 4rem;
+    background: var(--bg-primary);
+    display: flex;
+    justify-content: space-between;
+}
+
+.logo{
+    width:60px;
+    margin-left: 2em;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+.right-menu{
+    display: flex;
+    width:220px;
+    justify-content: space-between;
+    margin-right: 2em;
+
+}
+
+.right-menu > h3{
+    margin-top: 20px;
+}
+
+.right-menu > .perfil-user{
+    width:3.2rem;
+    height: 3.2rem;
+    border: 3px solid #000;
+    border-radius: 9em;
+    margin-top: 0.25rem;
+}
+
+.right-menu > .btn-icon{
+    width:2em;
+    transform: rotate(180deg);
+    cursor: pointer;
+}
+
+section{
+    margin: 2rem;
+    display: flex;
+}
+
+section > aside{
+    width:200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.btn {
+    width: 200px;
+    margin: 6px 0;
+    padding: 1em;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.btn-primary{
+    background: var(--bg-primary);
+}
+
+.active {
+    background: #FF5722;
+}
+
+section > .content{
+    width:100%;
+    background: #fff;
+    margin: 0 2rem;
+    border-radius: 5px;
+}
+
+.content > .card-title{
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg-primary);
+    border-radius: 5px 5px 0 0;
+    height:2.5rem;
+    font-size: 1.7em;
+    font-weight: 700;
+    box-shadow: 0px 3px 2px #ccc;
+
+}
+
+.content > .card-body{
+    margin: 2em 6rem;
+    width: 80%;
+}
+
+.callendar{
+    width:100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.callendar > .week{
+    width:100px;
+    height:2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    font-weight: 500;
+    background: var(--bg-primary);
+    box-shadow: 0px 3px 2px #ccc;
+}
+
+.callendar > .weekEnd{
+    background: var(--bg-weekEnd);
+}
+
+.callendar-day{
+    width:100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.callendar-day > .day{
+    margin-top: 1em;
+    width:100px;
+    height:5em;
+    display: flex;
+    justify-content: center;
+    border-radius: 5px;
+    font-weight: 500;
+    background: var(--bg-primary);
+    padding-top: 12px;
+    box-shadow: 0px 3px 2px #ccc;
+}
+
+.callendar-day > .weekEnd{
+    background: var(--bg-weekEnd);
+}
+
+section > nav{
+    width: 130px;
+    height:500px;
+    background: var(--bg-primary);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.navegation, .configurarion{
+    width: 100%;
+}
+.navegation ul li{
+    margin-left: 1.2rem;
+    margin-top: 10px;
+}
+ul{
+    list-style: none;
+}
+
+ul li{
+    width: 60px;
+    padding-bottom: 10px;
+}
