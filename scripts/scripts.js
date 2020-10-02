@@ -13,13 +13,13 @@ window.addEventListener('load', function() {
     Change.style.backgroundColor = GetColor.value;
     ChangeBtn.style.backgroundColor = GetColor.value;
     ChangeBackground.style.backgroundColor = GetColor.value;
-    ChangeBoxShadow.style.boxShadow = `0px 0px 0px 10px ${GetColor.value}`;
+    ChangeBackground.style.color = GetColor.value;
 
     GetColor.addEventListener('input', function(e) {
         Change.style.backgroundColor = e.target.value;
         ChangeBtn.style.backgroundColor = e.target.value;
         ChangeBackground.style.backgroundColor = e.target.value;
-        ChangeBoxShadow.style.boxShadow = `0px 0px 0px 10px ${GetColor.value}`;
+        ChangeBackground.style.color = e.target.value;
     }, false);
 
 });
