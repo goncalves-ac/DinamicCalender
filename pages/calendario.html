@@ -5,8 +5,8 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="imagem/png" href="../image/ICON.png" />
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="../styles/main.css">
 
     <title>Calendario Dinâmico</title>
@@ -33,78 +33,70 @@
 
         <div class="content">
             <div class="card-title">
-                Outubro
+                <div id="month"></div> 
+                <div id="year"></div>
+                <div class="control">
+                    <div class="callendar-prev" id="prev-month">&#9664;</div>
+                    <div class="callendar-next" id="next-month">&#9654;</div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="callendar">
-                    <div class="week weekEnd">Domingo</div>
-                    <div class="week">Segunda</div>
-                    <div class="week">Terça</div>
-                    <div class="week">Quarta</div>
-                    <div class="week">Quinta</div>
-                    <div class="week">Sexta</div>
-                    <div class="week weekEnd">Sábado</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="week weekEnd">Domingo</th>
+                                <th class="week">Segunda</th>
+                                <th class="week">Terça</th>
+                                <th class="week">Quarta</th>
+                                <th class="week">Quinta</th>
+                                <th class="week">Sexta</th>
+                                <th class="week weekEnd">Sábado</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
-                <div class="callendar-day">
-                    <div class="day weekEnd">27</div>
-                    <div class="day">28</div>
-                    <div class="day">29</div>
-                    <div class="day">30</div>
-                    <div class="day">1</div>
-                    <div class="day">2</div>
-                    <div class="day weekEnd">3</div>
-                    <div class="day weekEnd">4</div>
-                    <div class="day">5</div>
-                    <div class="day">6</div>
-                    <div class="day">7</div>
-                    <div class="day">8</div>
-                    <div class="day">9</div>
-                    <div class="day weekEnd">10</div>
-                    <div class="day weekEnd">11</div>
-                    <div class="day">12</div>
-                    <div class="day">13</div>
-                    <div class="day">14</div>
-                    <div class="day">15</div>
-                    <div class="day">16</div>
-                    <div class="day weekEnd">17</div>
-                    <div class="day weekEnd">18</div>
-                    <div class="day">19</div>
-                    <div class="day">20</div>
-                    <div class="day">21</div>
-                    <div class="day">22</div>
-                    <div class="day">23</div>
-                    <div class="day weekEnd">24</div>
-                    <div class="day weekEnd">25</div>
-                    <div class="day">26</div>
-                    <div class="day">27</div>
-                    <div class="day">28</div>
-                    <div class="day">29</div>
-                    <div class="day">30</div>
-                    <div class="day weekEnd">31</div>
+
+                <div class="callendar-mobile">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="week weekEnd">D</th>
+                                <th class="week">2º</th>
+                                <th class="week">3º</th>
+                                <th class="week">4º</th>
+                                <th class="week">5º</th>
+                                <th class="week">6º</th>
+                                <th class="week weekEnd">S</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
+
+                <div id="callendar-days"></div>
             </div>
         </div>
 
-        <nav>
+        <nav class="navbar-open">
             <div class="navegation">
                 <ul>
-                    <li><img src="../imageSVG/Amigos.svg"></li>
-                    <li><img src="../imageSVG/NovoEvento.svg"></li>
-                    <li><img src="../imageSVG/Calendário.svg"></li>
+                    <li><a href="#"><img src="../imageSVG/Amigos.svg"></a></li>
+                    <li><a href="#"><img src="../imageSVG/NovoEvento.svg"></a></li>
+                    <li><a href="#"><img src="../imageSVG/Calendário.svg"></a></li>
                 </ul>
             </div>
             <!--navegation-->
 
             <div class="configuration">
                 <ul>
-                    <li><img src="../imageSVG/ConfPerfil.svg"></li>
-                    <li><img src="../imageSVG/Engrenagem.svg"></li>
+                    <li><a href="#"><img src="../imageSVG/ConfPerfil.svg"></a></li>
+                    <li><a href="#"><img src="../imageSVG/Engrenagem.svg"></a></li>
                 </ul>    
             </div>
             <!-- configuration-->
         </nav>
     </section>
 
-<script src="js/scripts.js"></script>
+<script src="../scripts/callendar.js"></script>
 </body>
 </html>

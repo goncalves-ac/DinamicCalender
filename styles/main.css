@@ -1,72 +1,21 @@
 :root{
     --bg-primary: rgb(255, 151, 112);
-    --bg-weekEnd: rgb(249, 211, 197);
+    --bg-weekEnd: #ffab91;
+    --bg-active: #FF5722;
 }
 
 *{
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
 }
-
-body{
-    background: #333;
-    font-family: 'Comfortaa', cursive;
+ul{
+    list-style: none;
 }
-
-header{
-    width:100%;
-    height: 4rem;
-    background: var(--bg-primary);
-    display: flex;
-    justify-content: space-between;
+a{
+    text-decoration: none;
 }
-
-.logo{
-    width:60px;
-    margin-left: 2em;
-}
-
-img {
-    max-width: 100%;
-    display: block;
-}
-
-.right-menu{
-    display: flex;
-    width:220px;
-    justify-content: space-between;
-    margin-right: 2em;
-
-}
-
-.right-menu > h3{
-    margin-top: 20px;
-}
-
-.right-menu > .perfil-user{
-    width:3.2rem;
-    height: 3.2rem;
-    border: 3px solid #000;
-    border-radius: 9em;
-    margin-top: 0.25rem;
-}
-
-.right-menu > .btn-icon{
-    width:2em;
-    transform: rotate(180deg);
-    cursor: pointer;
-}
-
-section{
-    margin: 2rem;
-    display: flex;
-}
-
-section > aside{
-    width:200px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+img{
+    width:30px;
 }
 
 .btn {
@@ -85,18 +34,109 @@ section > aside{
 }
 
 .active {
-    background: #FF5722;
+    background: var(--bg-active);
 }
 
-section > .content{
+
+body{
+    font-family: 'Comfortaa', cursive;
+    background: #333;
+    font-size: 12px;
+}
+
+header{
     width:100%;
-    background: #fff;
+    height: 4rem;
+    background: var(--bg-primary);
+    display: flex;
+    justify-content: space-between;
+}
+
+.logo{
+    width:60px;
+    margin-left: 2em;
+}
+
+.logo img{
+    width:100%;
+}
+
+.right-menu{
+    display: flex;
+    width:220px;
+    justify-content: space-between;
+    margin-right: 2em;
+}
+
+.right-menu > h3{
+    margin-top: 20px;
+    font-size: 1.7em;
+}
+
+.right-menu > .perfil-user{
+    width:3.2rem;
+    height: 3.2rem;
+    border: 3px solid #000;
+    border-radius: 9em;
+    margin-top: 0.25rem;
+}
+
+.right-menu > .btn-icon{
+    width:2em;
+    transform: rotate(180deg);
+    cursor: pointer;
+}
+
+section{
+    display: flex;
+    margin: 2rem;
+}
+
+aside{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.content{
+    width: 100vw;
+    background: #eee;
     margin: 0 2rem;
     border-radius: 5px;
 }
 
-.content > .card-title{
-    width:100%;
+nav{
+    width: 15%;
+    border-radius: 5px;
+    background: var(--bg-primary);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.navegation{
+    margin-top: 1em;
+}
+
+.navegation, .configuration{
+    text-align: center;
+}
+
+.configuration{
+    margin-bottom: 1em;
+}
+
+
+nav img{
+    width:60%;
+}
+
+.navbar-close{
+    display: none;
+}
+
+.card-title{
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -106,83 +146,138 @@ section > .content{
     font-size: 1.7em;
     font-weight: 700;
     box-shadow: 0px 3px 2px #ccc;
-
+    position: relative;
 }
 
-.content > .card-body{
-    margin: 2em 6rem;
-    width: 80%;
+#month{
+    padding-right: 1em;
+}
+
+.control{
+    display: flex;
+    position: absolute;
+    right: 2em;
+}
+
+.control .callendar-next,.control .callendar-prev{
+    cursor: pointer;
+    padding-left: 1em;
+}
+
+.card-body{
+    margin: 2rem;
+}
+
+.callendar-mobile{
+    display: none;
 }
 
 .callendar{
     width:100%;
-    display: flex;
-    justify-content: space-between;
 }
 
-.callendar > .week{
-    width:100px;
-    height:2em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 5px;
-    font-weight: 500;
-    background: var(--bg-primary);
-    box-shadow: 0px 3px 2px #ccc;
-}
-
-.callendar > .weekEnd{
-    background: var(--bg-weekEnd);
-}
-
-.callendar-day{
-    width:100%;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-
-.callendar-day > .day{
-    margin-top: 1em;
-    width:100px;
-    height:5em;
-    display: flex;
-    justify-content: center;
-    border-radius: 5px;
-    font-weight: 500;
-    background: var(--bg-primary);
-    padding-top: 12px;
-    box-shadow: 0px 3px 2px #ccc;
-}
-
-.callendar-day > .weekEnd{
-    background: var(--bg-weekEnd);
-}
-
-section > nav{
-    width: 130px;
-    height:500px;
-    background: var(--bg-primary);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 5px;
-}
-
-.navegation, .configurarion{
+table{
     width: 100%;
 }
-.navegation ul li{
-    margin-left: 1.2rem;
-    margin-top: 10px;
-}
-ul{
-    list-style: none;
+
+table th{
+    height: 2rem;
+    background: var(--bg-primary);
+    border-radius: 5px;
+    text-align: center;
+    width: 10%;
+    font-weight: 700;
+    box-shadow: 0px 3px 2px #ccc;
 }
 
-ul li{
-    width: 60px;
-    padding-bottom: 10px;
+
+#callendar-days{
+    width:100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.day{
+    width:14%;
+    background: var(--bg-primary);
+    height: 6rem;
+    margin-bottom: 1em;
+    border-radius: 5px;
+    padding-top: 12px;
+    font-weight: 700;
+    box-shadow: 0px 3px 2px #ccc;
+}
+
+.weekEnd {
+    background: var(--bg-weekEnd);
+}
+
+@media only screen and (max-width: 576px) {
+    .right-menu > h3{
+        display: none;
+    }
+
+    .right-menu > .perfil-user{
+        width: 2.9rem;
+        height: 2.9rem;
+        margin-top: 0.49rem;
+        margin-right: 0.75rem;
+    }
+
+    .right-menu{
+        width:70px;
+        margin-right: 4em;
+    }
+
+    .btn{
+        font-size: 16px;
+        font-weight: 400;
+        width: 100px;
+        padding: 0.75em;
+    }
+
+    .card-title{
+        font-size: 1.4em;
+        font-weight: 500;
+    }
+
+    .callendar{
+        display: none;
+    }
+
+    .callendar-mobile{
+        display: flex;
+    }
+
+    .day{
+        height: 2rem;
+        padding-top: 9px;
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    section{
+        flex-direction: column;
+        position: relative;
+    }
+
+    aside{
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .content{
+        margin: 2rem 0 0 0;
+        width: 100%;
+    }
+
+    .navbar-open{
+        position: absolute;
+        right: 0;
+        height: 100%;
+    }
 }
