@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="imagem/png" href="../image/ICON.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/main.css">
+
+    <title>Calendario Dinâmico</title>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <img src="../image/ICON.png" class="images-logo">
+        </div>
+        <div class="right-menu">
+            <h3>Elisa Clack</h3>
+            <img src="../image/media/exemplo.jpg" class="perfil-user">
+            <img src="../imageSVG/Seta.svg" class="btn-icon">
+        </div>
+    </header>
+
+    <section>
+        <aside>
+            <button class="btn btn-primary">Dia</button>
+            <button class="btn btn-primary">Semana</button>
+            <button class="btn btn-primary active">Mês</button>
+        </aside>
+
+        <div class="content">
+            <div class="card-title">
+                <div id="month"></div> 
+                <div id="year"></div>
+                <div class="control">
+                    <div class="callendar-prev" id="prev-month">&#9664;</div>
+                    <div class="callendar-next" id="next-month">&#9654;</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="callendar">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="week weekEnd">Domingo</th>
+                                <th class="week">Segunda</th>
+                                <th class="week">Terça</th>
+                                <th class="week">Quarta</th>
+                                <th class="week">Quinta</th>
+                                <th class="week">Sexta</th>
+                                <th class="week weekEnd">Sábado</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
+                <div class="callendar-mobile">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="week weekEnd">D</th>
+                                <th class="week">2º</th>
+                                <th class="week">3º</th>
+                                <th class="week">4º</th>
+                                <th class="week">5º</th>
+                                <th class="week">6º</th>
+                                <th class="week weekEnd">S</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
+                <div id="callendar-days"></div>
+            </div>
+        </div>
+
+        <nav class="navbar-open">
+            <div class="navegation">
+                <ul>
+                    <li><a href="#"><img src="../imageSVG/Amigos.svg"></a></li>
+                    <li><a href="#"><img src="../imageSVG/NovoEvento.svg"></a></li>
+                    <li><a href="#"><img src="../imageSVG/Calendário.svg"></a></li>
+                </ul>
+            </div>
+            <!--navegation-->
+
+            <div class="configuration">
+                <ul>
+                    <li><a href="#"><img src="../imageSVG/ConfPerfil.svg"></a></li>
+                    <li><a href="#"><img src="../imageSVG/Engrenagem.svg"></a></li>
+                </ul>    
+            </div>
+            <!-- configuration-->
+        </nav>
+    </section>
+
+<script src="../scripts/callendar.js"></script>
+</body>
+</html>
