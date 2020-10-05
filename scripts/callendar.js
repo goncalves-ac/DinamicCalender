@@ -3,24 +3,32 @@ let monthList = [
     'Agosto', 'Setembro','Outubro', 'Novembro', 'Dezembro'
 ];
 
+let weekList = [
+    'Domingo','Segunda-feira','Terça-feira','Quarta-feira',
+    'Quinta-feira','Sexta-feira','Sábado'
+];
+
 let currentDate = new Date();
 let currentDay = currentDate.getDate();
 let monthNumber = currentDate.getMonth();
 let currentYear = currentDate.getFullYear();
+let day = currentDate.getDay();
 
 let dates = document.getElementById('callendar-month');
 let month = document.getElementById('currentMonth');
 let year = document.getElementById('currentYear');
 let prevMonthDOM = document.getElementById('prev-month');
 let nextMonthDOM = document.getElementById('next-month');
+let dayWeek = document.querySelector('.currentDay');
 
 month.textContent = monthList[monthNumber];
 year.textContent = currentYear.toString();
+dayWeek.textContent = weekList[day];
+
+document.querySelector('#callendar-day').innerHTML = currentDay + ' Hoje';
 
 prevMonthDOM.addEventListener('click', ()=>lastMonth());
 nextMonthDOM.addEventListener('click', ()=>nextMonth());
-
-
 
 const writeMonth = (month) => {
     let lastDays = 0;
@@ -40,7 +48,7 @@ const writeMonth = (month) => {
         }
     }
     
-   for (let i = 1; i <= 42 - (lastDays+getTotalDays(month)); i++) {
+   for (let i = 1; i <= 42 - (lastDays + getTotalDays(month)); i++) {
         dates.innerHTML += ` <div class="day">${i}</div>`;
    }
 
@@ -112,8 +120,11 @@ const setNewDate = () => {
 writeMonth(monthNumber);
 
 const events = document.querySelectorAll('.btn-event');
-const week = document.querySelector('.callendar');
+const week = document.querySelector('.callendar table');
 const currentMonth = document.querySelector('#callendar-month');
+const Day = document.querySelector('.currentDay');
+const today = document.querySelector('#callendar-day');
+const weekMobile = document.querySelector('.callendar-mobile');
 
 for (let i = 0; i < events.length; i++){
     events[i].addEventListener('click',() => {
@@ -122,20 +133,27 @@ for (let i = 0; i < events.length; i++){
             case 0:
                 week.style.display = 'none';
                 currentMonth.style.display = 'none';
+                Day.className = 'currentDay';
+                today.className = '';
+                weekMobile.style.display = 'none';
                 events[1].className = 'btn btn-primary btn-event';
                 events[2].className = 'btn btn-primary btn-event';
                 events[i].className = 'btn btn-primary active btn-event';
             break;
-            case 1:
-                week.style.display = 'none';
+            case 1:               
                 currentMonth.style.display = 'none';
+                Day.className = 'currentDay hide-callendar';
+                today.className = 'hide-callendar';
                 events[0].className = 'btn btn-primary btn-event';
                 events[2].className = 'btn btn-primary btn-event';
                 events[i].className = 'btn btn-primary active btn-event';
             break;
             case 2:
-                week.style.display = 'flex';
+                
+                week.style.display = 'table';
                 currentMonth.style.display = 'flex';
+                Day.className = 'currentDay hide-callendar';
+                today.className = 'hide-callendar';
                 events[0].className = 'btn btn-primary btn-event';
                 events[1].className = 'btn btn-primary btn-event';
                 events[i].className = 'btn btn-primary active btn-event';
@@ -145,10 +163,10 @@ for (let i = 0; i < events.length; i++){
      });
 }
 
-
+const screen = window.innerWidth;
 /** função para ocultar  menu de navegação*/
 function windowScreen() {
-    const screen = window.innerWidth;
+    
     let menu = document.querySelector('nav');
     let callendarDay = document.querySelector('#callendar-days');
     let callendar = document.querySelector('.callendar');
