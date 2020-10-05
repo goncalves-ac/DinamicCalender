@@ -20,6 +20,7 @@ let year = document.getElementById('currentYear');
 let prevMonthDOM = document.getElementById('prev-month');
 let nextMonthDOM = document.getElementById('next-month');
 let dayWeek = document.querySelector('.currentDay');
+let weekMonth = document.querySelector('#callendar-week');
 
 month.textContent = monthList[monthNumber];
 year.textContent = currentYear.toString();
@@ -54,12 +55,16 @@ const writeMonth = (month) => {
 
    const days = document.querySelectorAll('.day');
 
-for (let i = 0; i <= days.length; i++) {
-    if (i == 0 || i == 6 || i == 7 || i == 13 || i == 14 || i == 20 || 
-        i == 21 || i == 27 || i == 28 || i == 34 || i == 35 || i == 41) {
-        days[i].className = "day weekEnd";
+    for (let i = 0; i <= days.length; i++) {
+        if (i == 0 || i == 6 || i == 7 || i == 13 || i == 14 || i == 20 || 
+            i == 21 || i == 27 || i == 28 || i == 34 || i == 35 || i == 41) {
+            days[i].className = "day weekEnd";
+        }
     }
-}
+
+    for (let i = 0; i <= 6; i++) {
+        weekMonth.innerHTML += `<div class="day-week">${i+currentDay - 1}</div>`;
+    }
     
 }
 
@@ -135,6 +140,7 @@ for (let i = 0; i < events.length; i++){
                 currentMonth.style.display = 'none';
                 Day.className = 'currentDay';
                 today.className = '';
+                weekMonth.className = 'hide-callendar';
                 weekMobile.style.display = 'none';
                 events[1].className = 'btn btn-primary btn-event';
                 events[2].className = 'btn btn-primary btn-event';
@@ -144,6 +150,7 @@ for (let i = 0; i < events.length; i++){
                 currentMonth.style.display = 'none';
                 Day.className = 'currentDay hide-callendar';
                 today.className = 'hide-callendar';
+                weekMonth.className = '';
                 events[0].className = 'btn btn-primary btn-event';
                 events[2].className = 'btn btn-primary btn-event';
                 events[i].className = 'btn btn-primary active btn-event';
@@ -154,6 +161,7 @@ for (let i = 0; i < events.length; i++){
                 currentMonth.style.display = 'flex';
                 Day.className = 'currentDay hide-callendar';
                 today.className = 'hide-callendar';
+                weekMonth.className = 'hide-callendar';
                 events[0].className = 'btn btn-primary btn-event';
                 events[1].className = 'btn btn-primary btn-event';
                 events[i].className = 'btn btn-primary active btn-event';
