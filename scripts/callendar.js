@@ -8,9 +8,9 @@ let currentDay = currentDate.getDate();
 let monthNumber = currentDate.getMonth();
 let currentYear = currentDate.getFullYear();
 
-let dates = document.getElementById('callendar-days');
-let month = document.getElementById('month');
-let year = document.getElementById('year');
+let dates = document.getElementById('callendar-month');
+let month = document.getElementById('currentMonth');
+let year = document.getElementById('currentYear');
 let prevMonthDOM = document.getElementById('prev-month');
 let nextMonthDOM = document.getElementById('next-month');
 
@@ -34,7 +34,7 @@ const writeMonth = (month) => {
 
     for(let i=1; i<=getTotalDays(month); i++){
         if(i===currentDay) {
-            dates.innerHTML += ` <div class="day">${i}</div>`;
+            dates.innerHTML += ` <div class="day active">${i}</div>`;
         }else{
             dates.innerHTML += ` <div class="day">${i}</div>`;
         }
@@ -49,7 +49,6 @@ const writeMonth = (month) => {
 for (let i = 0; i <= days.length; i++) {
     if (i == 0 || i == 6 || i == 7 || i == 13 || i == 14 || i == 20 || 
         i == 21 || i == 27 || i == 28 || i == 34 || i == 35 || i == 41) {
-        console.log(i)
         days[i].className = "day weekEnd";
     }
 }
@@ -112,6 +111,39 @@ const setNewDate = () => {
 
 writeMonth(monthNumber);
 
+const events = document.querySelectorAll('.btn-event');
+const week = document.querySelector('.callendar');
+const currentMonth = document.querySelector('#callendar-month');
+
+for (let i = 0; i < events.length; i++){
+    events[i].addEventListener('click',() => {
+
+        switch(i) {
+            case 0:
+                week.style.display = 'none';
+                currentMonth.style.display = 'none';
+                events[1].className = 'btn btn-primary btn-event';
+                events[2].className = 'btn btn-primary btn-event';
+                events[i].className = 'btn btn-primary active btn-event';
+            break;
+            case 1:
+                week.style.display = 'none';
+                currentMonth.style.display = 'none';
+                events[0].className = 'btn btn-primary btn-event';
+                events[2].className = 'btn btn-primary btn-event';
+                events[i].className = 'btn btn-primary active btn-event';
+            break;
+            case 2:
+                week.style.display = 'flex';
+                currentMonth.style.display = 'flex';
+                events[0].className = 'btn btn-primary btn-event';
+                events[1].className = 'btn btn-primary btn-event';
+                events[i].className = 'btn btn-primary active btn-event';
+            break;    
+        }
+       
+     });
+}
 
 
 /** função para ocultar  menu de navegação*/
@@ -138,16 +170,10 @@ function windowScreen() {
   
   btnMenu.addEventListener('click',()=>{
     let menu = document.querySelector('nav');
-  //  let callendarDay = document.querySelector('#callendar-days');
-   // let callendar = document.querySelector('.callendar');
 
     if (menu.className === 'navbar-close') {
         menu.className = 'navbar-open';
-       // callendarDay.style.width = 100+'%';
-       // callendar.style.width = 100+'%';
     } else {
-       // callendarDay.style.width = 93+'%';
-       // callendar.style.width = 93+'%';
         menu.className = 'navbar-close'; 
     }
   })

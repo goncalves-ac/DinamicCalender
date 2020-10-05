@@ -26,15 +26,15 @@
 
     <section>
         <aside>
-            <button class="btn btn-primary">Dia</button>
-            <button class="btn btn-primary">Semana</button>
-            <button class="btn btn-primary active">Mês</button>
+            <button class="btn btn-primary btn-event">Dia</button>
+            <button class="btn btn-primary btn-event">Semana</button>
+            <button class="btn btn-primary active btn-event">Mês</button>
         </aside>
 
         <div class="content">
             <div class="card-title">
-                <div id="month"></div> 
-                <div id="year"></div>
+                <div id="currentMonth"></div> 
+                <div id="currentYear"></div>
                 <div class="control">
                     <div class="callendar-prev" id="prev-month">&#9664;</div>
                     <div class="callendar-next" id="next-month">&#9654;</div>
@@ -73,7 +73,9 @@
                     </table>
                 </div>
 
-                <div id="callendar-days"></div>
+                <div id="callendar-month"></div>
+                <div class="callendar-week"></div>
+                <div class="callendar-day"></div>
             </div>
         </div>
 

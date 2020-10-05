@@ -33,11 +33,6 @@ img{
     background: var(--bg-primary);
 }
 
-.active {
-    background: var(--bg-active);
-}
-
-
 body{
     font-family: 'Comfortaa', cursive;
     background: #333;
@@ -191,7 +186,7 @@ table th{
 }
 
 
-#callendar-days{
+#callendar-month{
     width:100%;
     display: flex;
     flex-wrap: wrap;
@@ -213,6 +208,10 @@ table th{
 
 .weekEnd {
     background: var(--bg-weekEnd);
+}
+
+.active {
+    background: var(--bg-active);
 }
 
 @media only screen and (max-width: 576px) {
