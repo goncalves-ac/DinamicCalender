@@ -202,6 +202,7 @@ input[type="textarea"] {
     border: 3px solid var(--backgroundMedium);
     box-shadow: 0 0 0 10px /*#9575CD*/;
     color: #9575CD;
+    font-style: var(--fonte);
     position: relative;
     display: flex;
     flex-direction: column;
