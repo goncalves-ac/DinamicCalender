@@ -108,7 +108,7 @@
 
 .config-container {
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
 
     display: flex;
     flex-direction: column;
@@ -269,3 +269,29 @@ input[type="textarea"] {
 button.close {
     background-color: #9575CD;
 }
+
+/* Alert */
+.alert {
+    width: 100%;
+    padding: 12px;
+    background: #FF5722;
+    color: white;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+.alert.default{background-color: #FF5722;}
+.alert.red{background-color: #DB4437;}
+.alert.green{background-color: #006315;}
+.alert.yellow{background-color: #c98901;}
+.alert.blue{background-color: #014ac9;}
+.alert-closebtn {
+    margin-left: 15px;
+    line-height: 20px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.alert-closebtn:hover {color: black;}
