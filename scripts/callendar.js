@@ -12,24 +12,325 @@ let currentDate = new Date();
 let currentDay = currentDate.getDate();
 let monthNumber = currentDate.getMonth();
 let currentYear = currentDate.getFullYear();
-let day = currentDate.getDay();
 
 let dates = document.getElementById('callendar-month');
 let month = document.getElementById('currentMonth');
 let year = document.getElementById('currentYear');
+
 let prevMonthDOM = document.getElementById('prev-month');
 let nextMonthDOM = document.getElementById('next-month');
-let dayWeek = document.querySelector('.currentDay');
-let weekMonth = document.querySelector('#callendar-week');
+//let dayWeek = document.querySelector('.currentDay');
 
 month.textContent = monthList[monthNumber];
 year.textContent = currentYear.toString();
-dayWeek.textContent = weekList[day];
-
-document.querySelector('#callendar-day').innerHTML = currentDay + ' Hoje';
 
 prevMonthDOM.addEventListener('click', ()=>lastMonth());
 nextMonthDOM.addEventListener('click', ()=>nextMonth());
+
+let weekNumber = 1;
+let dayNumber = currentDay;
+
+const btnEvent = document.querySelectorAll('.btn-event');
+
+for (let i = 0; i < btnEvent.length; i++){
+    btnEvent[i].addEventListener('click',() => {
+       activeBtn(btnEvent[i]);
+    });
+}    
+
+const activeBtn = (events) => {
+    for (let i = 0; i < btnEvent.length; i++) {
+        btnEvent[i].className = 'btn btn-primary btn-event';
+    }
+    events.className = 'btn btn-primary active btn-event';
+    titleCallendar(events.innerText);
+}
+
+const titleCallendar = (param) => {
+
+    if (param === 'Dia') {
+        month.textContent = monthList[monthNumber];
+        dates.innerHTML = '';
+        writeDay(monthNumber,dayNumber);
+    } else if (param === 'Semana') {
+        month.textContent = monthList[monthNumber].substr(0,3);
+        dates.innerHTML = '';
+        writeWeek(monthNumber,weekNumber);
+    } else {
+        month.textContent = monthList[monthNumber];
+        year.textContent = currentYear.toString();
+        dates.innerHTML = '';
+        writeMonth(monthNumber);
+    }
+}
+
+const activeWeek  = () => {
+    let lastDays = 0;
+    let temp = 0;
+    let aux = 0;
+    let count = 1;
+
+    for (let i = startDay()+1; i>0;i--){    
+        lastDays++;
+    }
+
+    for (let i = 1;  i <= (7 - lastDays);  i++) {
+        temp++;
+    }
+
+    for(let i=1; i<= getTotalDays(month); i++){
+        
+        if (i===currentDay) {
+           return count;
+        }
+
+        if (aux == 7 || aux == 14 || aux == 21 || aux == 28 ) {
+            count++;
+        }
+
+        aux++;
+    }
+}
+
+const writeDay = (month,dayNumber) => {
+
+    let count = 0;
+
+    if (currentDay === dayNumber) {
+        for (let i =1; i <=getTotalDays(month); i++) {
+            if(i === currentDay) {
+                dates.innerHTML += ` <div id="callendar-day">${i}</div>`;
+            }
+        }
+        
+    } else if (dayNumber > currentDay){
+        for (let i = dayNumber; i <=getTotalDays(month); i++) {
+            if (count === 0) {
+                dates.innerHTML += ` <div id="callendar-day">${i}</div>`;
+            }
+            count++;
+        }
+
+    } else {
+        for (let i = getTotalDays(month); i >= dayNumber; i--) {
+            if (dayNumber === i) {
+                dates.innerHTML += ` <div id="callendar-day">${i}</div>`;
+            }
+        }
+
+    }
+    
+    return getTotalDays(month);
+
+}
+
+const readWeek = (month,weekNumber) =>{
+
+    let lastDays = 0;
+    let temp = 0;
+    let aux = 0;
+
+    switch (weekNumber) {
+        case 1:
+            for(let i = startDay()+1; i>0;i--){
+                lastDays++;
+            }
+
+            if (lastDays < 7) {
+                temp = 7 - lastDays;
+                    for(let i = startDay()+1; i>0;i--){
+                        dates.innerHTML += ` <div class="day-week">
+                                ${getTotalDays(monthNumber-1)-(i-1)}
+                            </div>`;
+                        lastDays++;
+                    }
+               
+            } else {
+                temp = 7;
+            }
+
+            for (let i = 1; i <= temp; i++) {
+                if(i===currentDay) {
+                    dates.innerHTML += ` <div class="day-week active">${i}</div>`;
+                }else{
+                    dates.innerHTML += ` <div class="day-week">${i}</div>`;
+                    dayLast = i;
+                }
+            }
+           
+        break;
+        
+        case 2:
+            
+            for(let i = startDay()+1; i>0;i--){
+                lastDays++;
+            }
+
+            if (lastDays < 7) {
+                temp = 7 - lastDays;
+            } else {
+                temp = 7;
+            }
+
+            for (let i =temp+1; i <=getTotalDays(month); i++) {
+                if (aux < 7) {
+                    if(i===currentDay) {
+                        dates.innerHTML += ` <div class="day-week active">${i}</div>`;
+                    }else{
+                        dates.innerHTML += ` <div class="day-week">${i}</div>`;
+                        
+                    }
+                }
+                aux++;
+            }
+            
+        break;
+
+        case 3:
+            for(let i = startDay()+1; i>0;i--){
+                lastDays++;
+            }
+
+            if (lastDays < 7) {
+                temp = 7 - lastDays;
+            } else {
+                temp = 7;
+            }
+
+            for (let i =temp+1+7; i <=getTotalDays(month); i++) {
+                if (aux < 7) {
+                    if(i===currentDay) {
+                        dates.innerHTML += ` <div class="day-week active">${i}</div>`;
+                    }else{
+                        dates.innerHTML += ` <div class="day-week">${i}</div>`;
+                    }
+                }
+                aux++;
+            }
+
+        break;
+
+        case 4:
+            for(let i = startDay()+1; i>0;i--){
+                lastDays++;
+            }
+
+            if (lastDays < 7) {
+                temp = 7 - lastDays;
+            } else {
+                temp = 7;
+            }
+
+            for (let i =temp+1+7+7; i <=getTotalDays(month); i++) {
+                if (aux < 7) {
+                    if(i===currentDay) {
+                        dates.innerHTML += ` <div class="day-week active">${i}</div>`;
+                    }else{
+                        dates.innerHTML += ` <div class="day-week">${i}</div>`;
+                    }
+                }
+                aux++;
+            }
+
+        break;
+
+        case 5:
+            for(let i = startDay()+1; i>0;i--){
+                lastDays++;
+            }
+
+            if (lastDays < 7) {
+                temp = 7 - lastDays;
+            } else {
+                temp = 7;
+            }
+
+            for (let i =temp+1+7+7+7; i <=getTotalDays(month); i++) {
+                if (aux < 7) {
+                    if(i===currentDay) {
+                        dates.innerHTML += ` <div class="day-week active">${i}</div>`;
+                    }else{
+                        dates.innerHTML += ` <div class="day-week">${i}</div>`;
+                    }
+                }
+                aux++;
+            }
+           
+            if (aux <= 6) {
+                aux = 7 - aux;
+               
+                for(let i = 1; i <= aux; i++) {
+                    if(i===currentDay) {
+                        dates.innerHTML += ` <div class="day-week active">${i}</div>`;
+                    }else{
+                        dates.innerHTML += ` <div class="day-week">${i}</div>`;
+                    }
+                }
+                return weekNumber = 2
+            } else {
+                return weekNumber = 1;
+            }  
+              
+        break;
+        
+    }
+
+}
+
+
+const writeWeek = (month,weekNumber) => {
+
+    switch (month) {
+        case 0: 
+          readWeek(month,weekNumber);  
+        break;
+
+        case 1:
+            readWeek(month,weekNumber);      
+        break;
+
+        case 2:
+            readWeek(month,weekNumber);      
+        break;
+
+        case 3:
+            readWeek(month,weekNumber);      
+        break;
+
+        case 4:
+            readWeek(month,weekNumber);      
+        break;
+
+        case 5:
+            readWeek(month,weekNumber);      
+        break;
+
+        case 6:
+            readWeek(month,weekNumber);      
+        break;
+
+        case 7:
+            readWeek(month,weekNumber);      
+        break;
+
+        case 8:
+            readWeek(month,weekNumber);      
+        break;
+
+        case 9:
+            readWeek(month,weekNumber);      
+        break;
+
+        case 10:
+            readWeek(month,weekNumber);      
+        break;
+
+        case 11:
+            readWeek(month,weekNumber);      
+        break;
+    }
+     
+}
 
 const writeMonth = (month) => {
     let lastDays = 0;
@@ -62,10 +363,6 @@ const writeMonth = (month) => {
         }
     }
 
-    for (let i = 0; i <= 6; i++) {
-        weekMonth.innerHTML += `<div class="day-week">${i+currentDay - 1}</div>`;
-    }
-    
 }
 
 const getTotalDays = month => {
@@ -92,26 +389,111 @@ const startDay = () => {
     return ((start.getDay()-1) === -1) ? 6 : start.getDay()-1;
 }
 
+
 const lastMonth = () => {
-    if(monthNumber !== 0){
-        monthNumber--;
-    }else{
-        monthNumber = 11;
-        currentYear--;
+let active =  document.querySelector('.btn-event.active');
+    switch(active.innerText) {
+        case 'Dia':
+            if (dayNumber !== 1) {
+                dayNumber--;
+            } else {
+                dayNumber = writeDay(monthNumber,dayNumber)+1;
+                if(monthNumber !== 0){
+                    monthNumber--;
+                }else{
+                    monthNumber = 11;
+                    currentYear--;
+                }
+            }
+            setNewDay();
+        break;
+
+        case 'Semana':
+            if(weekNumber !== 1){
+                weekNumber--;
+            }else{
+                weekNumber = 5;
+                if(monthNumber !== 0){
+                    monthNumber--;
+                }else{
+                    monthNumber = 11;
+                    currentYear--;
+                }
+            }
+            setNewWeek();
+        break;
+        default: 
+            if(monthNumber !== 0){
+                monthNumber--;
+            }else{
+                monthNumber = 11;
+                currentYear--;
+            }
+            setNewDate();
+        break;
     }
 
-    setNewDate();
 }
 
 const nextMonth = () => {
-    if(monthNumber !== 11){
-        monthNumber++;
-    }else{
-        monthNumber = 0;
-        currentYear++;
-    }
+    let active =  document.querySelector('.btn-event.active');
+    switch(active.innerText) {
+        case 'Dia':
+            if (dayNumber !== writeDay(monthNumber,dayNumber)) {
+                dayNumber++;
+            } else {
+                dayNumber = 1;
+                if(monthNumber !== 11){
+                    monthNumber++;
+                }else{
+                    monthNumber = 0;
+                    currentYear++;
+                }
+            }
+            setNewDay();
+        break;
 
-    setNewDate();
+        case 'Semana':
+
+            if(weekNumber !== 5){
+                weekNumber++;
+            }else{
+                weekNumber = readWeek(monthNumber,weekNumber);
+                if (monthNumber !== 11) {
+                    monthNumber++;
+                } else {
+                    monthNumber = 0;
+                    currentYear++; 
+                }
+            }
+            setNewWeek();
+        break;
+        default: 
+            if(monthNumber !== 11){
+                monthNumber++;
+            }else{
+                monthNumber = 0;
+                currentYear++;
+            }
+            setNewDate();
+        break;
+    }
+}
+
+const setNewDay = () => {
+    currentDate.setFullYear(currentYear,monthNumber,currentDay);
+    month.textContent = monthList[monthNumber].substr(0,3) + '  ';
+    year.textContent = currentYear.toString();
+    dates.textContent = '';
+    writeDay(monthNumber,dayNumber);
+} 
+
+const setNewWeek = () => {
+    currentDate.setFullYear(currentYear,monthNumber,currentDay);
+    month.textContent = monthList[monthNumber].substr(0,3) + '  ';
+    year.textContent = currentYear.toString();
+    dates.textContent = '';
+    writeWeek(monthNumber,weekNumber);
 }
 
 const setNewDate = () => {
@@ -123,53 +505,6 @@ const setNewDate = () => {
 }
 
 writeMonth(monthNumber);
-
-const events = document.querySelectorAll('.btn-event');
-const week = document.querySelector('.callendar table');
-const currentMonth = document.querySelector('#callendar-month');
-const Day = document.querySelector('.currentDay');
-const today = document.querySelector('#callendar-day');
-const weekMobile = document.querySelector('.callendar-mobile');
-
-for (let i = 0; i < events.length; i++){
-    events[i].addEventListener('click',() => {
-
-        switch(i) {
-            case 0:
-                week.style.display = 'none';
-                currentMonth.style.display = 'none';
-                Day.className = 'currentDay';
-                today.className = '';
-                weekMonth.className = 'hide-callendar';
-                weekMobile.style.display = 'none';
-                events[1].className = 'btn btn-primary btn-event';
-                events[2].className = 'btn btn-primary btn-event';
-                events[i].className = 'btn btn-primary active btn-event';
-            break;
-            case 1:               
-                currentMonth.style.display = 'none';
-                Day.className = 'currentDay hide-callendar';
-                today.className = 'hide-callendar';
-                weekMonth.className = '';
-                events[0].className = 'btn btn-primary btn-event';
-                events[2].className = 'btn btn-primary btn-event';
-                events[i].className = 'btn btn-primary active btn-event';
-            break;
-            case 2:
-                
-                week.style.display = 'table';
-                currentMonth.style.display = 'flex';
-                Day.className = 'currentDay hide-callendar';
-                today.className = 'hide-callendar';
-                weekMonth.className = 'hide-callendar';
-                events[0].className = 'btn btn-primary btn-event';
-                events[1].className = 'btn btn-primary btn-event';
-                events[i].className = 'btn btn-primary active btn-event';
-            break;    
-        }
-       
-     });
-}
 
 const screen = window.innerWidth;
 /** função para ocultar  menu de navegação*/
@@ -202,4 +537,6 @@ function windowScreen() {
     } else {
         menu.className = 'navbar-close'; 
     }
-  })
+  });
+
+  
