@@ -133,15 +133,7 @@ form {
     align-items: center;
 }
 
-.btn{
-    text-align: center;
-    min-width: 250px;
-    margin: 0.5em;
-    background-color: var(--detailsButtons);
-    border-radius: 5px;
-    border: 1px solid var(--detailsButtons);
-    color: #FFFFFF;
-}
+
 
 .btn-envio {
     min-width: 250px;
@@ -152,11 +144,7 @@ form {
     color: #FFFFFF;
 }
 
-input[type="phone"],
-input[type="date"],
-input[type="password"],
-input[type="email"],
-input[type="text"] {
+input {
     min-width: 250px;
     margin: 0.3em;
     border-radius: 5px;
@@ -281,5 +269,3 @@ input[type="textarea"] {
 button.close {
     background-color: #9575CD;
 }
-
-/* END-CSS-MODAL */
