@@ -79,8 +79,8 @@ select {
 input[type="color"] {
 	-webkit-appearance: none;
 	border: none;
-	width: 0px;
-	height: 0px;
+	width: 0;
+	height: 0;
 }
 input[type="color"]::-webkit-color-swatch-wrapper {
 	padding: 0;
@@ -89,8 +89,14 @@ input[type="color"]::-webkit-color-swatch {
 	border: none;
 }
 
+.bg-dark{
+    background-color: #212121 !important;
+}
 .bg-primary {
     background-color: #FF9F1C !important;
+}
+.bg-light{
+    background-color: #eeeeee !important;
 }
 
 .container {
@@ -124,10 +130,22 @@ input[type="color"]::-webkit-color-swatch {
 .icon-left{
     display: inline;
     float: left;
-    margin: auto auto auto 10px;
 }
 .icon-right{
     display: inline;
     float: right;
-    margin: auto 10px auto auto;
+}
+
+.btn{
+    appearance: button;
+    text-decoration:none;
+    display: inline;
+    width: auto;
+    padding: 3px 10px;
+    text-align: center;
+    margin: 0.5em auto;
+    background-color: var(--detailsButtons);
+    border-radius: 5px;
+    border: 1px solid var(--detailsButtons);
+    color: #FFFFFF;
 }
