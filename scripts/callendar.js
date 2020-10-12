@@ -123,6 +123,7 @@ const writeDay = (month,dayNumber) => {
         }
 
     } else {
+       
         for (let i = getTotalDays(month); i >= dayNumber; i--) {
             if (dayNumber === i) {
                 dates.innerHTML += ` <div class="currentDay">${weekList[activeDay]}</div>`;  
@@ -130,11 +131,9 @@ const writeDay = (month,dayNumber) => {
                 
             }
         }
-
     }
-    
+      
     return getTotalDays(month);
-
 }
 
 const readWeek = (month,weekNumber) =>{
@@ -416,8 +415,7 @@ let active =  document.querySelector('.btn-event.active');
             if (dayNumber !== 1) {
                 dayNumber--;
             } else {
-                dayNumber = writeDay(monthNumber,dayNumber);
-                
+                dayNumber = writeDay(monthNumber-1,dayNumber)
                 if(monthNumber !== 0){
                     monthNumber--;
                 }else{
