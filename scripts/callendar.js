@@ -154,27 +154,20 @@ const readWeek = (month,weekNumber) =>{
                         dates.innerHTML += ` <div class="day-week">
                                 ${getTotalDays(monthNumber-1)-(i-1)}
                             </div>`;
-                        lastDays++;
                     }
                
             } else {
                 temp = 7;
             }
-
+            
             for (let i = 1; i <= temp; i++) {
                 if(i===currentDay) {
                     dates.innerHTML += ` <div class="day-week active">${i}</div>`;
                 }else{
                     dates.innerHTML += ` <div class="day-week">${i}</div>`;
-                    dayLast = i;
                 }
             }
-           
-           if (month === 1|| month === 2 || month === 5 || month === 8 || month === 10) {
-               return weekNumber = 5;
-           } else {
-               return weekNumber = 4;
-           }
+          
 
         break;
         
@@ -284,8 +277,10 @@ const readWeek = (month,weekNumber) =>{
                         dates.innerHTML += ` <div class="day-week">${i}</div>`;
                     }
                 }
-                return weekNumber = 2
+                
+                return weekNumber = 2;
             } else {
+                
                 return weekNumber = 1;
             }  
               
@@ -435,12 +430,9 @@ let active =  document.querySelector('.btn-event.active');
         case 'Semana':
             if(weekNumber !== 1){
                 weekNumber--;
-            }else{
-                if (5 === readWeek(monthNumber,weekNumber)) {
-                    weekNumber = 5;
-                } else if (4 === readWeek(monthNumber,weekNumber)){
-                    weekNumber = 4;
-                }
+            }else{                
+                weekNumber = 5;
+                
                 if(monthNumber !== 0){
                     monthNumber--;
                 }else{

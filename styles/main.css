@@ -202,7 +202,7 @@ table th{
 }
 
 .day{
-    width:14%;
+    width:13%;
     background: var(--bg-primary);
     height: 6rem;
     margin-bottom: 1em;
