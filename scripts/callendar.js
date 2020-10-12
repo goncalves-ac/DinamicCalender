@@ -29,7 +29,7 @@ nextMonthDOM.addEventListener('click', ()=>nextMonth());
 let weekNumber = 1;
 let dayNumber = currentDay;
 
-const table = document.querySelector('table');
+const table = document.querySelectorAll('table');
 const btnEvent = document.querySelectorAll('.btn-event');
 
 for (let i = 0; i < btnEvent.length; i++){
@@ -52,14 +52,19 @@ const titleCallendar = (param) => {
        
         month.textContent = monthList[monthNumber];
         dates.innerHTML = '';
-        table.style.display = 'none';
+        table[0].style.display = 'none';
+        table[1].style.display = 'none';
         writeDay(monthNumber,dayNumber);
 
     } else if (param === 'Semana') {
         
         month.textContent = monthList[monthNumber];
         dates.innerHTML = '';
-        table.style.display = 'table';
+        if (screen <= 576) {
+            table[1].style.display = 'table';
+        } else {
+            table[0].style.display = 'table';
+        }
         writeWeek(monthNumber,weekNumber);
 
     } else {
@@ -67,7 +72,11 @@ const titleCallendar = (param) => {
         month.textContent = monthList[monthNumber];
         year.textContent = currentYear.toString();
         dates.innerHTML = '';
-        table.style.display = 'table';
+        if (screen <= 576) {
+            table[1].style.display = 'table';
+        } else {
+            table[0].style.display = 'table';
+        }
         writeMonth(monthNumber);
 
     }
@@ -543,6 +552,7 @@ function windowScreen() {
    
     if (screen <= 1179) {
       menu.className = 'navbar-close';
+
     } else {
       menu.className = 'navbar-open';
     }

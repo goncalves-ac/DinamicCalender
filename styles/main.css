@@ -257,7 +257,7 @@ table th{
     justify-content: center;
     margin-top: 1em;
     font-size: 1.2em;
-    width: 14%;
+    width: 13%;
     background: var(--bg-primary);
     height: 400px;
     border-radius: 5px;
@@ -321,6 +321,11 @@ table th{
 
     .callendar-mobile{
         display: flex;
+    }
+
+    .currentDay{
+        width: 75%;
+        font-size: 1.2rem;
     }
 
     .day{
