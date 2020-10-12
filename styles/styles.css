@@ -133,8 +133,6 @@ form {
     align-items: center;
 }
 
-
-
 .btn-envio {
     min-width: 250px;
     margin: 0.5em;
@@ -144,12 +142,18 @@ form {
     color: #FFFFFF;
 }
 
-input {
+input[type="phone"],
+input[type="number"],
+input[type="date"],
+input[type="password"],
+input[type="email"],
+input[type="text"] {
+    width: 100%;
     min-width: 250px;
     margin: 0.3em;
     border-radius: 5px;
-    padding: 2px;
-    background-color: transparent;
+    padding: 2px 15px;
+    background-color: #eeeeee;
 }
 
 input[type="time"] {
@@ -273,10 +277,10 @@ button.close {
 /* Alert */
 .alert {
     width: 100%;
-    padding: 12px;
+    padding: 8px;
     background: #FF5722;
     color: white;
-    margin-bottom: 5px;
+    margin: 0.3em 0.3em 0.5em 0.3em;
     border-radius: 5px;
 }
 .alert.default{background-color: #FF5722;}

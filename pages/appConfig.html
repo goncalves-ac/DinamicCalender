@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <!-- Código que carrega Icone da página-->
-    <link rel="icon" type="imagem/png" href="../image/ICON.png" />
-    <!-- Código que carrega Google Font-->
+    <title>Calendário Dinâmico</title>
+    <link rel="icon" type="imagem/png" href="../image/ICON.png"/>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Código que carrega arquivos CSS -->
     <link rel="stylesheet" href="./../styles/styleReset.css">
     <link rel="stylesheet" href="./../styles/styles.css">
+    <link rel="stylesheet" href="./../fontawesome/css/fontawesome.css">
+    <link rel="stylesheet" href="./../fontawesome/css/all.css">
 </head>
 <body>
-
-    <section class="config-container">
+<section class="config-container">
+    <div class="container container-centered-column bg-dark">
         <div>
             <img class="login-logo" src="./../image/LOGO2.png" alt="Logo" title="Logo CD">
         </div>
@@ -74,11 +73,12 @@
             </ul>
         </div>
         <div>
-            <button type="submit" class="btn-envio">Atualizar</button>
+            <button type="submit" class="btn-envio" style="width: 100%"><i class="fas fa-check-circle"></i> Atualizar</button>
         </div>
-    </section>
-
-    <!-- Código que carrega arquivos JavaScript -->
-    <script src="./../scripts/scripts.js"></script>
+    </div>
+</section>
+<script src="./../scripts/scripts.js"></script>
+<script src="../fontawesome/js/fontawesome.js"></script>
+<script src="../fontawesome/js/all.js"></script>
 </body>
 </html>

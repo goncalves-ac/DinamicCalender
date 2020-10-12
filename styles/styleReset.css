@@ -108,6 +108,14 @@ input[type="color"]::-webkit-color-swatch {
     margin-right: auto;
     margin-left: auto;
 }
+.container-centered-column{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    justify-items: center;
+    justify-content: center;
+}
 .container-fluid {
     width: 100%;
     padding-right: 15px;
@@ -138,6 +146,7 @@ input[type="color"]::-webkit-color-swatch {
 }
 
 .btn{
+    cursor: pointer;
     appearance: button;
     text-decoration:none;
     display: inline;

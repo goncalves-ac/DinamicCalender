@@ -3,53 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <!-- Código que carrega Icone da página-->
-    <link rel="icon" type="imagem/png" href="../image/ICON.png" />
-    <!-- Código que carrega Google Font-->
+    <title>Calendário Dinâmico</title>
+    <link rel="icon" type="imagem/png" href="../image/ICON.png"/>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Código que carrega arquivos CSS -->
     <link rel="stylesheet" href="./../styles/styleReset.css">
     <link rel="stylesheet" href="./../styles/styles.css">
+    <link rel="stylesheet" href="./../fontawesome/css/fontawesome.css">
+    <link rel="stylesheet" href="./../fontawesome/css/all.css">
 </head>
 <body>
-
     <section class="config-container" class="perfil-config">
-        <div>
-            <img class="login-logo" src="./../image/LOGO2.png" alt="Logo" title="Logo CD">
-        </div>
-        <div id="config">
-            <form action="">
-                <input type="text" id="" name="" placeholder="Nome">
-                <input type="text" id="" name="" placeholder="Sobrenome">
-                <input type="email" id="" name="" placeholder="Email">
-                <input type="text" id="" name="" placeholder="CPF">
-                <input type="password" id="" name="" placeholder="Senha">
-                <input type="date" id="" name="" >
+        <div id="config" class="container container-centered-column">
+            <div>
+                <img class="login-logo" src="./../image/LOGO2.png" alt="Logo" title="Logo CD">
+            </div>
+            <form action="" style="width: 80%; min-width: 300px;">
+                <input type="text" name="nome" placeholder="Nome">
+                <input type="text" name="sobrenome" placeholder="Sobrenome">
+                <input type="email" name="email" placeholder="Email">
+                <input type="number" name="cpf" placeholder="CPF">
+                <input type="password" name="senha" placeholder="Senha">
+                <input type="date" name="nascimento" >
                 <div>
-                    <label for="gender">Gênero: </label>
-                    <ul>
+                    <label name="genero">Gênero: </label>
+                    <ul style="display: flex; flex-direction: row; flex-wrap: wrap;">
                         <li>
                             <input type="radio" id="fem" name="gender" value="Feminino">
-                            <label for="genderF" id="gender">Feminino</label>
+                            <label for="genderF" id="genderF">Feminino</label>
                         </li>
                         <li>
                             <input type="radio" id="masc" name="gender" value="Masculino">
-                            <label for="genderM" id="gender">Masculino</label>
+                            <label for="genderM" id="genderM">Masculino</label>
                         </li>
                         <li>
                             <input type="radio" id="sem-resposta" name="gender" value="Sem Resposta" checked>
-                            <label for="genderM" id="gender">Sem Resposta</label>
+                            <label for="genderOther" id="genderOther">Sem Resposta</label>
                         </li>
                     </ul>
                 </div>
-                <input type="phone" id="" name="" placeholder="Telefone">
-                <button type="submit" class="btn-envio">Atualizar</button>
+                <input type="phone"name="telefone" placeholder="Telefone">
+                <button type="submit" style="width: 100%;" class="btn"><i class="fas fa-check-circle"></i> Atualizar</button>
             </form>
         </div>
     </section>
-
-    <!-- Código que carrega arquivos JavaScript -->
-    <script src="./../scripts/scripts.js"></script>
+    <script src="../fontawesome/js/fontawesome.js"></script>
+    <script src="../fontawesome/js/all.js"></script>
 </body>
 </html>
