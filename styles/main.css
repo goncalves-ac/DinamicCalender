@@ -230,6 +230,7 @@ table th{
     height: 2.5rem;
     border-radius: 5px;
     box-shadow: 0px 3px 2px #ccc;
+    margin: 0 auto;
 }
 
 #callendar-day{
@@ -243,6 +244,7 @@ table th{
     padding-top: 15px;
     padding-left: 15px;
     font-weight: 700;
+    display: flex;
 }
 
 #callendar-week{

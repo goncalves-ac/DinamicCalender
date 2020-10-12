@@ -19,7 +19,6 @@ let year = document.getElementById('currentYear');
 
 let prevMonthDOM = document.getElementById('prev-month');
 let nextMonthDOM = document.getElementById('next-month');
-//let dayWeek = document.querySelector('.currentDay');
 
 month.textContent = monthList[monthNumber];
 year.textContent = currentYear.toString();
@@ -30,6 +29,7 @@ nextMonthDOM.addEventListener('click', ()=>nextMonth());
 let weekNumber = 1;
 let dayNumber = currentDay;
 
+const table = document.querySelector('table');
 const btnEvent = document.querySelectorAll('.btn-event');
 
 for (let i = 0; i < btnEvent.length; i++){
@@ -49,18 +49,27 @@ const activeBtn = (events) => {
 const titleCallendar = (param) => {
 
     if (param === 'Dia') {
+       
         month.textContent = monthList[monthNumber];
         dates.innerHTML = '';
+        table.style.display = 'none';
         writeDay(monthNumber,dayNumber);
+
     } else if (param === 'Semana') {
-        month.textContent = monthList[monthNumber].substr(0,3);
+        
+        month.textContent = monthList[monthNumber];
         dates.innerHTML = '';
+        table.style.display = 'table';
         writeWeek(monthNumber,weekNumber);
+
     } else {
+        
         month.textContent = monthList[monthNumber];
         year.textContent = currentYear.toString();
         dates.innerHTML = '';
+        table.style.display = 'table';
         writeMonth(monthNumber);
+
     }
 }
 
@@ -91,21 +100,24 @@ const activeWeek  = () => {
         aux++;
     }
 }
-
+let activeDay = currentDate.getDay();
 const writeDay = (month,dayNumber) => {
 
     let count = 0;
-
+    let today = currentDate.getDay();
+    
     if (currentDay === dayNumber) {
         for (let i =1; i <=getTotalDays(month); i++) {
-            if(i === currentDay) {
+            if(i === currentDay) {        
+                dates.innerHTML += ` <div class="currentDay">${weekList[today]}</div>`;  
                 dates.innerHTML += ` <div id="callendar-day">${i}</div>`;
-            }
+            }        
         }
         
     } else if (dayNumber > currentDay){
         for (let i = dayNumber; i <=getTotalDays(month); i++) {
-            if (count === 0) {
+            if (count === 0) {  
+                dates.innerHTML += ` <div class="currentDay">${weekList[activeDay]}</div>`;
                 dates.innerHTML += ` <div id="callendar-day">${i}</div>`;
             }
             count++;
@@ -114,6 +126,7 @@ const writeDay = (month,dayNumber) => {
     } else {
         for (let i = getTotalDays(month); i >= dayNumber; i--) {
             if (dayNumber === i) {
+                dates.innerHTML += ` <div class="currentDay">${weekList[activeDay]}</div>`;  
                 dates.innerHTML += ` <div id="callendar-day">${i}</div>`;
             }
         }
@@ -158,6 +171,12 @@ const readWeek = (month,weekNumber) =>{
                 }
             }
            
+           if (month === 1|| month === 2 || month === 5 || month === 8 || month === 10) {
+               return weekNumber = 5;
+           } else {
+               return weekNumber = 4;
+           }
+
         break;
         
         case 2:
@@ -405,6 +424,12 @@ let active =  document.querySelector('.btn-event.active');
                     currentYear--;
                 }
             }
+
+            if (activeDay !== 0) {
+                activeDay--;
+            } else {
+                activeDay = 6;
+            }
             setNewDay();
         break;
 
@@ -412,7 +437,11 @@ let active =  document.querySelector('.btn-event.active');
             if(weekNumber !== 1){
                 weekNumber--;
             }else{
-                weekNumber = 5;
+                if (5 === readWeek(monthNumber,weekNumber)) {
+                    weekNumber = 5;
+                } else if (4 === readWeek(monthNumber,weekNumber)){
+                    weekNumber = 4;
+                }
                 if(monthNumber !== 0){
                     monthNumber--;
                 }else{
@@ -450,6 +479,13 @@ const nextMonth = () => {
                     currentYear++;
                 }
             }
+
+            if (activeDay !== 6) {
+                activeDay++;
+            } else {
+                activeDay = 0;
+            }
+
             setNewDay();
         break;
 
@@ -482,7 +518,7 @@ const nextMonth = () => {
 
 const setNewDay = () => {
     currentDate.setFullYear(currentYear,monthNumber,currentDay);
-    month.textContent = monthList[monthNumber].substr(0,3) + '  ';
+    month.textContent = monthList[monthNumber];
     year.textContent = currentYear.toString();
     dates.textContent = '';
     writeDay(monthNumber,dayNumber);
@@ -490,7 +526,7 @@ const setNewDay = () => {
 
 const setNewWeek = () => {
     currentDate.setFullYear(currentYear,monthNumber,currentDay);
-    month.textContent = monthList[monthNumber].substr(0,3) + '  ';
+    month.textContent = monthList[monthNumber];
     year.textContent = currentYear.toString();
     dates.textContent = '';
     writeWeek(monthNumber,weekNumber);
