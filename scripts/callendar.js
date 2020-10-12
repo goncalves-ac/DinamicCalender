@@ -104,12 +104,11 @@ let activeDay = currentDate.getDay();
 const writeDay = (month,dayNumber) => {
 
     let count = 0;
-    let today = currentDate.getDay();
     
     if (currentDay === dayNumber) {
         for (let i =1; i <=getTotalDays(month); i++) {
             if(i === currentDay) {        
-                dates.innerHTML += ` <div class="currentDay">${weekList[today]}</div>`;  
+                dates.innerHTML += ` <div class="currentDay">${weekList[activeDay]}</div>`;  
                 dates.innerHTML += ` <div id="callendar-day">${i}</div>`;
             }        
         }
@@ -128,6 +127,7 @@ const writeDay = (month,dayNumber) => {
             if (dayNumber === i) {
                 dates.innerHTML += ` <div class="currentDay">${weekList[activeDay]}</div>`;  
                 dates.innerHTML += ` <div id="callendar-day">${i}</div>`;
+                
             }
         }
 
@@ -416,7 +416,8 @@ let active =  document.querySelector('.btn-event.active');
             if (dayNumber !== 1) {
                 dayNumber--;
             } else {
-                dayNumber = writeDay(monthNumber,dayNumber)+1;
+                dayNumber = writeDay(monthNumber,dayNumber);
+                
                 if(monthNumber !== 0){
                     monthNumber--;
                 }else{
