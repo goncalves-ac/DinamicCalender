@@ -1,7 +1,22 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <div th:replace="components/head"></div>
-<body>
-Hello World
+<body class="d-flex my-bg-orange-0" style="min-height: 100vh">
+<div class="align-self-center container-md text-center col-lg-5">
+        <form class="form-signin">
+            <img class="mb-4" th:src="@{/sources/image/logo-black.png}" alt="" width="80">
+            <h1 class="h3 mb-3 font-weight-normal">Calendário Dinâmico</h1>
+            <label for="inputEmail" class="sr-only"><i class="fas fa-at"></i> Email</label>
+            <input name="email" type="email" id="inputEmail" class="form-control my-1" placeholder="Email" required="" autofocus="">
+            <label for="inputPassword" class="sr-only"><i class="fas fa-key"></i> Senha</label>
+            <input name="senha" type="password" id="inputPassword" class="form-control my-1" placeholder="Senha" required="">
+            <button class="btn btn-lg btn-block my-bg-orange-1 my-2" type="submit">Entrar <i class="fas fa-chevron-right"></i></button>
+        </form>
+    <a href="#" class="btn btn-lg btn-block my-bg-orange-1 my-2"><i class="fas fa-user-plus"></i> Cadastre-se</a>
+    <hr>
+    <a href="#" class="btn btn-lg btn-block btn-danger"><i class="fab fa-google"></i> Login Google</a>
+    <a href="#" class="btn btn-lg btn-block btn-primary" ><i class="fab fa-facebook"></i> Login Facebook</a>
+</div>
+
 </body>
 </html>
