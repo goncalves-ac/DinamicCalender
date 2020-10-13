@@ -8,13 +8,14 @@ body {
     font-size: 15pt;
 }
 
-.nav-item a {
+#main-tab .nav-item a {
     color: #f1b0b7 !important;
 }
 
-.nav-link.active,
+#main-tab .nav-link.active,
 .tab-content {
     background-color: #E0E0E0 !important;
+    color: #000000 !important;
 }
 
 .clearfix {
