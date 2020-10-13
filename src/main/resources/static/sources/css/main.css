@@ -1,0 +1,9 @@
+body {
+    min-height: 100vh !important;
+    background-color: #212121 !important;
+}
+
+#main-navbar {
+    background-color: #ff9770 !important;
+    font-size: 15pt;
+}
