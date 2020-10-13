@@ -9,12 +9,22 @@ public class BasicController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(){
+        return "redirect:login";
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login(){
         return "login";
     }
 
     @RequestMapping(value = "/blank", method = RequestMethod.GET)
     public String blankPage(){
         return "blankPage";
+    }
+
+    @RequestMapping(value = "/cadastro", method = RequestMethod.GET)
+    public String cadastro(){
+        return "cadastro";
     }
 
 }
