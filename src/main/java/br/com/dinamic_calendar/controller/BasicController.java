@@ -7,24 +7,37 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class BasicController {
 
+    // PÁGINA PÚBLICAS
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(){
         return "redirect:login";
     }
-
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(){
         return "login";
     }
-
+    @RequestMapping(value = "/cadastro", method = RequestMethod.GET)
+    public String cadastro(){
+        return "cadastro";
+    }
+    @RequestMapping(value = "/sair", method = RequestMethod.GET)
+    public String sair(){
+        return "redirect:login";
+    }
     @RequestMapping(value = "/blank", method = RequestMethod.GET)
     public String blankPage(){
         return "blankPage";
     }
 
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public String pagina_test(){
-        return "test";
+
+    // PÁGINAS USUÁRIO
+    @RequestMapping(value = "/usuario", method = RequestMethod.GET)
+    public String usuario(){
+        return "redirect:usuario/perfil";
+    }
+    @RequestMapping(value = "/usuario/perfil", method = RequestMethod.GET)
+    public String usuarioPerfil(){
+        return "usuario/perfil";
     }
 
 }
