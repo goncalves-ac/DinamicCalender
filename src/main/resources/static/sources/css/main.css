@@ -7,3 +7,16 @@ body {
     background-color: #ff9770 !important;
     font-size: 15pt;
 }
+
+.nav-item a {
+    color: #f1b0b7 !important;
+}
+
+.nav-link.active,
+.tab-content {
+    background-color: #E0E0E0 !important;
+}
+
+.clearfix {
+    background-color: #FF572280 !important;
+}
