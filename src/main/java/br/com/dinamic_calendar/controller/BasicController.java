@@ -17,4 +17,9 @@ public class BasicController {
         return "blankPage";
     }
 
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public String pagina_test(){
+        return "test";
+    }
+
 }

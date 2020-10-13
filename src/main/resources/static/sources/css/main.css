@@ -13,3 +13,17 @@ body {
     background-color: #ff9770 !important;
     font-size: 15pt;
 }
+
+#main-tab .nav-item a {
+    color: #f1b0b7 !important;
+}
+
+#main-tab .nav-link.active,
+.tab-content {
+    background-color: #E0E0E0 !important;
+    color: #000000 !important;
+}
+
+.clearfix {
+    background-color: #FF572280 !important;
+}
