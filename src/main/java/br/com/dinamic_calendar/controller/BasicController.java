@@ -12,4 +12,9 @@ public class BasicController {
         return "login";
     }
 
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public String qlqr_coisa(){
+        return "test";
+    }
+
 }
