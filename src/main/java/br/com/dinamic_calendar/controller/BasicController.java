@@ -5,12 +5,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
+@RequestMapping(value = "")
 public class BasicController {
 
-    // PÁGINA PÚBLICAS
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping
     public String index(){
-        return "redirect:login";
+        return "redirect:/login";
     }
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(){
@@ -22,22 +22,11 @@ public class BasicController {
     }
     @RequestMapping(value = "/sair", method = RequestMethod.GET)
     public String sair(){
-        return "redirect:login";
+        return "redirect:/login";
     }
     @RequestMapping(value = "/blank", method = RequestMethod.GET)
     public String blankPage(){
         return "blankPage";
-    }
-
-
-    // PÁGINAS USUÁRIO
-    @RequestMapping(value = "/usuario", method = RequestMethod.GET)
-    public String usuario(){
-        return "redirect:usuario/perfil";
-    }
-    @RequestMapping(value = "/usuario/perfil", method = RequestMethod.GET)
-    public String usuarioPerfil(){
-        return "usuario/perfil";
     }
 
 }
