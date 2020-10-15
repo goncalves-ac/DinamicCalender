@@ -4,6 +4,10 @@
 .my-bg-white-1{background-color: #E0E0E0 !important;}
 .my-bg-orange-0{background-color: #FFAB91 !important;}
 .my-bg-orange-1{background-color: #FF5722 !important;}
+.my-orange-1{color: #FF5722 !important;}
+.my-bolder{font-weight: bold !important;}
+
+.my-text-align {text-align: center !important;}
 
 body {
     min-height: 100vh !important;

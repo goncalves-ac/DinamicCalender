@@ -4,6 +4,7 @@
 <body>
 <div th:replace="_components_/nav"></div>
 
+<div th:replace="_components_/usuario/perfilFoto"></div>
 
 <div class="container my-5">
     <ul class="nav nav-tabs font-weight-bold" id="main-tab" role="tablist">
@@ -18,13 +19,7 @@
     </ul>
     <div class="tab-content" id="myTabContent">
         <div aria-labelledby="home-tab" class="tab-pane fade show active w-100 p-3" id="home" role="tabpanel">
-            <div class="w-100 p-3 clearfix">
-                <p class="text-center">“No momento em que verdadeiramente entendo meu inimigo, o suficiente para
-                    derrotá-lo, então naquele mesmo momento eu também o amo.”</p>
-            </div>
-            <div class="d-flex justify-content-around align-self-center">
-
-            </div>
+            <div th:replace="_components_/usuario/perfilUsuario"></div>
         </div>
         <div aria-labelledby="profile-tab" class="tab-pane fade" id="profile" role="tabpanel">
 
