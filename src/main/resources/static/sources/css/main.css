@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap');
 *{font-family: 'Comfortaa', cursive !important;}
 
+.my-bg-white-1{background-color: #E0E0E0 !important;}
 .my-bg-orange-0{background-color: #FFAB91 !important;}
 .my-bg-orange-1{background-color: #FF5722 !important;}
 
