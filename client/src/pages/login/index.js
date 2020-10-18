@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+import { Link } from "react-router-dom";
 import Logo_Black from "./../../img/logo-black.png";
 import "./style.css";
 
@@ -28,8 +29,8 @@ export default function Login() {
                 <button className="btn btn-lg btn-block my-bg-orange-1 my-2" type="submit">Entrar <i
                     className="fas fa-chevron-right"></i></button>
             </form>
-            <a href="/cadastro" className="btn btn-lg btn-block my-bg-orange-1 my-2"><i
-                className="fas fa-user-plus"></i> Cadastre-se</a>
+            <Link to="/cadastro" className="btn btn-lg btn-block my-bg-orange-1 my-2"><i
+                className="fas fa-user-plus"></i> Cadastre-se</Link>
             <hr/>
             <a href="#" className="btn btn-lg btn-block btn-danger"><i className="fab fa-google"></i> Login Google</a>
             <a href="#" className="btn btn-lg btn-block btn-primary"><i className="fab fa-facebook"></i> Login Facebook</a>
