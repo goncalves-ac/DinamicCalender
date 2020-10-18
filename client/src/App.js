@@ -1,8 +1,8 @@
 import React from 'react';
-import Cadastro from "./pages/cadastro";
+import Routes from './routes';
 
 function App() {
-  return <Cadastro/>;
+  return <Routes />;
 }
 
 export default App;
