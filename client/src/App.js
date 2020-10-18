@@ -1,8 +1,8 @@
 import React from 'react';
-import Login from "./pages/login";
+import Cadastro from "./pages/cadastro";
 
 function App() {
-  return <Login/>;
+  return <Cadastro/>;
 }
 
 export default App;
