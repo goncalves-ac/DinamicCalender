@@ -1,5 +1,5 @@
 import React from "react";
-import "./PerfilUsuario.css";
+import "./ListaAmigos.css";
 
 const ListaAmigos = () => {
     return (
@@ -24,7 +24,6 @@ const ListaAmigos = () => {
                         <div className="col-lg-7 col-md-7 col-sm-12">
                             <h5><a className="profile-link" href="#">Sophia Silva</a></h5>
                             <p>Assim como tudo na vida, todo início de um processo deve ser realizado com cautela.</p>
-                            <!--<p class="text-muted"></p>-->
                         </div>
                         <div className="col-lg-2 col-md-2 col-sm-3">
                             <button className="btn btn-info btn-circle pull-right"><i

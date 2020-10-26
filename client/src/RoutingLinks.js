@@ -7,6 +7,7 @@ const RoutingLinks = () => {
       <h2 className="text-white">ENDPOINTS</h2>
       <Link className="mt-2" to="/login">/login</Link>
       <Link className="mt-2" to="/cadastro">/cadastro</Link>
+        <Link className="mt-2" to="/usuario">/usuario</Link>
     </div>
   );
 };

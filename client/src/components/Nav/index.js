@@ -2,17 +2,19 @@ import React, {useState, useEffect} from "react";
 import Icon from "../../img/icon.png";
 import UserModelo from "../../img/user1.jpg";
 
+import { Link } from "react-router-dom";
+
 export default function Index() {
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light" id="main-navbar">
-            <a className="navbar-brand" href="#">
+            <Link className="navbar-brand" to="#">
                 <img src={Icon} height="60" alt="" loading="lazy" />
-            </a>
-            <a className="navbar-brand mx-3" href="#">
+            </Link>
+            <Link className="navbar-brand mx-3" to="#">
                 <img src={UserModelo} width="50" height="50"
                      className="rounded-circle border border-dark" loading="lazy" />
-            </a>
+            </Link>
             <button className="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                     aria-label="Toggle navigation">
