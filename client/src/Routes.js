@@ -13,6 +13,7 @@ const Routes = () => {
       <Route path="/login" exact><Login /></Route>
       <Route path="/cadastro" exact><Cadastro /></Route>
       <Route path="/usuario" exact><Usuario /></Route>
+      <Route path="/calendario" exact><Calendario /></Route>
     </Switch>
       
     </BrowserRouter>

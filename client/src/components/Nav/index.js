@@ -24,17 +24,17 @@ export default function Index() {
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav ml-auto">
                     <li className="nav-item active">
-                        <a className="nav-link" href="#"><i className="fas fa-users fa-lg"></i> Amigos </a>
+                        <Link className="nav-link" to="#"><i className="fas fa-users fa-lg"></i> Amigos </Link>
                     </li>
                     <li className="nav-item active">
-                        <a className="nav-link" href="#"><i
-                            className="fas fa-calendar-alt fa-lg"></i> Calendário </a>
+                        <Link className="nav-link" to="/calendario"><i
+                            className="fas fa-calendar-alt fa-lg"></i> Calendário </Link>
                     </li>
                     <li className="nav-item active">
-                        <a className="nav-link" href="#"><i className="fas fa-user-cog fa-lg"></i> Editar Perfil </a>
+                        <Link className="nav-link" to="#"><i className="fas fa-user-cog fa-lg"></i> Editar Perfil </Link>
                     </li>
                     <li className="nav-item active">
-                        <a className="nav-link" href="#"><i className="fas fa-cogs fa-lg"></i> Configuração </a>
+                        <Link className="nav-link" to="#"><i className="fas fa-cogs fa-lg"></i> Configuração </Link>
                     </li>
                     <hr />
                         <li className="nav-item active">
