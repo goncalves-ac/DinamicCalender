@@ -4,6 +4,7 @@ import Cadastro from './pages/Cadastro';
 import Login from './pages/Login';
 import RoutingLinks from './RoutingLinks';
 import Usuario from "./pages/Usuario";
+import Calendario from "./pages/Calendario";
 
 const Routes = () => {
   return (

@@ -3,6 +3,6 @@ import "./Calendario.css"
 
 export default function Calendario () {
     return (
-        <p>Calendario</p>
+        <p className="calendario">Calendario</p>
     );
 }
