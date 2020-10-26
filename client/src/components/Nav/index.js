@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from "react";
-import Icon from "../img/icon.png";
-import UserModelo from "../img/user1.jpg";
+import Icon from "../../img/icon.png";
+import UserModelo from "../../img/user1.jpg";
 
-export default function Nav() {
+export default function Index() {
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light" id="main-navbar">

@@ -1,0 +1,23 @@
+/* https://www.bootdey.com/snippets/view/bs4-beta-friend-list#css */
+.people-nearby {
+    padding: 30px;
+    margin-bottom: 20px;
+}
+
+.people-nearby .google-maps {
+    height: 300px;
+    width: 100%;
+    border: none;
+}
+
+.people-nearby .nearby-user {
+    padding: 20px 10px;
+    border-top: 1px solid #f1f2f2;
+    border-bottom: 1px solid #f1f2f2;
+}
+
+img.profile-photo-lg {
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+}
