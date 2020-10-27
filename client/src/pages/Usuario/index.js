@@ -16,7 +16,7 @@ export default function Usuario () {
                     <li className="nav-item" role="presentation">
                         <a aria-controls="home" aria-selected="true" className="nav-link active" data-toggle="tab"
                            href="#home" id="home-tab"
-                           role="tab"> NomeUsuário </a>
+                           role="tab"> Timeline </a>
                     </li>
                     <li className="nav-item" role="presentation">
                         <a aria-controls="profile" aria-selected="false" className="nav-link" data-toggle="tab"
