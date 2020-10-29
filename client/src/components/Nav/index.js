@@ -8,7 +8,7 @@ export default function Index() {
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light" id="main-navbar">
-            <Link className="navbar-brand" to="#">
+            <Link className="navbar-brand" to="/">
                 <img src={Icon} height="60" alt="" loading="lazy" />
             </Link>
             <Link className="navbar-brand mx-3" to="#">

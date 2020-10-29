@@ -6,11 +6,14 @@ import interactionPlugin from '@fullcalendar/interaction';
 import timeGridWeek from '@fullcalendar/timegrid';
 import timeGridDay from '@fullcalendar/timegrid';
 import listYear from '@fullcalendar/list'; //listMonth, listWeek, listDay, listYear
+import ModalOverlay from '../../components/ModalOverlay';
+import CalenderModal from '../../components/CalenderModal';
 
 
 export default class Calendario extends React.Component {
 
     state = {
+        selectedEvent: null,
         weekendsVisible: true,
         currentEvents: [],
         INITIAL_EVENTS: [
@@ -18,15 +21,18 @@ export default class Calendario extends React.Component {
                 id: 1,
                 title: 'Desenvolver Banco de Dados',
                 start: new Date().toISOString().replace(/T.*$/, ''),
-                allDay: true,
-                borderColor: "#b40505",
-                backgroundColor: "#ffffaa",
-                textColor: "#000000"
+                duration: "02:00",
+                place: "Pizzaria Margarithe",
+                invitedFriends: ["Matheus", "Lucas", "Marina", "Cecília", "João", "Camila", "Alexandre", "Lili"],
+                description: "",
+                allDay: false,
+                backgroundColor: "#d33"
             },
             {
                 id: 2,
                 title: 'Banho e Tosa do Afrânio',
-                start: new Date().toISOString().replace(/T.*$/, '') + 'T12:00:00'
+                start: new Date().toISOString().replace(/T.*$/, '') + 'T12:00:00',
+                backgroundColor: "#d1a"
             },
             {
                 id: 4,
@@ -46,8 +52,32 @@ export default class Calendario extends React.Component {
         console.log(input);
     };
 
+    handleEventClick = ({event}) => {
+        const eventInfo = {
+            title: event.title,
+            backgroundColor: event.backgroundColor,
+            start: event.start,
+            duration: event._def.extendedProps.duration,
+            description: event._def.extendedProps.description,
+            invitedFriends: event._def.extendedProps.invitedFriends,
+            place: event._def.extendedProps.place,
+        };
+        this.setState({selectedEvent: eventInfo})
+    }
+
+    handleCloseModal = () => this.setState({selectedEvent: null})
+
+
     render() {
-        return <section>
+        return (
+        <section>
+            {this.state.selectedEvent && <ModalOverlay 
+            children=
+            {
+            <CalenderModal 
+            eventInfo={this.state.selectedEvent}/>
+            }
+            handleCloseModal={this.handleCloseModal}/>}
             <Nav/>
             <div className="container bg-light my-5 py-3">
                 <FullCalendar
@@ -75,11 +105,12 @@ export default class Calendario extends React.Component {
                         list:     'Lista'
                     }}
                     eventDrop={this.dataAlterada}
-                    //eventClick={this.handleEventClick}
+                    eventClick={this.handleEventClick}
                     //events={this.formatEvents()}
                 />
             </div>
         </section>
+        )
 
     }
 
