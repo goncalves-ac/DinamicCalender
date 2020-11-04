@@ -17,7 +17,7 @@ export default function Cadastro() {
         <div className="row no-gutters my-bg-orange-0" id="container-base-cadastro">
             <div className="align-self-center container-md text-center col-lg-5">
                 <form className="form-signin">
-                    <img className="mb-4" src={Logo_Black} alt="" width="50"/>
+                    <img className="mb-4" src={Logo_Black} alt="" width="120"/>
                     <h2 className="h3 mb-3 font-weight-normal">Cadastro</h2>
 
                     <div className="row no-gutters">
@@ -48,7 +48,7 @@ export default function Cadastro() {
                         <a href="#">Política de Dados</a> e <a href="#">Utilização de Cookies</a>.
                         Você pode receber notificações e cancelar quando quiser.
                     </p>
-                    <button className="btn btn-lg btn-block my-bg-orange-1 my-2" type="submit">
+                    <button className="btn btn-lg btn-block my-bg-orange-1 my-2 my-color-white" type="submit">
                         <i className="fas fa-check-circle"></i> CADASTRAR
                     </button>
                 </form>
