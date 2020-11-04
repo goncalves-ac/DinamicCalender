@@ -1,8 +1,10 @@
-import React from 'react';
-import './styles.css';
+import React, { useState } from "react";
+import CreateEditEventModal from "../CreateEditEventModal";
+import FriendsCarousel from "../FriendsCarousel";
+import "./styles.css";
 
-
-const CalenderModal = ({eventInfo}) => {
+const CalenderModal = ({ eventInfo, handleSubmit }) => {
+  const [mode, setMode] = useState("VIEW" || "EDIT" || "CREATE");
 
   const parsedDate = () => {
     if (eventInfo.start) {
@@ -10,19 +12,24 @@ const CalenderModal = ({eventInfo}) => {
       return hours[0];
     }
     return null;
-    
-  }
+  };
 
-  const parsedFriends = () => {
-    if (eventInfo.invitedFriends) {
-      return JSON.stringify(eventInfo.invitedFriends).replace(/[\[|\]|\"]/g, "").split(",").join("; ")
-    }
-    return null;
-  }
+  if (mode !== "VIEW")
+    return (
+      <CreateEditEventModal
+        eventInfo={eventInfo}
+        mode={mode}
+        setMode={setMode}
+        handleSubmit={handleSubmit}
+      />
+    );
 
   return (
     <div className="calender-modal-container">
-      <div className="calender-modal-background"  style={{backgroundColor: eventInfo.backgroundColor || "#3788d8"}} />
+      <div
+        className="calender-modal-background"
+        style={{ backgroundColor: eventInfo.backgroundColor || "#3788d8" }}
+      />
       <div className="calender-modal-styling" />
 
       <div className="calender-modal-content">
@@ -32,29 +39,48 @@ const CalenderModal = ({eventInfo}) => {
 
         <div className="event-field">
           <h2>Horário: </h2>
-          <div className="modal-event-start calender-modal-field-value">{parsedDate() || "--:--"}</div>
+          <p className="modal-event-start calender-modal-field-value">
+            {parsedDate() || "--:--"}
+          </p>
         </div>
 
         <div className="event-field">
           <h2>Duração: </h2>
-          <div className="modal-event-duration calender-modal-field-value">{eventInfo.duration || "--:--"}</div>
+          <p className="modal-event-duration calender-modal-field-value">
+            {eventInfo.duration || "--:--"}
+          </p>
         </div>
 
         <div className="event-field">
           <h2>Local: </h2>
-          <div className="modal-event-place calender-modal-field-value">{eventInfo.place || "-"}</div>
+          <p className="modal-event-place calender-modal-field-value">
+            {eventInfo.place || "-"}
+          </p>
         </div>
 
         <div className="event-field">
           <h2>Amigos Convidados: </h2>
-          <div className="modal-event-invited-friends calender-modal-field-value">{ parsedFriends() || "Não há convidados"}</div>
+          <div className="carousel-container">
+            <FriendsCarousel
+              loading={false}
+              friends={eventInfo.invitedFriends || []}
+            />
+          </div>
         </div>
 
         <div className="event-field">
-          <h2>Descrição:  </h2>
-          <div className="modal-event-description calender-modal-field-value">{eventInfo.description || "Sem descrição"}</div>
+          <h2>Descrição: </h2>
+          <p className="modal-event-description calender-modal-field-value">
+            {eventInfo.description || "Sem descrição"}
+          </p>
         </div>
-        
+
+        <button
+          className="calender-modal-edit-event-button"
+          onClick={() => setMode("EDIT")}
+        >
+          Editar <i className="fas fa-edit" />
+        </button>
       </div>
     </div>
   );
