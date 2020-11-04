@@ -1,19 +1,31 @@
-import React from 'react';
-import {createPortal} from 'react-dom';
-import './styles.css';
+import React from "react";
+import { createPortal } from "react-dom";
+import "./styles.css";
 
-
-const ModalOverlay = ({children, handleCloseModal}) => {
+const ModalOverlay = ({ children, handleCloseModal }) => {
   const targetDiv = document.getElementById("modal-layer");
+  const overlayRef = React.createRef();
 
-  return (
-    createPortal(
-    <div className="modal-overlay" >
+  const handleOverlayClick = (e) => {
+    if (e.target === overlayRef.current) {
+      handleCloseModal();
+    }
+  };
+
+  return createPortal(
+    <div
+      ref={overlayRef}
+      className="modal-overlay"
+      onClick={handleOverlayClick}
+    >
       <div className="modal-content">
-      <button className="modal-close-btn" onClick={handleCloseModal}><i className="fas fa-times fa-2x" /></button>
         {children}
+        <button className="modal-close-btn" onClick={handleCloseModal}>
+          <i className="fas fa-times fa-2x" />
+        </button>
       </div>
-    </div>, targetDiv)
+    </div>,
+    targetDiv
   );
 };
 
