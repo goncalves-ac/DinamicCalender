@@ -17,7 +17,7 @@
   border: none;
   max-width: 600px;
   width: 90%;
-  height: 75%;
+  height: 100%;
 }
 
 .modal-close-btn {
@@ -26,4 +26,7 @@
   background: none;
   color: white;
   border: none;
+  position: absolute;
+  right: 0;
+  z-index: 10;
 }
