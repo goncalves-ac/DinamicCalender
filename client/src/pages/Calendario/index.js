@@ -10,15 +10,19 @@ import ModalOverlay from "../../components/ModalOverlay";
 import CalenderModal from "../../components/CalenderModal";
 import "./style.css";
 import CreateEditEventModal from "../../components/CreateEditEventModal";
-import friendList from "./../../mock/friendList";
+import allFriends from "./../../mock/allFriends";
+import invitedFriends from "./../../mock/invitedFriends";
 
 export default class Calendario extends React.Component {
   state = {
     selectedEvent: null,
+    calendarRef: React.createRef(),
     showCreateEventModal: false,
     weekendsVisible: true,
-    currentEvents: [],
-    allFriends: friendList,
+    selectedDate: `${new Date().getFullYear}-${
+      new Date().getMonth() + 1
+    }-${new Date().getDate()}`,
+    allFriends: allFriends,
     INITIAL_EVENTS: [
       {
         id: 1,
@@ -32,7 +36,7 @@ export default class Calendario extends React.Component {
         start: new Date().toISOString().replace(/T.*$/, ""),
         duration: "02:00",
         place: "Pizzaria Margarithe",
-        invitedFriends: [friendList[1], friendList[2], friendList[3]],
+        invitedFriends: invitedFriends,
         description: "",
         allDay: false,
         backgroundColor: "#dd3333",
@@ -50,6 +54,7 @@ export default class Calendario extends React.Component {
         backgroundColor: "#9922aa",
       },
     ],
+    currentEvents: [],
   };
 
   dataAlterada = (input) => {
@@ -72,6 +77,7 @@ export default class Calendario extends React.Component {
 
   handleDateClick = (event) => {
     this.setState({ showCreateEventModal: true });
+    this.setState({ selectedDate: event.dateStr });
     console.log(event);
   };
 
@@ -80,7 +86,21 @@ export default class Calendario extends React.Component {
 
   handleModalFormSubmit = (e, { eventInfo, mode }) => {
     e.preventDefault();
+    eventInfo.start = `${this.state.selectedDate}T${eventInfo.start}:00`;
+
+    if (mode === "CREATE") {
+      const allIds = this.state.INITIAL_EVENTS.map((event) => event.id);
+      const maxId = Math.max.apply(Math, allIds);
+      const createdEventId = maxId + 1;
+      const newEvent = Object.assign({ id: createdEventId }, eventInfo);
+
+      this.setState({ currentEvents: [...this.state.currentEvents, newEvent] });
+    }
   };
+
+  componentDidMount() {
+    this.state.currentEvents = this.state.INITIAL_EVENTS;
+  }
 
   render() {
     return (
@@ -91,6 +111,8 @@ export default class Calendario extends React.Component {
               <CalenderModal
                 eventInfo={this.state.selectedEvent}
                 handleSubmit={this.handleModalFormSubmit}
+                allFriends={allFriends}
+                setCalendarState={this.setState}
               />
             }
             handleCloseModal={this.handleCloseDetails}
@@ -104,6 +126,8 @@ export default class Calendario extends React.Component {
                 eventInfo={{}}
                 handleSubmit={this.handleModalFormSubmit}
                 mode="CREATE"
+                allFriends={allFriends}
+                setCalendarState={this.setState}
               />
             }
             handleCloseModal={this.handleCloseCreation}
@@ -113,6 +137,7 @@ export default class Calendario extends React.Component {
         <Nav />
         <div className="container bg-light my-5 py-3">
           <FullCalendar
+            ref={this.state.calendarRef}
             plugins={[
               dayGridPlugin,
               timeGridWeek,
@@ -130,6 +155,7 @@ export default class Calendario extends React.Component {
             initialView="dayGridMonth"
             initialEvents={this.state.INITIAL_EVENTS}
             editable={true}
+            events={this.state.currentEvents}
             selectable={true}
             dateClick={this.handleDateClick}
             select={this.handleDateClick}
