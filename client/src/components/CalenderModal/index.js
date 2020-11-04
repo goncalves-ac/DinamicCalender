@@ -3,7 +3,12 @@ import CreateEditEventModal from "../CreateEditEventModal";
 import FriendsCarousel from "../FriendsCarousel";
 import "./styles.css";
 
-const CalenderModal = ({ eventInfo, handleSubmit }) => {
+const CalenderModal = ({
+  eventInfo,
+  handleSubmit,
+  allFriends,
+  setCalendarState,
+}) => {
   const [mode, setMode] = useState("VIEW" || "EDIT" || "CREATE");
 
   const parsedDate = () => {
@@ -21,6 +26,8 @@ const CalenderModal = ({ eventInfo, handleSubmit }) => {
         mode={mode}
         setMode={setMode}
         handleSubmit={handleSubmit}
+        allFriends={allFriends}
+        setCalendarState={setCalendarState}
       />
     );
 
