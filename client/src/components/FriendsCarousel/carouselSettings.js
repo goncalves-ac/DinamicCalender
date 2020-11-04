@@ -1,9 +1,9 @@
 export default {
   infinite: true,
-  slidesToShow: 4,
   slidesToScroll: 1,
+  slidesToShow: 3,
   dots: false,
   arrows: false,
   centerMode: true,
-  centerPadding: "3px",
+  centerPadding: "1rem",
 };
