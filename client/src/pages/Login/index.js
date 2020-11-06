@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from "react";
+import AuthSSO, {authMethods} from "../../components/AuthSSO";
 import { Link } from "react-router-dom";
 import Logo_Black from "./../../img/logo-black.png";
 import "./style.css";
+
 
 export default function Login() {
 
@@ -32,8 +34,8 @@ export default function Login() {
                 <Link to="/cadastro" className="btn btn-lg btn-block my-bg-orange-1 my-2 my-color-white"><i
                     className="fas fa-user-plus my-color-white"></i> Cadastre-se</Link>
                 <hr/>
-                <a href="#" className="btn btn-lg btn-block btn-danger"><i className="fab fa-google"></i> Login Google</a>
-                <a href="#" className="btn btn-lg btn-block btn-primary"><i className="fab fa-facebook"></i> Login Facebook</a>
+                <a href="#" onClick={() => {AuthSSO(authMethods.GOOGLE)}}  className="btn btn-lg btn-block btn-danger"><i className="fab fa-google"></i> Login Google</a>
+                <a href="#" onClick={() => {AuthSSO(authMethods.FACEBOOK)}}  className="btn btn-lg btn-block btn-primary"><i className="fab fa-facebook"></i> Login Facebook</a>
             </div>
         </div>
     );
