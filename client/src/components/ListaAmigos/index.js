@@ -34,29 +34,17 @@ const ListaAmigos = () => {
       profileLink: "#",
       userDesc: "Um brinde ao que é vivido e não postado.",
     },
-  ];
+]
 
-  return (
-    <div className=" col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-sm-12">
-      <form className="form-inline py-3">
-        <input
-          aria-label="Search"
-          className="form-control col-md-10 col-sm-11 p-1"
-          placeholder="Buscar Amigo..."
-          type="search"
-        />
-        <button className="btn btn-success col-md-2 col-sm-1 p-1" type="submit">
-          <i className="fas fa-search fa-lg"></i>
-        </button>
-      </form>
 
-      <div className="people-nearby">
-        {amigos.map((amigo) => (
-          <CardAmigo userInfo={amigo} key={amigo.id} />
-        ))}
-      </div>
-    </div>
-  );
-};
+    return (
+        <div className=" col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-sm-12">
+            <div className="people-nearby">
+                {amigos.map(amigo => <CardAmigo userInfo={amigo}/>)}
+            </div>
+        </div>
+    );
+}
+
 
 export default ListaAmigos;
