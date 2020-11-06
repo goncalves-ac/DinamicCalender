@@ -32,9 +32,13 @@ body {
   background-color: #212121 !important;
 }
 
+.nav-height {
+  height: 7vh ;
+}
+
 #main-navbar {
   background-color: #ff9770 !important;
-  font-size: 15pt;
+  font-size: 13pt;
 }
 
 #main-tab .nav-item a {
@@ -44,7 +48,7 @@ body {
 #main-tab .nav-link.active,
 .tab-content {
   background-color: #e0e0e0 !important;
-  color: #000000 !important;
+  color: #2c3e50 !important;
 }
 
 .clearfix {

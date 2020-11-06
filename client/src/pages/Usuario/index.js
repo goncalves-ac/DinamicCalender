@@ -3,6 +3,7 @@ import "./Usuario.css";
 
 import PerfilUsuario from "../../components/PerfilUsuario";
 import ListaAmigos from "../../components/ListaAmigos";
+import ListaBusca from "../../components/ListaBusca";
 import Nav from "../../components/Nav"
 import FotoPerfil from "../../components/FotoPerfil";
 
@@ -16,12 +17,17 @@ export default function Usuario () {
                     <li className="nav-item" role="presentation">
                         <a aria-controls="home" aria-selected="true" className="nav-link active" data-toggle="tab"
                            href="#home" id="home-tab"
-                           role="tab"> Timeline </a>
+                           role="tab"> <i className="fas fa-stream"></i> Timeline </a>
                     </li>
                     <li className="nav-item" role="presentation">
                         <a aria-controls="profile" aria-selected="false" className="nav-link" data-toggle="tab"
                            href="#profile" id="profile-tab"
-                           role="tab"> Amigos </a>
+                           role="tab"> <i className="fas fa-users"></i> Amigos </a>
+                    </li>
+                    <li className="nav-item" role="presentation">
+                        <a aria-controls="search" aria-selected="false" className="nav-link" data-toggle="tab"
+                           href="#search" id="search-tab"
+                           role="tab"> <i className="fas fa-search"></i> Buscar </a>
                     </li>
                 </ul>
                 <div className="tab-content" id="myTabContent">
@@ -34,8 +40,8 @@ export default function Usuario () {
                         <ListaAmigos />
                     </div>
 
-                    <div aria-labelledby="contact-tab" className="tab-pane fade" id="contact" role="tabpanel">
-
+                    <div aria-labelledby="search-tab" className="tab-pane fade" id="search" role="tabpanel">
+                        <ListaBusca />
                     </div>
                 </div>
             </div>

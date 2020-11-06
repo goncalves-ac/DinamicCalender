@@ -1,6 +1,6 @@
 import React from "react";
 import CardAmigo from "../CardAmigo";
-import "./ListaAmigos.css";
+import "./ListaBusca.css";
 
 const ListaAmigos = () => {
     const amigos = [
@@ -33,6 +33,16 @@ const ListaAmigos = () => {
 
     return (
         <div className=" col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-sm-12">
+
+            <form className="form-inline py-3">
+                <input aria-label="Search" className="form-control col-md-10 col-sm-11 p-1"
+                       placeholder="Buscar Amigo..."
+                       type="search" />
+                    <button className="btn col-md-2 col-sm-1 p-1 my-bg-orange-1" type="submit">
+                        <i className="fas fa-search fa-lg my-color-white"></i>
+                    </button>
+            </form>
+
             <div className="people-nearby">
                 {amigos.map(amigo => <CardAmigo userInfo={amigo}/>)}
             </div>
