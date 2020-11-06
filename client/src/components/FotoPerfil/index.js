@@ -16,8 +16,6 @@ const FotoPerfil = () => {
                 </div>
             </div>
         </div>
-      </div>
-    </div>
   );
 };
 
