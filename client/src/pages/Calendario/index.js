@@ -83,6 +83,7 @@ export default class Calendario extends React.Component {
                 <FullCalendar
                     plugins={[dayGridPlugin, timeGridWeek,timeGridDay, listYear, interactionPlugin]}
                     editable={true}
+                    contentHeight= "auto"
                     headerToolbar={{
                         left: 'prev,next today',
                         center: 'title',
