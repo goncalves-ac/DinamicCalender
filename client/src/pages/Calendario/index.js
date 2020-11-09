@@ -88,11 +88,50 @@ export default class Calendario extends React.Component {
     e.preventDefault();
     eventInfo.start = `${this.state.selectedDate}T${eventInfo.start}:00`;
 
-    if (mode === "CREATE") {
-      const allIds = this.state.INITIAL_EVENTS.map((event) => event.id);
-      const maxId = Math.max.apply(Math, allIds);
-      const createdEventId = maxId + 1;
-      const newEvent = Object.assign({ id: createdEventId }, eventInfo);
+    render() {
+        return (
+        <section>
+            {this.state.selectedEvent && <ModalOverlay 
+            children=
+            {
+            <CalenderModal 
+            eventInfo={this.state.selectedEvent}/>
+            }
+            handleCloseModal={this.handleCloseModal}/>}
+            <Nav/>
+            <div className="container bg-light my-5 py-3">
+                <FullCalendar
+                    plugins={[dayGridPlugin, timeGridWeek,timeGridDay, listYear, interactionPlugin]}
+                    editable={true}
+                    contentHeight= "auto"
+                    headerToolbar={{
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,timeGridDay,listYear'
+                    }}
+                    allDayText='O Dia Todo'
+                    initialView = 'dayGridMonth'
+                    initialEvents={this.state.INITIAL_EVENTS}
+                    editable={true}
+                    selectable={true}
+                    selectMirror={true}
+                    dayMaxEvents={true}
+                    weekends={this.state.weekendsVisible}
+                    locale='pt-br'
+                    buttonText={{
+                        today:    'Hoje',
+                        month:    'Mês',
+                        week:     'Semana',
+                        day:      'Diário',
+                        list:     'Lista'
+                    }}
+                    eventDrop={this.dataAlterada}
+                    eventClick={this.handleEventClick}
+                    //events={this.formatEvents()}
+                />
+            </div>
+        </section>
+        )
 
       this.setState({ currentEvents: [...this.state.currentEvents, newEvent] });
     }

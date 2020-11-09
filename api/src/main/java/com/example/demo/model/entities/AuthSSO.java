@@ -5,7 +5,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-public class SSO {
+public class AuthSSO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,9 +17,9 @@ public class SSO {
     private Usuario usuario;
     private String uuid_externo;
 
-    public SSO() { }
+    public AuthSSO() { }
 
-    public SSO(int id_sso, Usuario usuario, String uuid_externo) {
+    public AuthSSO(int id_sso, Usuario usuario, String uuid_externo) {
         this.id_sso = id_sso;
         this.usuario = usuario;
         this.uuid_externo = uuid_externo;
