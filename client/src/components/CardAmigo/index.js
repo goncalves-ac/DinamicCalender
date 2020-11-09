@@ -17,10 +17,11 @@ const CardAmigo = ({ userInfo }) => {
           </h5>
           <p>{userDesc}</p>
         </div>
-        <div className="col-lg-2 col-md-2 col-sm-3">
-          <button className="btn btn-info btn-circle pull-right">
-            <i className="fas fa-user-plus fa-lg"></i>
-          </button>
+        <div className="d-flex col-lg-2 col-md-2 col-sm-3">
+          <div className="btn-group btn-group-toggle" data-toggle="buttons">
+            <button type="button" className="btn btn-primary my-bg-orange-1 btn-height"><i className="fas fa-user"></i></button>
+            <button type="button" className="btn btn-primary btn-danger btn-height"><i className="fas fa-user-alt-slash"></i></button>
+          </div>
         </div>
       </div>
     </div>

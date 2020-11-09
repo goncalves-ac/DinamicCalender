@@ -34,6 +34,12 @@ export default function Index() {
         <span className="navbar-toggler-icon"></span>
       </button>
 
+
+    return (
+        <nav className="navbar navbar-expand-lg navbar-light bg-light nav-height" id="main-navbar">
+            <Link className="navbar-brand" to="/">
+                <img src={Icon} height="60" alt="" loading="lazy" />
+
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav ml-auto">
           <li className="nav-item active">
@@ -45,6 +51,34 @@ export default function Index() {
             <Link className="nav-link" to="/calendario">
               <i className="fas fa-calendar-alt fa-lg"></i> Calendário{" "}
             </Link>
+            <button className="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span className="navbar-toggler-icon"></span>
+            </button>
+
+            <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul className="navbar-nav ml-auto">
+                    <li className="nav-item active">
+                        <Link className="nav-link" to="/calendario"><i
+                            className="fas fa-calendar-alt fa-lg"></i> Calendário </Link>
+                    </li>
+                    <li className="nav-item active">
+                        <Link className="nav-link" to="#"><i className="fas fa-user-cog fa-lg"></i> Editar Perfil </Link>
+                    </li>
+                    <li className="nav-item active">
+                        <Link className="nav-link" to="#"><i className="fas fa-cogs fa-lg"></i> Configuração </Link>
+                    </li>
+                    <hr />
+                        <li className="nav-item active">
+                            <a className="nav-link" href="#"><i className="fas fa-power-off"></i> Sair</a>
+                        </li>
+                </ul>
+            </div>
+        </nav>
+    );
+
+}
           </li>
           <li className="nav-item active">
             <Link className="nav-link" to="#">
