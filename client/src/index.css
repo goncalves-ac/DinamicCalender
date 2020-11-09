@@ -24,6 +24,10 @@
   font-weight: bold !important;
 }
 
+.fa-spinner {
+  animation: spinner 1s linear infinite;
+}
+
 .my-text-align {
   text-align: center !important;
 }
@@ -64,4 +68,13 @@ body {
   position: fixed;
   top: 0;
   z-index: 1000;
+}
+
+@keyframes spinner {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
