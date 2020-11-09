@@ -1,3 +1,15 @@
 .calendario {
-    background-color: #61dafb;
+  background-color: #61dafb;
+}
+
+.fc-list-event-title,
+.fc-timegrid-slot,
+.fc-daygrid-day-frame {
+  cursor: pointer;
+}
+
+.fc-list-event-title:hover,
+.fc-timegrid-slot:hover,
+.fc-daygrid-day-frame:hover {
+  background-color: #eee;
 }
