@@ -87,15 +87,6 @@ export default class Calendario extends React.Component {
   handleModalFormSubmit = (e, { eventInfo, mode }) => {
     e.preventDefault();
     eventInfo.start = `${this.state.selectedDate}T${eventInfo.start}:00`;
-
-    if (mode === "CREATE") {
-      const allIds = this.state.INITIAL_EVENTS.map((event) => event.id);
-      const maxId = Math.max.apply(Math, allIds);
-      const createdEventId = maxId + 1;
-      const newEvent = Object.assign({ id: createdEventId }, eventInfo);
-
-      this.setState({ currentEvents: [...this.state.currentEvents, newEvent] });
-    }
   };
 
   componentDidMount() {

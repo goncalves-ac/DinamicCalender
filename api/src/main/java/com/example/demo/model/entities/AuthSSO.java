@@ -13,7 +13,7 @@ import lombok.Setter;
 @Table(name="sso")
 @Getter
 @Setter
-public class SSO {
+public class AuthSSO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,9 +25,9 @@ public class SSO {
     private Usuario usuario;
     private String uuid_externo;
 
-    public SSO() { }
+    public AuthSSO() { }
 
-    public SSO(UUID id_sso, Usuario usuario, String uuid_externo) {
+    public AuthSSO(UUID id_sso, Usuario usuario, String uuid_externo) {
         this.id_sso = id_sso;
         this.usuario = usuario;
         this.uuid_externo = uuid_externo;
