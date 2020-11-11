@@ -28,7 +28,6 @@ public class EventoController {
     @Autowired
     private ModelMapper modelMapper;
 
-    /* Encontrar Evento */
     @GetMapping()
     @ResponseBody
     public Set<Evento> getEventos(Authentication auth) {
