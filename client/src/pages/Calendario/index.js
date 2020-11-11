@@ -138,6 +138,7 @@ export default class Calendario extends React.Component {
         <div className="container bg-light my-5 py-3">
           <FullCalendar
             ref={this.state.calendarRef}
+            contentHeight="auto"
             plugins={[
               dayGridPlugin,
               timeGridWeek,
