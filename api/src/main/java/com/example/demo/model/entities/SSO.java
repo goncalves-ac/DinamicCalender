@@ -1,15 +1,23 @@
 package com.example.demo.model.entities;
 
-/* Bibliotecas */
+import java.util.UUID;
+
 import javax.persistence.*;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
+@Table(name="sso")
+@Getter
+@Setter
 public class SSO {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_sso;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id_sso;
 
     @OneToOne
     @JoinColumn(name = "id_usuario")
@@ -19,29 +27,9 @@ public class SSO {
 
     public SSO() { }
 
-    public SSO(int id_sso, Usuario usuario, String uuid_externo) {
+    public SSO(UUID id_sso, Usuario usuario, String uuid_externo) {
         this.id_sso = id_sso;
         this.usuario = usuario;
-        this.uuid_externo = uuid_externo;
-    }
-
-    public int getId_sso() {
-        return id_sso;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public String getUuid_externo() {
-        return uuid_externo;
-    }
-
-    public void setUuid_externo(String uuid_externo) {
         this.uuid_externo = uuid_externo;
     }
 }
