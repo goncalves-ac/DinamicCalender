@@ -87,54 +87,6 @@ export default class Calendario extends React.Component {
   handleModalFormSubmit = (e, { eventInfo, mode }) => {
     e.preventDefault();
     eventInfo.start = `${this.state.selectedDate}T${eventInfo.start}:00`;
-
-    render() {
-        return (
-        <section>
-            {this.state.selectedEvent && <ModalOverlay 
-            children=
-            {
-            <CalenderModal 
-            eventInfo={this.state.selectedEvent}/>
-            }
-            handleCloseModal={this.handleCloseModal}/>}
-            <Nav/>
-            <div className="container bg-light my-5 py-3">
-                <FullCalendar
-                    plugins={[dayGridPlugin, timeGridWeek,timeGridDay, listYear, interactionPlugin]}
-                    editable={true}
-                    contentHeight= "auto"
-                    headerToolbar={{
-                        left: 'prev,next today',
-                        center: 'title',
-                        right: 'dayGridMonth,timeGridWeek,timeGridDay,listYear'
-                    }}
-                    allDayText='O Dia Todo'
-                    initialView = 'dayGridMonth'
-                    initialEvents={this.state.INITIAL_EVENTS}
-                    editable={true}
-                    selectable={true}
-                    selectMirror={true}
-                    dayMaxEvents={true}
-                    weekends={this.state.weekendsVisible}
-                    locale='pt-br'
-                    buttonText={{
-                        today:    'Hoje',
-                        month:    'Mês',
-                        week:     'Semana',
-                        day:      'Diário',
-                        list:     'Lista'
-                    }}
-                    eventDrop={this.dataAlterada}
-                    eventClick={this.handleEventClick}
-                    //events={this.formatEvents()}
-                />
-            </div>
-        </section>
-        )
-
-      this.setState({ currentEvents: [...this.state.currentEvents, newEvent] });
-    }
   };
 
   componentDidMount() {
@@ -177,6 +129,7 @@ export default class Calendario extends React.Component {
         <div className="container bg-light my-5 py-3">
           <FullCalendar
             ref={this.state.calendarRef}
+            contentHeight="auto"
             plugins={[
               dayGridPlugin,
               timeGridWeek,
