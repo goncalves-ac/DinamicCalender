@@ -25,10 +25,6 @@ public class AmigoController {
         return amigoRepository.findById(id);
     }
 
-    @GetMapping("/nome")
-    public Amigo getByNome(@RequestParam String nome) {
-        return amigoRepository.findByNome(nome);
-    }
 
     /* Adicionar Amigo */
     @PostMapping()
