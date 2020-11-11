@@ -39,7 +39,6 @@ public class Evento {
     private Date criado_em = java.sql.Date.valueOf(LocalDate.now());
     private Date ultima_edicao = java.sql.Date.valueOf(LocalDate.now());
     private String corDeFundo;
-        
     private String privacidade = "PRIVATE";
     
     @ManyToMany
