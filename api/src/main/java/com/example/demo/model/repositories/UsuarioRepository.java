@@ -1,14 +1,16 @@
 package com.example.demo.model.repositories;
 
-import com.example.demo.model.entities.Usuario;
+import java.util.Set;
 
-import java.util.UUID;
-
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-public interface UsuarioRepository extends CrudRepository<Usuario, UUID> {
+import com.example.demo.model.entities.Usuario;
+
+public interface UsuarioRepository extends CrudRepository<Usuario, Integer> {
 	
-	Usuario findByNome(String nome);
+	@Query(value = "SELECT u from Usuario u where LOWER(nome) like :nome%")
+	Set<Usuario> findByNome(String nome);
 
 	Usuario findByEmail(String email);
     
