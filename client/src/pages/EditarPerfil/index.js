@@ -1,8 +1,9 @@
 import React from "react";
 import './EditarPerfil.css';
 import Logo_Black from "../../img/logo-black.png";
+import AvatarPlaceholder from "../../img/avatar-placeholder.png"
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function EditarPerfil () {
     const birthInput = React.createRef();
@@ -15,12 +16,18 @@ export default function EditarPerfil () {
     }
 
     const [ file, setFile ] = useState(null);
+    const [ avatar, setAvatarUrl ] = useState(null);
+
+    useEffect(() => {
+        if(file instanceof File ) {
+            setAvatarUrl(window.URL.createObjectURL(file));
+        }
+    }, [file]);
+
     const inputRef = React.createRef();
 
     const handleFileSelect = (e) => {
-        setFile(e.target.value);
-        console.log(e.target.value)
-
+        setFile(e.target.files[0]);
     }
 
     return (
@@ -65,8 +72,8 @@ export default function EditarPerfil () {
                                                    onFocus={handleBirthInputFocus}
                                                    onBlur={handleBirthInputBlur}
                                                    ref={birthInput} />
-                                            <select className="col-md-6 col-sm-12 form-control p-2" name="genero" required>
-                                                <option disabled="" hidden="" selected="selected">Selecione seu Gênero</option>
+                                            <select className="col-md-6 col-sm-12 form-control p-2" name="genero" defaultValue="" required>
+                                                <option disabled="" hidden="" value="">Selecione seu Gênero</option>
                                                 <option value="m">Masculino</option>
                                                 <option value="f">Feminino</option>
                                                 <option value="o">Outro</option>
@@ -74,7 +81,7 @@ export default function EditarPerfil () {
                                         </div>
 
                                         <div className="custom-file">
-                                            <input name="photoProfile" type="file" ref={inputRef} className="custom-file-input" id="validatedCustomFile" accept="image/*" onChange={handleFileSelect} required />
+                                            <input name="photoProfile" type="file" ref={inputRef} className="custom-file-input" id="validatedCustomFile" accept="image/*" onChange={handleFileSelect} />
                                             <label className="custom-file-label mt-1 mb-1" htmlFor="validatedCustomFile">Foto ...</label>
                                             <div className="invalid-feedback">Example invalid custom file feedback</div>
                                         </div>
@@ -86,7 +93,7 @@ export default function EditarPerfil () {
                                 </div>
 
                                 <div className="">
-                                    <img className="preview-photo" src="https://www.victorromero.com.br/wp-content/uploads/2019/03/image-placeholder-350x350.png" alt="Preview..." id="preview-photo" alt="Image preview..." />
+                                    <img className="preview-photo" src={avatar || AvatarPlaceholder} alt="Preview..." id="preview-photo" alt="Image preview..." />
                                 </div>
 
                             </div>
