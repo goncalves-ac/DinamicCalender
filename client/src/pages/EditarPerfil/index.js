@@ -2,6 +2,8 @@ import React from "react";
 import './EditarPerfil.css';
 import Logo_Black from "../../img/logo-black.png";
 
+import { useState } from "react";
+
 export default function EditarPerfil () {
     const birthInput = React.createRef();
 
@@ -10,6 +12,15 @@ export default function EditarPerfil () {
         if (birthInput.current.value==="") {
             birthInput.current.type="text";
         }
+    }
+
+    const [ file, setFile ] = useState(null);
+    const inputRef = React.createRef();
+
+    const handleFileSelect = (e) => {
+        setFile(e.target.value);
+        console.log(e.target.value)
+
     }
 
     return (
@@ -63,7 +74,7 @@ export default function EditarPerfil () {
                                         </div>
 
                                         <div className="custom-file">
-                                            <input name="photoProfile" type="file" className="custom-file-input" id="validatedCustomFile" accept="image/*" required />
+                                            <input name="photoProfile" type="file" ref={inputRef} className="custom-file-input" id="validatedCustomFile" accept="image/*" onChange={handleFileSelect} required />
                                             <label className="custom-file-label mt-1 mb-1" htmlFor="validatedCustomFile">Foto ...</label>
                                             <div className="invalid-feedback">Example invalid custom file feedback</div>
                                         </div>
@@ -75,7 +86,7 @@ export default function EditarPerfil () {
                                 </div>
 
                                 <div className="">
-                                    <img className="preview-photo" src="http://placehold.it/180" alt="Preview..." id="preview-photo" alt="Image preview..." />
+                                    <img className="preview-photo" src="https://www.victorromero.com.br/wp-content/uploads/2019/03/image-placeholder-350x350.png" alt="Preview..." id="preview-photo" alt="Image preview..." />
                                 </div>
 
                             </div>
