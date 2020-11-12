@@ -1,4 +1,10 @@
 .preview-photo {
     width: 180px;
+    height: 180px;
+    object-fit: cover;
+
+    border: 5px solid #2c3e50;
     border-radius: 100%;
+
+    margin-left: 10px;
 }
