@@ -40,7 +40,7 @@ const ListaAmigos = () => {
     return (
         <div className=" col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-sm-12">
             <div className="people-nearby">
-                {amigos.map(amigo => <CardAmigo userInfo={amigo}/>)}
+                {amigos.map((amigo) => <CardAmigo userInfo={amigo}/>)}
             </div>
         </div>
     );
