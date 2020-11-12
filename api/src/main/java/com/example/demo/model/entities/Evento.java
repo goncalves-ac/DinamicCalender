@@ -1,5 +1,9 @@
 package com.example.demo.model.entities;
 
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,22 +19,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.Set;
-import java.util.UUID;
-
 @Entity
 @Table(name="evento")
 @Getter
 @Setter
 public class Evento {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id_evento;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id_evento;
 
     @Column(name="fk_id_dono")
-    private UUID fkIdDono;
+    private int fkIdDono;
     
     private String titulo;
     private String descricao;
@@ -47,13 +46,13 @@ public class Evento {
     		joinColumns = @JoinColumn(name="fk_id_evento", referencedColumnName = "id_evento"),
     		inverseJoinColumns = @JoinColumn(name="fk_id_usuario", referencedColumnName = "id_usuario")
     )
-    @JsonIgnoreProperties(value= {"eventos_alheios", "senha", "email", "genero", "amigos_requisitados"
-    		, "requisicoes_amigos", "eventos_proprios"})
+    @JsonIgnoreProperties(value= {"eventosAlheios", "senha", "email", "genero", "amigosRequisitados"
+    		, "requisicoesAmigos", "eventosProprios"})
     private Set<Usuario> usuariosConvidados;
 
 	public Evento() { }
 
-    public Evento(UUID id_dono, String titulo, String descricao, Date inicio, Date fim, String corDeFundo, String privacidade) {
+    public Evento(int id_dono, String titulo, String descricao, Date inicio, Date fim, String corDeFundo, String privacidade) {
     	this.fkIdDono = id_dono;
         this.titulo = titulo;
         this.descricao = descricao;
