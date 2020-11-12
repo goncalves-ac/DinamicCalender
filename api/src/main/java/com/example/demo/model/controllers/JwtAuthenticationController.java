@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.config.JwtTokenUtil;
 import com.example.demo.model.entities.JwtRequest;
 import com.example.demo.model.entities.JwtResponse;
-import com.example.demo.model.entities.Usuario;
-import com.example.demo.service.JwtUserDetailsService;
+import com.example.demo.services.JwtUserDetailsService;
 
 @RestController
 @CrossOrigin
