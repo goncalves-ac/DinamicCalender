@@ -3,6 +3,7 @@ package com.example.demo.model.controllers;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.EventoRequestDTO;
@@ -60,6 +62,7 @@ public class EventoController {
     }
 
     @PostMapping()
+    @ResponseStatus(code = HttpStatus.CREATED)
     public Evento addEvento(@RequestBody EventoRequestDTO eventoDTO, Authentication auth) throws Exception {
     	Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);
     	
@@ -80,6 +83,7 @@ public class EventoController {
     }
 
     @PutMapping("/{idEvento}")
+    @ResponseStatus(code = HttpStatus.OK)
     public Evento updateEvento(@PathVariable int idEvento, @RequestBody EventoRequestDTO eventoDTO, Authentication auth) throws Exception{
 		Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);
 		
@@ -98,6 +102,7 @@ public class EventoController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteEvento(@PathVariable int id, Authentication auth) throws Exception {
     	Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);
     	

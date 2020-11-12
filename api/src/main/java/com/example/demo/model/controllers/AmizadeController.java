@@ -3,6 +3,7 @@ package com.example.demo.model.controllers;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.entities.Amizade;
@@ -34,6 +36,7 @@ public class AmizadeController {
     }
 
     @PostMapping("/convites")
+    @ResponseStatus(code = HttpStatus.CREATED)
     public Amizade criarConvite(@RequestParam int idUsuarioReq, Authentication auth) throws Exception {
     	Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);
     	
@@ -45,6 +48,7 @@ public class AmizadeController {
     }
 
     @PatchMapping("/convites")
+    @ResponseStatus(code = HttpStatus.OK)
     public Amizade aceitarAmigo(@RequestParam int idUsuarioReq, Authentication auth) throws Exception {
 		Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);
     	
@@ -56,6 +60,7 @@ public class AmizadeController {
     }
 
     @DeleteMapping("/convites")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void recusarAmigo(@RequestParam int idUsuarioReq, Authentication auth) throws Exception {
 		Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);
     	

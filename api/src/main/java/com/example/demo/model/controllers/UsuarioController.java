@@ -105,7 +105,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{idUsuario}")
-    @ResponseStatus(code = HttpStatus.OK)
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     @PreAuthorize("#idUsuario == authentication.principal.idUsuario")
     public void deleteUsuario(@PathVariable int idUsuario) throws Exception{
 
