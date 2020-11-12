@@ -1,16 +1,13 @@
 
-package com.example.demo.service;
+package com.example.demo.services;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.config.UserDetail;
-import com.example.demo.dto.UserAuthDTO;
 import com.example.demo.model.repositories.UsuarioRepository;
 
 @Service
