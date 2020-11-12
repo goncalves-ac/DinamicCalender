@@ -28,7 +28,7 @@ const ListaEventos = () => {
     return (
         <div className="col-md-6 offset-md-3">
             <ul className="timeline">
-                {events.map(event => <CardEvento eventInfo={event}/>)}
+                {events.map(event => <CardEvento eventInfo={event} />)}
             </ul>
         </div>
     );

@@ -43,7 +43,7 @@ export default function Index() {
                 </Link>
               </li>
               <li className="nav-item active">
-                <Link className="nav-link" to="#">
+                <Link className="nav-link" to="/editarPerfil">
                   <i className="fas fa-user-cog fa-lg"></i> Editar Perfil{" "}
                 </Link>
               </li>
