@@ -19,5 +19,8 @@ public interface AmizadeRepository extends CrudRepository<Amizade, Integer> {
 	
 	@Query(value = "Select a from Amizade a where id_usuario_2 = :fkIdUser2")
 	Set<Amizade> findInviteByUser2(@Param("fkIdUser2") int fkIdUser2);
+	
+	@Query(value = "Select a from Amizade a where id_usuario_1 in (:fkIdUser1, :fkIdUser2) and id_usuario_2 in (:fkIdUser1, :fkIdUser2) ")
+	Amizade findInvite(@Param("fkIdUser1") int fkIdUser1, @Param("fkIdUser2") int fkIdUser2);
 
 }
