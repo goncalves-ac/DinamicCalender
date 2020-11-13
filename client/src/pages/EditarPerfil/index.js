@@ -80,10 +80,9 @@ export default function EditarPerfil () {
                                             </select>
                                         </div>
 
-                                        <div className="custom-file">
+                                        <div className="custom-file d-flex">
                                             <input name="photoProfile" type="file" ref={inputRef} className="custom-file-input" id="validatedCustomFile" accept="image/*" onChange={handleFileSelect} />
-                                            <label className="custom-file-label mt-1 mb-1" htmlFor="validatedCustomFile">Foto ...</label>
-                                            <div className="invalid-feedback">Example invalid custom file feedback</div>
+                                            <label className="custom-file-label mt-1 mb-1" htmlFor="validatedCustomFile" data-browse="SELECIONAR FOTO"></label>
                                         </div>
 
                                         <button className="btn btn-lg btn-block my-bg-orange-1 my-2 my-color-white mt-2" type="submit">
