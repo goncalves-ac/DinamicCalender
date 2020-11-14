@@ -28,6 +28,7 @@ export default function EditarPerfil () {
 
     const handleFileSelect = (e) => {
         setFile(e.target.files[0]);
+        document.querySelector('#arquivo').value = e.target.files[0].name;
     }
 
     return (
@@ -84,12 +85,12 @@ export default function EditarPerfil () {
                                             <div className="my-btn custom-file" >
                                                 <input name="photoProfile" type="file" ref={inputRef}
                                                        className="custom-file-input" id="validatedCustomFile"
-                                                       accept="image/*" onChange={handleFileSelect}/>
+                                                       accept="image/*" onChange={handleFileSelect} value=""/>
                                                 <span className="pos-icon"><i className="fas fa-camera"></i></span>
                                             </div>
                                             <div className="">
                                                 <input className="my-input-file" type="text"
-                                                       placeholder="  Selecione sua foto." />
+                                                       placeholder="  Selecione sua foto." id="arquivo" defaultValue="" />
                                             </div>
                                         </div>
 
