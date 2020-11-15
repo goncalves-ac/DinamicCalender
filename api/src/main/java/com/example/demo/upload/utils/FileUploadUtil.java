@@ -10,21 +10,40 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 public class FileUploadUtil {
+	
+	private final static Path uploadPath = Paths.get("./assets");
 
-    public static  void saveFile(String uploadDir, String fileNome, MultipartFile file) throws IOException {
-        Path uploadPath = Paths.get(uploadDir);
+    public static void saveFile(MultipartFile file) throws Exception {
+        String fileName = file.getName();
 
         if(!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
 
         try (InputStream inputStream = file.getInputStream()){
-            Path filePath = uploadPath.resolve(fileNome);
+            Path filePath = uploadPath.resolve(fileName);
+            
+            if (Files.exists(filePath)) { 
+            	throw new IOException("Já existe um arquivo com esse nome.");
+            }
+            
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
         }
+        
         catch (IOException ioException) {
-            throw new IOException("Não foi possível salvar o arquivo: " + fileNome, ioException);
+            throw new IOException("Não foi possível salvar o arquivo: " + fileName, ioException);
         }
 
+    }
+    
+    public static void deleteFile(String fileName) throws Exception {
+    	Path filePath = uploadPath.resolve(fileName);
+    	
+    	if (Files.exists(filePath)) {
+    		Files.delete(filePath);
+    	} else {
+    		throw new IOException("Arquivo com nome" + fileName + " não existe.");
+    	}   	
+    	
     }
 }
