@@ -17,6 +17,7 @@ public class UsuarioResponseDTO {
 	private String email;
 	private Date nascimento;
 	private String genero;
+	private String avatarUrl;
 	
 	@JsonIgnoreProperties(value={"eventosAlheios", "senha", "email", "genero", "amigosRequisitados"
 			, "requisicoesAmigos", "eventosProprios"})
@@ -37,10 +38,13 @@ public class UsuarioResponseDTO {
 		this.email=usuario.getEmail();
 		this.nascimento=usuario.getNascimento();
 		this.genero=usuario.getGenero();
+		this.avatarUrl = usuario.getAvatarUrl();
 		this.amigosRequisitados = usuario.getAmigosRequisitados();
 		this.requisicoesAmigos = usuario.getRequisicoesAmigos();
 		this.eventosAlheios = usuario.getEventosAlheios();
 		this.eventosProprios = usuario.getEventosProprios();
+
+
 	}
 	
 }
