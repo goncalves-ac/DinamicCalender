@@ -32,7 +32,7 @@ public class UserService {
 	@Transactional
 	public Usuario createUser(Usuario user) throws Exception {
 		if (userRepository.findByEmail(user.getEmail()) != null) {
-			throw new DuplicateEntryException(user.getEmail() + "já está cadastrado.");
+			throw new DuplicateEntryException(user.getEmail() + " já está cadastrado.");
 		}
 		user.setSenha(passwordEncoder.encode(user.getSenha()));
 		Usuario u = userRepository.save(user);
