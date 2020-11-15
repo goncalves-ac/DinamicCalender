@@ -14,7 +14,7 @@ public class FileUploadUtil {
 	
 	private final static Path uploadPath = Paths.get("assets");
 
-    public static void saveFile(MultipartFile file) throws Exception {
+    public static String saveFile(MultipartFile file) throws Exception {
 
         Date date = new Date();
         String filePrefix = date.getTime() + "-";
@@ -32,6 +32,7 @@ public class FileUploadUtil {
             }
             
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            return uploadPath + "/" + fileName;
         }
         
         catch (IOException ioException) {
