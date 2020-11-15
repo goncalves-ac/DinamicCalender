@@ -6,7 +6,7 @@
 -- Schema calendario_dinamico
 -- -----------------------------------------------------
 DROP SCHEMA IF EXISTS `calendario_dinamico`;
-CREATE SCHEMA IF NOT EXISTS `calendario_dinamico` DEFAULT CHARACTER SET utf8mb4 ;
+CREATE SCHEMA IF NOT EXISTS `calendario_dinamico` DEFAULT CHARACTER SET utf8mb4;
 USE `calendario_dinamico` ;
 
 -- -----------------------------------------------------
