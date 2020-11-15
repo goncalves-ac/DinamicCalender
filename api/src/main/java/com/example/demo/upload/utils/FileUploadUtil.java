@@ -1,7 +1,6 @@
 package com.example.demo.upload.utils;
 
-import org.springframework.web.multipart.MultipartFile;
-
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -10,15 +9,34 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Date;
 
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
+
 public class FileUploadUtil {
 	
-	private final static Path uploadPath = Paths.get("assets");
+	private final static Path uploadPath = Paths.get("static");
+	
+	private static String getFileNamePrefix(boolean prefix) {
+		if (prefix) {
+			Date date = new Date();
+            return date.getTime() + "-"; 
+		} else {
+			return "";
+		}
+	}
+	
+	private static String getFileNameAffix(String fileName, String fileOriginalName) {
+		if (fileName.contains(".")) {
+			return fileName;
+		} else {
+			return fileOriginalName;
+		}
+	}
 
-    public static String saveFile(MultipartFile file) throws Exception {
+    public static String saveFile(MultipartFile file, boolean prefix) throws Exception {
 
-        Date date = new Date();
-        String filePrefix = date.getTime() + "-";
-        String fileName = filePrefix + file.getName();
+    	String fileName = getFileNamePrefix(prefix) + getFileNameAffix(file.getName(), file.getOriginalFilename());
+        
 
         if(!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
@@ -41,14 +59,35 @@ public class FileUploadUtil {
 
     }
     
-    public static void deleteFile(String fileName) throws Exception {
-    	Path filePath = uploadPath.resolve(fileName);
+    public static MultipartFile getFile(String avatarUri) throws Exception {
+    	   	
+
+    	File oldImg = new File(avatarUri);
+    	if (!oldImg.exists()) {
+    		return null;
+    	}
+
+    	
+    	byte[] oldImgByteArray = Files.readAllBytes(Paths.get(avatarUri));
+    	
+    	MultipartFile oldImgMultipart = new MockMultipartFile(oldImg.getName(), oldImgByteArray);
+
+    	return oldImgMultipart;
+    }
+    
+    public static void deleteFile(String avatarUri) throws Exception {
+    	Path filePath = Paths.get(avatarUri);
     	
     	if (Files.exists(filePath)) {
     		Files.delete(filePath);
     	} else {
-    		throw new IOException("Arquivo com nome" + fileName + " não existe.");
+    		throw new IOException("Destino de arquivo inexistente.");
     	}   	
     	
+    }
+    
+    public static void rollback(OldNewImgFileState oldState) throws Exception {
+    	deleteFile(oldState.getNewImgUri());
+    	saveFile(oldState.getOldImg(), false);
     }
 }

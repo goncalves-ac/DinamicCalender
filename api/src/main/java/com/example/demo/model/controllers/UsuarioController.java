@@ -6,10 +6,13 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.dto.NovaSenhaRequestDTO;
 import com.example.demo.dto.UsuarioRequestDTO;
@@ -26,6 +30,8 @@ import com.example.demo.dto.UsuarioResponseDTO;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.model.entities.Usuario;
 import com.example.demo.services.UserService;
+import com.example.demo.upload.utils.FileUploadUtil;
+import com.example.demo.upload.utils.OldNewImgFileState;
 
 
 @RestController
@@ -79,15 +85,29 @@ public class UsuarioController {
     		throw e;
     	}
     }
-
-    @PutMapping("/{idUsuario}")
+    
+    @CrossOrigin
+    @PutMapping(value="/{idUsuario}", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(code = HttpStatus.ACCEPTED)
     @PreAuthorize("#idUsuario == authentication.principal.idUsuario")
-    public UsuarioResponseDTO updateUsuario(@PathVariable int idUsuario, @RequestBody UsuarioRequestDTO usuarioRequestDTO) throws Exception{       
+    public UsuarioResponseDTO updateUsuario(@PathVariable int idUsuario, @ModelAttribute UsuarioRequestDTO usuarioRequestDTO) throws Exception{       
+    	Usuario dadosUsuario = usuarioRequestDTO.toUsuario();
+		MultipartFile avatarImg = usuarioRequestDTO.getAvatarImg();
+		OldNewImgFileState state = new OldNewImgFileState();
+		if (!avatarImg.isEmpty()) {
+			try {
+				state = userService.changeUserAvatarImg(idUsuario, avatarImg);
+				dadosUsuario.setAvatarUrl(state.getNewImgUri());
+			} catch (Exception e) {
+				throw e;
+			}
+		}
+
     	try {
-    		Usuario u = userService.updateUser(idUsuario, usuarioRequestDTO.toUsuario());
+    		Usuario u = userService.updateUser(idUsuario, dadosUsuario);
     		return new UsuarioResponseDTO(u);
     	} catch (Exception e) {
+    		FileUploadUtil.rollback(state);
     		throw e;
     	}
     }

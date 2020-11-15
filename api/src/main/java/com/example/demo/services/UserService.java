@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.dto.NovaSenhaRequestDTO;
 import com.example.demo.exceptions.BadRequestException;
@@ -14,6 +15,8 @@ import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.exceptions.UnauthorizedException;
 import com.example.demo.model.entities.Usuario;
 import com.example.demo.model.repositories.UsuarioRepository;
+import com.example.demo.upload.utils.FileUploadUtil;
+import com.example.demo.upload.utils.OldNewImgFileState;
 
 @Service
 public class UserService {
@@ -83,7 +86,11 @@ public class UserService {
     	if (dadosUsuario.getGenero() != null && dadosUsuario.getGenero() != u.getGenero()) {
     		u.setGenero(dadosUsuario.getGenero());
     	}
-
+    	
+    	if (dadosUsuario.getAvatarUrl() != null && dadosUsuario.getAvatarUrl() != u.getAvatarUrl()) {
+    		u.setAvatarUrl(dadosUsuario.getAvatarUrl());
+    	}
+    	
         userRepository.save(u);
         return u;
 		
@@ -91,6 +98,7 @@ public class UserService {
 	
 	@Transactional
 	public Usuario changeUserPassword(int id, NovaSenhaRequestDTO novaSenhaDTO) throws Exception {
+		
 		Usuario u = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não pode ser encontrado"));
 		
@@ -113,5 +121,25 @@ public class UserService {
 	@Transactional 
 	public void deleteUserById(int id) throws Exception {
 		userRepository.deleteById(id);
+	}
+	
+	public OldNewImgFileState changeUserAvatarImg(int id, MultipartFile avatarImg) throws Exception {
+		Usuario u = userRepository.findById(id).get();
+		
+		if (u==null) {
+			throw new ResourceNotFoundException("Usuário não encontrado");
+		}
+		
+		String newImgUri = FileUploadUtil.saveFile(avatarImg, true);
+		MultipartFile oldImg = null;
+		if (u.getAvatarUrl() != null) {
+			oldImg = FileUploadUtil.getFile(u.getAvatarUrl());
+			if (oldImg != null) {
+				FileUploadUtil.deleteFile(u.getAvatarUrl());
+			}
+		}
+		
+		return new OldNewImgFileState(newImgUri, oldImg);
+
 	}
 }
