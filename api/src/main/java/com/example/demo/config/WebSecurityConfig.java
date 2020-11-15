@@ -51,12 +51,14 @@ public AuthenticationManager authenticationManagerBean() throws Exception {
 return super.authenticationManagerBean();
 }
 
+
 @Override
 protected void configure(HttpSecurity httpSecurity) throws Exception {
 httpSecurity.csrf().disable()
 .authorizeRequests().antMatchers(HttpMethod.POST, "/authenticate").permitAll()
-.antMatchers(HttpMethod.POST, "/usuario").permitAll().
-anyRequest().authenticated().and().cors().and().
+.antMatchers(HttpMethod.POST, "/usuario").permitAll()
+.antMatchers(HttpMethod.GET, "/static/**").permitAll()
+.anyRequest().authenticated().and().cors().and().
 exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
