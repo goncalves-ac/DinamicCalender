@@ -11,7 +11,7 @@ import java.nio.file.StandardCopyOption;
 
 public class FileUploadUtil {
 	
-	private final static Path uploadPath = Paths.get("./assets");
+	private final static Path uploadPath = Paths.get("assets");
 
     public static void saveFile(MultipartFile file) throws Exception {
         String fileName = file.getName();
