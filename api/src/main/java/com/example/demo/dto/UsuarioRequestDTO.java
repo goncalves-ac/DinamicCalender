@@ -1,6 +1,6 @@
 package com.example.demo.dto;
 
-import java.io.File;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.model.entities.Usuario;
 
@@ -15,7 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UsuarioRequestDTO extends Usuario {
 	
-	private File avatarImg;
+	private MultipartFile avatarImg;
 	
 	public Usuario toUsuario() {
 		return new Usuario(
