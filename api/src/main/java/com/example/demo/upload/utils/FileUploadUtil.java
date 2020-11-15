@@ -8,13 +8,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Date;
 
 public class FileUploadUtil {
 	
 	private final static Path uploadPath = Paths.get("assets");
 
     public static void saveFile(MultipartFile file) throws Exception {
-        String fileName = file.getName();
+
+        Date date = new Date();
+        String filePrefix = date.getTime() + "-";
+        String fileName = filePrefix + file.getName();
 
         if(!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
