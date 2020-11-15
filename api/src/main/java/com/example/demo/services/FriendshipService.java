@@ -2,10 +2,10 @@ package com.example.demo.services;
 
 import java.util.Set;
 
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.exceptions.BadRequestException;
 import com.example.demo.exceptions.DuplicateEntryException;
@@ -19,7 +19,7 @@ public class FriendshipService {
     @Autowired
     private AmizadeRepository amizadeRepository;
     
-    @Transactional
+    @Transactional(readOnly = true)
     public Set<Amizade> findSelfFriendships(int id) throws Exception{
     	Set<Amizade> selfInvites = amizadeRepository.findInviteByUser1(id);
     	Set<Amizade> otherInvites = amizadeRepository.findInviteByUser2(id);
