@@ -6,62 +6,56 @@ import {Link} from "react-router-dom";
 
 export default function Calendario_Dinamico () {
     return (
-        <main className="d-flex justify-content-end mt-5 my-mr-100">
+        <main className="d-flex justify-content-end mt-5 my-mr-100 my-scroll-hidden">
             <section className="width-index">
                 <div className="my-text-align mb-5">
-                    <img src={CD} alt="" width="500"/>
+                    <img src={CD} alt="" width="400"/>
                 </div>
                 <p className="my-color-white text-justify">
                     Bem Vindo a solução dos seus problemas. Estou aqui para ajudá-lo facilmente a gerenciar seus compromissos,
                     afazeres e horários... Assim, a organização de suas tarefas potencializará sua entregas e a cumprir suas
                     promesas. Estarei com você para dinamizar sua vida.
                 </p>
-                <div className="d-flex justify-content-center align-items-center">
+                <div className="d-flex justify-content-center align-items-center mt-4">
                     <div className="my-text-align mb-5">
-                        <img src={CD_EX} alt="" width="80%"/>
+                        <img src={CD_EX} alt="" width="85%"/>
                     </div>
                     <div>
-                        <h4 className="my-blue-1">Recursos:</h4>
+                        <h5 className="my-blue-1">Recursos:</h5>
                         <ul className="my-color-white list-recursos fa-ul">
-                            <li>
+                            <li className="d-flex justify-content-start align-items-center">
                                 <i className="fas fa-fw fa-bullseye"></i>
-                                <i className="fas fa-fw fa-caret-right tam-seta"></i>
-                                <h5>Clique duas vezes pode fazer notas na tela, o que é conveniente e útil.</h5>
+                                <p>Clique duas vezes pode fazer notas na tela, o que é conveniente e útil.</p>
                             </li>
-                            <li>
+                            <li className="d-flex justify-content-start align-items-center">
                                 <i className="fas fa-fw fa-fill-drip"></i>
-                                <i className="fas fa-fw fa-caret-right tam-seta"></i>
-                                <h5> Definir cor de fundo para os eventos.</h5>
+                                <p> Definir cor de fundo para os eventos.</p>
                             </li>
-                            <li>
+                            <li className="d-flex justify-content-start align-items-center">
                                 <i className="fas fa-fw fa-route"></i>
-                                <i className="fas fa-fw fa-caret-right tam-seta"></i>
-                                <h5> Mover os eventos entre os dias.</h5>
+                                <p> Mover os eventos entre os dias.</p>
                             </li>
-                            <li>
+                            <li className="d-flex justify-content-start align-items-center">
                                 <i className="far fa-fw fa-calendar-alt"></i>
-                                <i className="fas fa-fw fa-caret-right tam-seta"></i>
-                                <h5> Disposição do calendário em mês, semana, dia e lista.</h5>
+                                <p> Disposição do calendário em mês, semana, dia e lista.</p>
                             </li>
-                            <li>
+                            <li className="d-flex justify-content-start align-items-center">
                                 <i className="fas fa-fw fa-users"></i>
-                                <i className="fas fa-fw fa-caret-right tam-seta"></i>
-                                <h5> Marque eventos com seus amigos.</h5>
+                                <p> Marque eventos com seus amigos.</p>
                             </li>
-                            <li>
+                            <li className="d-flex justify-content-start align-items-center">
                                 <i className="fas fa-fw fa-unlock-alt"></i>
-                                <i className="fas fa-fw fa-caret-right tam-seta"></i>
-                                <h5> Seus eventos podem ser públicos ou privados.</h5>
+                                <p> Seus eventos podem ser públicos ou privados.</p>
                             </li>
                         </ul>
                     </div>
                 </div>
 
                 <div className="fixed-bottom my-btn-fixed-left">
-                    <Link to="/cadastro" className="btn btn-lg btn-block my-bg-orange-1 my-2 my-color-white mr-3" type="submit">
+                    <Link to="/cadastro" className="btn btn-lg btn-block my-bg-orange-1 my-2 my-color-white mr-3 my-font-size" type="submit">
                         <i className="fas fa-check-circle"></i> CADASTRAR
                     </Link>
-                    <Link to="/login" className="btn btn-lg btn-block my-bg-orange-1 my-2 my-color-white" type="submit">
+                    <Link to="/login" className="btn btn-lg btn-block my-bg-orange-1 my-2 my-color-white my-font-size" type="submit">
                         ENTRAR  <i className="fas fa-chevron-right"></i>
                     </Link>
                 </div>

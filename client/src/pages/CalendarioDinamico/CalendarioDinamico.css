@@ -3,41 +3,32 @@
     bottom: 50%;
 }
 
+.my-btn-fixed-left Link {
+    font-size: max(12px, 1em) !important;
+}
+
 .my-mr-100 {
+    margin-left: min(13vw, 13vw);
     margin-right: 100px;
 }
 .width-index {
-    width: 1400px;
+    width: 1200px;
 }
 
 .width-index p {
-    font-size: 1.3rem !important;
+    font-size: 1rem !important;
+    margin-bottom: 0;
 }
 
 .list-recursos {
     list-style: none;
 }
 
-.list-recursos li {
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-
+.list-recursos li i {
+    font-size: 1.5rem;
     margin: 10px;
 }
 
-.list-recursos li i {
-    font-size: 3rem;
-    margin: 5px;
-}
-
-.list-recursos .tam-seta {
-    font-size: 2rem;
-    display: flex;
-    align-items: center;
-}
-
-.list-recursos li h5 {
-    display: flex;
-    align-items: center;
+.my-scroll-hidden {
+    overflow: hidden !important;
 }
