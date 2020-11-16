@@ -9,6 +9,7 @@ const RoutingLinks = () => {
       <Link className="mt-2" to="/cadastro">/cadastro</Link>
       <Link className="mt-2" to="/usuario">/usuario</Link>
       <Link className="mt-2" to="/calendario">/calendario</Link>
+      <Link className="mt-2" to="/calendario_dinamico">/calendario_dinamico</Link>
     </div>
   );
 };

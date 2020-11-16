@@ -1,0 +1,48 @@
+.btn-fixed-left {
+    width: 12vw;
+    bottom: 50%;
+}
+
+.css {
+    width: 1500px;
+    text-align: justify;
+    padding-left: 100px;
+}
+
+.css2 {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.css p {
+    font-size: 1.3rem !important;
+}
+
+.list-recursos {
+    list-style: none;
+}
+
+.list-recursos li {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+
+    margin: 10px;
+}
+
+.list-recursos li i {
+    font-size: 3rem;
+    margin: 5px;
+}
+
+.list-recursos .tam-seta {
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+}
+
+.list-recursos li h5 {
+    display: flex;
+    align-items: center;
+}
