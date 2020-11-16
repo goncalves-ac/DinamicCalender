@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import AuthSSO, { authMethods } from "../../components/AuthSSO";
 import { Link, Redirect } from "react-router-dom";
 import Logo_Black from "./../../img/logo-black.png";
@@ -31,9 +31,9 @@ export default function Login() {
         setRedirect(true);
       }, 1000);
     } catch (e) {
+      const errorData = e.response.data;
       setLoading(false);
-      setFormError("Email ou senha incorretos.");
-      console.log(e);
+      setFormError(errorData.message);
     }
   };
 
