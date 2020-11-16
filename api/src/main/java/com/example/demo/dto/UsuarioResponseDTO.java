@@ -1,6 +1,6 @@
 package com.example.demo.dto;
 
-import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.Set;
 
 import com.example.demo.model.entities.Evento;
@@ -15,9 +15,11 @@ public class UsuarioResponseDTO {
 	private String nome;
 	private String sobrenome;
 	private String email;
-	private Date nascimento;
+	private String nascimento;
 	private String genero;
 	private String avatarUrl;
+	
+	private final static SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
 	
 	@JsonIgnoreProperties(value={"eventosAlheios", "senha", "email", "genero", "amigosRequisitados"
 			, "requisicoesAmigos", "eventosProprios"})
@@ -36,7 +38,7 @@ public class UsuarioResponseDTO {
 		this.nome=usuario.getNome();
 		this.sobrenome=usuario.getSobrenome();
 		this.email=usuario.getEmail();
-		this.nascimento=usuario.getNascimento();
+		this.nascimento=dateFormatter.format(usuario.getNascimento());
 		this.genero=usuario.getGenero();
 		this.avatarUrl = usuario.getAvatarUrl();
 		this.amigosRequisitados = usuario.getAmigosRequisitados();
