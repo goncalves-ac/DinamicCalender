@@ -20,6 +20,7 @@ export default function Index() {
           height="50"
           className="rounded-circle border border-dark"
           loading="lazy"
+          alt="Avatar do usuário"
         />
       </Link>
       <button
