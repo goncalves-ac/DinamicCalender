@@ -2,6 +2,7 @@ import React from 'react';
 import './CalendarioDinamico.css';
 import CD from "../../img/CD.png";
 import CD_EX from "../../img/calendario-ex.PNG";
+import {Link} from "react-router-dom";
 
 export default function Calendario_Dinamico () {
     return (
@@ -57,12 +58,12 @@ export default function Calendario_Dinamico () {
                 </div>
 
                 <div className="fixed-bottom btn-fixed-left">
-                    <button className="btn btn-lg btn-block my-bg-orange-1 my-2 my-color-white mr-3" type="submit">
+                    <Link to="/cadastro" className="btn btn-lg btn-block my-bg-orange-1 my-2 my-color-white mr-3" type="submit">
                         <i className="fas fa-check-circle"></i> CADASTRAR
-                    </button>
-                    <button className="btn btn-lg btn-block my-bg-orange-1 my-2 my-color-white" type="submit">
+                    </Link>
+                    <Link to="/login" className="btn btn-lg btn-block my-bg-orange-1 my-2 my-color-white" type="submit">
                         ENTRAR  <i className="fas fa-chevron-right"></i>
-                    </button>
+                    </Link>
                 </div>
             </section>
         </main>
