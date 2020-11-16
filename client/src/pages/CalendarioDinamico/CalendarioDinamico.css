@@ -1,21 +1,16 @@
-.btn-fixed-left {
+.my-btn-fixed-left {
     width: 12vw;
     bottom: 50%;
 }
 
-.css {
-    width: 1500px;
-    text-align: justify;
-    padding-left: 100px;
+.my-mr-100 {
+    margin-right: 100px;
+}
+.width-index {
+    width: 1400px;
 }
 
-.css2 {
-    display: flex;
-    justify-content: center;
-    margin-top: 50px;
-}
-
-.css p {
+.width-index p {
     font-size: 1.3rem !important;
 }
 

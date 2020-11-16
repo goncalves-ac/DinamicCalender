@@ -6,12 +6,12 @@ import {Link} from "react-router-dom";
 
 export default function Calendario_Dinamico () {
     return (
-        <main className="css2">
-            <section className="css">
+        <main className="d-flex justify-content-end mt-5 my-mr-100">
+            <section className="width-index">
                 <div className="my-text-align mb-5">
                     <img src={CD} alt="" width="500"/>
                 </div>
-                <p className="my-color-white">
+                <p className="my-color-white text-justify">
                     Bem Vindo a solução dos seus problemas. Estou aqui para ajudá-lo facilmente a gerenciar seus compromissos,
                     afazeres e horários... Assim, a organização de suas tarefas potencializará sua entregas e a cumprir suas
                     promesas. Estarei com você para dinamizar sua vida.
@@ -57,7 +57,7 @@ export default function Calendario_Dinamico () {
                     </div>
                 </div>
 
-                <div className="fixed-bottom btn-fixed-left">
+                <div className="fixed-bottom my-btn-fixed-left">
                     <Link to="/cadastro" className="btn btn-lg btn-block my-bg-orange-1 my-2 my-color-white mr-3" type="submit">
                         <i className="fas fa-check-circle"></i> CADASTRAR
                     </Link>
