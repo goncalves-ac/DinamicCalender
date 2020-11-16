@@ -6,6 +6,7 @@ import RoutingLinks from './RoutingLinks';
 import Usuario from "./pages/Usuario";
 import Calendario from "./pages/Calendario";
 import EditarPerfil from "./pages/EditarPerfil";
+import Calendario_Dinamico from "./pages/CalendarioDinamico";
 
 const Routes = () => {
   return (
@@ -17,6 +18,7 @@ const Routes = () => {
       <Route path="/usuario" exact><Usuario /></Route>
       <Route path="/calendario" exact><Calendario /></Route>
       <Route path="/editarPerfil" exact><EditarPerfil /></Route>
+      <Route path="/calendario_dinamico" exact><Calendario_Dinamico /></Route>
     </Switch>
       
     </BrowserRouter>

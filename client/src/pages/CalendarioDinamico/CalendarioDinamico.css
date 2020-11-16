@@ -1,0 +1,34 @@
+.my-btn-fixed-left {
+    width: 12vw;
+    bottom: 50%;
+}
+
+.my-btn-fixed-left Link {
+    font-size: max(12px, 1em) !important;
+}
+
+.my-mr-100 {
+    margin-left: min(13vw, 13vw);
+    margin-right: 100px;
+}
+.width-index {
+    width: 1200px;
+}
+
+.width-index p {
+    font-size: 1rem !important;
+    margin-bottom: 0;
+}
+
+.list-recursos {
+    list-style: none;
+}
+
+.list-recursos li i {
+    font-size: 1.5rem;
+    margin: 10px;
+}
+
+.my-scroll-hidden {
+    overflow: hidden !important;
+}
