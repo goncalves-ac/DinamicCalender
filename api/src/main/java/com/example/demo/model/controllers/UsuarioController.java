@@ -33,7 +33,7 @@ import com.example.demo.services.UserService;
 import com.example.demo.upload.utils.FileUploadUtil;
 import com.example.demo.upload.utils.OldNewImgFileState;
 
-
+@CrossOrigin
 @RestController
 @RequestMapping(path = "usuario")
 public class UsuarioController {
@@ -86,7 +86,6 @@ public class UsuarioController {
     	}
     }
     
-    @CrossOrigin
     @PutMapping(value="/{idUsuario}", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(code = HttpStatus.ACCEPTED)
     @PreAuthorize("#idUsuario == authentication.principal.idUsuario")

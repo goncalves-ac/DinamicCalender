@@ -5,6 +5,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import com.example.demo.exceptions.ForbiddenActionException;
 import com.example.demo.model.entities.Evento;
 import com.example.demo.services.EventService;
 
+@CrossOrigin
 @RestController
 @RequestMapping(path = "eventos")
 public class EventoController {
@@ -60,7 +62,7 @@ public class EventoController {
     		throw e;
     	}   
     }
-
+    
     @PostMapping()
     @ResponseStatus(code = HttpStatus.CREATED)
     public Evento addEvento(@RequestBody EventoRequestDTO eventoDTO, Authentication auth) throws Exception {
@@ -81,7 +83,7 @@ public class EventoController {
         	throw e;
         }
     }
-
+    
     @PutMapping("/{idEvento}")
     @ResponseStatus(code = HttpStatus.OK)
     public Evento updateEvento(@PathVariable int idEvento, @RequestBody EventoRequestDTO eventoDTO, Authentication auth) throws Exception{
