@@ -9,4 +9,9 @@ public class UnauthorizedException extends Exception{
 	private static final long serialVersionUID = -7600297334496540492L;
 
 	public UnauthorizedException() {}
+	
+	public UnauthorizedException(String msg) {
+		super(msg);
+	}
+	
 }
