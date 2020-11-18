@@ -63,7 +63,6 @@ public class Evento {
     		joinColumns = @JoinColumn(name="fk_id_evento", referencedColumnName = "id_evento"),
     		inverseJoinColumns = @JoinColumn(name="fk_id_usuario", referencedColumnName = "id_usuario")
     )
-    
     @JsonIgnoreProperties(value= {"eventosAlheios", "senha", "email", "genero", "amigosRequisitados"
     		, "requisicoesAmigos", "eventosProprios"})
     private Set<Usuario> usuariosConvidados;

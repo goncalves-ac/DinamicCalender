@@ -30,7 +30,6 @@ public class UserService {
 	private UsuarioRepository userRepository;
 	
 	private final EntityValidator<Usuario> usuarioValidator = new EntityValidator<Usuario>();
-	
 	public UserService() {
 	}
 	
@@ -74,7 +73,7 @@ public class UserService {
 		
 		return u;
 	}
-	
+  
 	@Transactional(rollbackFor = Exception.class)
 	public Usuario updateUser(int id, Usuario dadosUsuario) throws Exception {	
     	Usuario u = userRepository.findById(id)
@@ -143,8 +142,6 @@ public class UserService {
 			
 			userRepository.save(u);
 			return u;
-		
-		
 		
 	}
 	

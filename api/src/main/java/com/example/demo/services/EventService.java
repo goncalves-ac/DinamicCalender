@@ -53,8 +53,6 @@ public class EventService {
 		eventInviteService.createEventInvites(eventoSalvo.getId_evento(), idsConvidados);
 		em.refresh(eventoSalvo);
 		return eventoSalvo;
-		
-
 	}
 	
 	@Transactional(readOnly = true)
@@ -110,8 +108,7 @@ public class EventService {
 		if (!constraintViolations.isEmpty()) {
 			throw new BadRequestException(constraintViolations.iterator().next().getMessage());
 		}
-		
-        
+
         eventInviteService.updateEventInvites(idEvento, dadosEvento.getConvites());
         em.refresh(e);
         
