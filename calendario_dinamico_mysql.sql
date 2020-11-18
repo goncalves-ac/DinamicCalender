@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS `calendario_dinamico`.`usuario` (
   `avatar_url` TEXT NULL,
   `sobrenome` VARCHAR(150) NOT NULL,
   `nascimento` DATE NOT NULL,
+  `descricao` TINYTEXT NULL,
   `email` VARCHAR(240) NOT NULL,
   `senha` VARCHAR(150) NOT NULL,
   `genero` CHAR(1) NOT NULL,

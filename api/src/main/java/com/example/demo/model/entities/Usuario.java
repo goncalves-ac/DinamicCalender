@@ -19,6 +19,8 @@ import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,7 +36,7 @@ public class Usuario {
     private int idUsuario;
     
     @NotEmpty(message="Nome é obrigatório.")
-    @Size(min=2, max=150, message="Sobrenome deve ter entre 2 e 150 caractéres.")
+    @Size(min=2, max=150, message="Nome deve ter entre 2 e 150 caractéres.")
     private String nome;
     
     @NotEmpty(message="Sobrenome é obrigatório.")
@@ -43,6 +45,7 @@ public class Usuario {
         
     @NotNull(message="Data de nascimento é obrigatória.")
     @Past(message="Data de nascimento deve ser anterior ao dia de hoje.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date nascimento;
     
     @NotEmpty(message="Email é obrigatório.")
@@ -63,6 +66,9 @@ public class Usuario {
     
     @Column(name="avatar_url")
     private String avatarUrl;
+    
+    @Size(max=240, message="Descrição deve conter no máximo 240 caractéres.")
+    private String descricao;
 
  
     @ManyToMany
@@ -90,12 +96,13 @@ public class Usuario {
 
     public Usuario() { }
 
-    public Usuario(String nome, String sobrenome, Date nascimento, String genero, String email, String senha) {
+    public Usuario(String nome, String sobrenome, Date nascimento, String genero, String email, String senha, String descricao) {
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.nascimento = nascimento;
         this.genero = genero;
         this.email = email;
         this.senha = senha;
+        this.descricao = descricao;
     }
 }
