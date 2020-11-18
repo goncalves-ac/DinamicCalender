@@ -6,18 +6,18 @@ import {Link} from "react-router-dom";
 
 export default function CalendarioDinamico () {
     return (
-        <main className="d-flex justify-content-end mt-5 my-mr-100 my-scroll-hidden">
+        <main className="d-flex justify-content-end mt-5 my-mr-100 my-scroll-hidden my-600px">
             <section className="width-index">
                 <div className="my-text-align mb-5">
-                    <img src={CD} alt="" width="400"/>
+                    <img className="my-600px-img" src={CD} alt="" width="400"/>
                 </div>
                 <p className="my-color-white text-justify">
                     Bem Vindo a solução dos seus problemas. Estou aqui para ajudá-lo facilmente a gerenciar seus compromissos,
                     afazeres e horários... Assim, a organização de suas tarefas potencializará sua entregas e a cumprir suas
                     promesas. Estarei com você para dinamizar sua vida.
                 </p>
-                <div className="d-flex justify-content-center align-items-center mt-4">
-                    <div className="my-text-align mb-5">
+                <div className="d-flex justify-content-center align-items-center mt-4 my-flex">
+                    <div className="my-text-align mb-5 my-img-700">
                         <img src={CD_EX} alt="" width="85%"/>
                     </div>
                     <div>
