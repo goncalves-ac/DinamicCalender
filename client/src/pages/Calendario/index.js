@@ -90,7 +90,9 @@ export default class Calendario extends React.Component {
   };
 
   componentDidMount() {
-    this.state.currentEvents = this.state.INITIAL_EVENTS;
+    this.setState({
+      currentEvents: this.state.INITIAL_EVENTS,
+    });
   }
 
   render() {
@@ -146,7 +148,6 @@ export default class Calendario extends React.Component {
             allDayText="O Dia Todo"
             initialView="dayGridMonth"
             initialEvents={this.state.INITIAL_EVENTS}
-            editable={true}
             events={this.state.currentEvents}
             selectable={true}
             dateClick={this.handleDateClick}

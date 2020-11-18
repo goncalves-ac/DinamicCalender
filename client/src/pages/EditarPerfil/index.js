@@ -1,131 +1,393 @@
-import React from "react";
-import './EditarPerfil.css';
-import Logo_Black from "../../img/logo-black.png";
-import AvatarPlaceholder from "../../img/avatar-placeholder.png"
+import React, { useState, useEffect, useContext } from "react";
+import Nav from "../../components/Nav";
+import "./EditarPerfil.css";
+import AvatarPlaceholder from "../../img/avatar-placeholder.png";
+import { AuthContext } from "../../providers/AuthProvider";
+import useAuthorization from "../../hooks/useAuthorization";
+import api from "../../api";
 
-import { useState, useEffect } from "react";
-
-export default function EditarPerfil () {
-    const birthInput = React.createRef();
-
-    const handleBirthInputFocus = () => birthInput.current.type="date";
-    const handleBirthInputBlur = () => {
-        if (birthInput.current.value==="") {
-            birthInput.current.type="text";
-        }
+export default function EditarPerfil() {
+  const parseNascimento = (nascimento) => {
+    if (nascimento.match("^[0-9]{2}/[0-9]{2}/[0-9]{4}$")) {
+      const nascimentoValues = nascimento.split("/");
+      return `${nascimentoValues[2]}-${nascimentoValues[1]}-${nascimentoValues[0]}`;
+    } else {
+      return nascimento;
     }
+  };
 
-    const [ file, setFile ] = useState(null);
-    const [ avatar, setAvatarUrl ] = useState(null);
+  const { authState, setAuthState } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
+  const [nome, setNome] = useState(authState.userInfo.nome);
+  const [sobrenome, setSobrenome] = useState(authState.userInfo.sobrenome);
+  const [email, setEmail] = useState(authState.userInfo.email);
+  const [nascimento, setNascimento] = useState(authState.userInfo.nascimento);
+  const [genero, setGenero] = useState(authState.userInfo.genero);
+  const [descricao, setDescricao] = useState(
+    authState.userInfo.descricao || ""
+  );
+  const [avatarUrl, setAvatarUrl] = useState(
+    (authState.userInfo.avatarUrl &&
+      `${process.env.REACT_APP_API_URL}/${authState.userInfo.avatarUrl}`) ||
+      AvatarPlaceholder
+  );
+  const [profileFormError, setProfileFormError] = useState(null);
+  const [profileFormSubmitSuccess, setProfileFormSubmitSuccess] = useState(
+    false
+  );
 
-    useEffect(() => {
-        if(file instanceof File ) {
-            setAvatarUrl(window.URL.createObjectURL(file));
-        }
-    }, [file]);
+  const [senhaAntiga, setSenhaAntiga] = useState("");
+  const [senhaNova, setSenhaNova] = useState("");
+  const [confirmarSenhaNova, setConfirmarSenhaNova] = useState("");
+  const [passwordFormError, setPasswordFormError] = useState(null);
+  const [passwordSubmitSuccess, setPasswordSubmitSuccess] = useState(false);
 
-    const inputRef = React.createRef();
+  const [fileExceedsSize, setFileExceedsSize] = useState(false);
 
-    const handleFileSelect = (e) => {
-        setFile(e.target.files[0]);
-        document.querySelector('#arquivo').value = e.target.files[0].name;
+  const [file, setFile] = useState(null);
+
+  const birthInput = React.createRef();
+
+  const handleBirthInputFocus = () => (birthInput.current.type = "date");
+  const handleBirthInputBlur = () => {
+    if (birthInput.current.value === "") {
+      birthInput.current.type = "text";
     }
+  };
 
-    return (
-        <div className="row no-gutters my-bg-orange-0" id="container-base-cadastro">
-            <div className="align-self-center container-md text-center col-lg-5">
+  const { authorization } = useAuthorization();
 
-                <img className="mb-4" src={Logo_Black} alt="" width="120"/>
-                <h2 className="h3 mb-3 font-weight-normal my-blue-2">Editar Perfil</h2>
+  useEffect(() => {
+    setProfileFormSubmitSuccess(false);
+    if (file instanceof File) {
+      if (file.size > 540 * 1000) {
+        setFileExceedsSize(true);
+        setProfileFormError(
+          "Tamanho da imagem excede o tamanho máximo de 540KB"
+        );
+        setFile(null);
+        return;
+      } else {
+        setAvatarUrl(window.URL.createObjectURL(file));
+        setFileExceedsSize(false);
+        setProfileFormError(null);
+      }
+    }
+  }, [file]);
 
-                <div className="container my-5">
-                    <ul className="nav nav-tabs font-weight-bold" id="main-tab" role="tablist">
-                        <li className="nav-item" role="presentation">
-                            <a aria-controls="perfil" aria-selected="true" className="nav-link active" data-toggle="tab"
-                               href="#editar_perfil" id="perfil-tab"
-                               role="tab"> <i className="fas fa-address-card"></i> Perfil </a>
-                        </li>
-                        <li className="nav-item" role="presentation">
-                            <a aria-controls="password" aria-selected="false" className="nav-link" data-toggle="tab"
-                               href="#password" id="password-tab"
-                               role="tab"> <i className="fas fa-unlock-alt"></i> Senha </a>
-                        </li>
-                    </ul>
-                    <div className="tab-content" id="myTabContent">
-                        <div aria-labelledby="perfil-tab" className="tab-pane fade show active w-100 p-3" id="editar_perfil"
-                             role="tabpanel">
+  const inputRef = React.createRef();
 
-                            <div className="d-flex justify-content-around align-items-center">
+  const handleFileSelect = (e) => {
+    setFile(e.target.files[0]);
+    document.querySelector("#arquivo").value = e.target.files[0].name;
+  };
 
-                                <div>
-                                    <form className="form-signin">
+  const handleEditProfileSubmit = async (e) => {
+    e.preventDefault();
+    if (loading) return;
+    const formData = new FormData();
+    formData.append("nome", nome);
+    formData.append("sobrenome", sobrenome);
+    formData.append("email", email);
+    formData.append("nascimento", parseNascimento(nascimento));
+    formData.append("genero", genero);
+    formData.append("descricao", descricao);
+    if (file !== null) {
+      formData.append("avatarImg", file);
+    }
+    try {
+      setLoading(true);
+      setProfileFormError(null);
+      setProfileFormSubmitSuccess(false);
+      const { data } = await api.put(
+        `/usuario/${authState.userInfo.idUsuario}`,
+        formData,
+        authorization
+      );
+      setAuthState(Object.assign(authState, { userInfo: data }));
 
-                                        <div className="row no-gutters">
-                                            <input name="nome" type="text" className="col-md-6 col-sm-12 form-control p-2" placeholder="Nome" required/>
-                                            <input name="sobrenome" type="text" className="col-md-6 col-sm-12 form-control p-2" placeholder="Sobrenome" required/>
-                                        </div>
+      setProfileFormSubmitSuccess(true);
+      setLoading(false);
+    } catch (e) {
+      setProfileFormSubmitSuccess(false);
+      setLoading(false);
+      if (e.response.data.status === 400) {
+        setProfileFormError(e.response.data.message);
+      } else {
+        setProfileFormError("Ocorreu um erro. Por favor, tente novamente.");
+      }
+    }
+  };
 
-                                        <input name="email" type="email" className="form-control my-1 p-2" placeholder="Email" required/>
+  const handleEditPasswordSubmit = async (e) => {
+    e.preventDefault();
+    if (loading) return;
+    if (senhaNova !== confirmarSenhaNova) {
+      setPasswordFormError("A confirmação não é igual a nova senha.");
+      return;
+    }
+    setPasswordFormError(null);
+    const formData = {
+      senhaAtual: senhaAntiga,
+      novaSenha: senhaNova,
+    };
 
-                                        <div className="row no-gutters">
-                                            <input type="text" className="col-md-6 col-sm-12 form-control p-2"
-                                                   placeholder="Data de Nascimento"
-                                                   onFocus={handleBirthInputFocus}
-                                                   onBlur={handleBirthInputBlur}
-                                                   ref={birthInput} />
-                                            <select className="col-md-6 col-sm-12 form-control p-2" name="genero" defaultValue="" required>
-                                                <option disabled="" hidden="" value="">Selecione seu Gênero</option>
-                                                <option value="m">Masculino</option>
-                                                <option value="f">Feminino</option>
-                                                <option value="o">Outro</option>
-                                            </select>
-                                        </div>
+    try {
+      setLoading(true);
+      setPasswordSubmitSuccess(false);
+      await api.patch(
+        `/usuario/${authState.userInfo.idUsuario}`,
+        formData,
+        authorization
+      );
+      setPasswordSubmitSuccess(true);
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+      setPasswordSubmitSuccess(false);
+      if (e.response.data.status === 401) {
+        setPasswordFormError("Senha atual incorreta.");
+      } else if (e.response.data.status === 400) {
+        setPasswordFormError(e.response.data.message);
+      } else {
+        setPasswordFormError("Ocorreu um erro. Por favor, tente novamente.");
+      }
+    }
+  };
 
-                                        <div className="d-flex mt-2">
-                                            <div className="my-btn custom-file" >
-                                                <input name="photoProfile" type="file" ref={inputRef}
-                                                       className="custom-file-input" id="validatedCustomFile"
-                                                       accept="image/*" onChange={handleFileSelect} value=""/>
-                                                <span className="pos-icon"><i className="fas fa-camera"></i></span>
-                                            </div>
-                                            <div className="">
-                                                <input className="my-input-file" type="text"
-                                                       placeholder="  Selecione sua foto." id="arquivo" defaultValue="" />
-                                            </div>
-                                        </div>
+  return (
+    <>
+      <div id="container-base-cadastro">
+        <Nav />
+        <div className="container text-center col-12 col-md-8">
+          <h2 className="h3 my-4 font-weight-normal my-blue-1">
+            Editar Perfil
+          </h2>
 
-                                        <button className="btn btn-lg btn-block my-bg-orange-1 my-2 my-color-white mt-2" type="submit">
-                                            <i className="fas fa-user-check"></i> ATUALIZAR
-                                        </button>
-                                    </form>
-                                </div>
-
-                                <div className="">
-                                    <img className="preview-photo" src={avatar || AvatarPlaceholder} alt="Preview..." id="preview-photo" alt="Image preview..." />
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div aria-labelledby="password-tab" className="tab-pane fade w-100 p-3" id="password"
-                                 role="tabpanel">
-                            <form className="form-signin">
-
-                                <input name="password" type="password" className="form-control my-1 p-2" placeholder="Senha Atual" required/>
-                                <input name="new-password" type="password" className="form-control my-1 p-2" placeholder="Senha Nova" required/>
-                                <input name="confirm-new-password" type="password" className="form-control my-1 p-2" placeholder="Confirmar Senha Nova" required/>
-
-                                <button className="btn btn-lg btn-block my-bg-orange-1 my-2 my-color-white mt-2" type="submit">
-                                    <i className="fas fa-lock"></i> ATUALIZAR SENHA
-                                </button>
-                            </form>
-                        </div>
-
+          <div className="container">
+            <ul
+              className="nav nav-tabs font-weight-bold"
+              id="main-tab"
+              role="tablist"
+            >
+              <li className="nav-item" role="presentation">
+                <a
+                  aria-controls="perfil"
+                  aria-selected="true"
+                  className="nav-link active"
+                  data-toggle="tab"
+                  href="#editar_perfil"
+                  id="perfil-tab"
+                  role="tab"
+                >
+                  {" "}
+                  <i className="fas fa-address-card"></i> Perfil{" "}
+                </a>
+              </li>
+              <li className="nav-item" role="presentation">
+                <a
+                  aria-controls="password"
+                  aria-selected="false"
+                  className="nav-link"
+                  data-toggle="tab"
+                  href="#password"
+                  id="password-tab"
+                  role="tab"
+                >
+                  {" "}
+                  <i className="fas fa-unlock-alt"></i> Senha{" "}
+                </a>
+              </li>
+            </ul>
+            <div
+              className="tab-content edit-profile-form-container"
+              id="myTabContent"
+            >
+              <div
+                aria-labelledby="perfil-tab"
+                className="tab-pane fade show active w-100 p-3"
+                id="editar_perfil"
+                role="tabpanel"
+              >
+                <div className="d-flex flex-column-reverse flex-lg-row justify-content-around align-items-center w-100">
+                  <form
+                    className="form-signin no-gutters w-100"
+                    onSubmit={handleEditProfileSubmit}
+                    encType="multipart/form-data"
+                  >
+                    {(profileFormSubmitSuccess && (
+                      <p className="text-success">
+                        Perfil atualizado com sucesso.
+                      </p>
+                    )) || <p className="text-danger">{profileFormError}</p>}
+                    <div className="row no-gutters mt-2">
+                      <input
+                        name="nome"
+                        type="text"
+                        className="col-md-6 col-sm-12 form-control p-2"
+                        placeholder="Nome"
+                        value={nome}
+                        onChange={(e) => setNome(e.target.value)}
+                        required
+                      />
+                      <input
+                        name="sobrenome"
+                        type="text"
+                        className="col-md-6 col-sm-12 form-control p-2"
+                        placeholder="Sobrenome"
+                        value={sobrenome}
+                        onChange={(e) => setSobrenome(e.target.value)}
+                        required
+                      />
                     </div>
-                </div>
 
+                    <input
+                      name="email"
+                      type="email"
+                      className="form-control my-1 p-2"
+                      placeholder="Email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+
+                    <div className="row no-gutters">
+                      <input
+                        type="text"
+                        className="col-md-6 col-sm-12 form-control p-2"
+                        placeholder="Data de Nascimento"
+                        value={nascimento}
+                        onChange={(e) => setNascimento(e.target.value)}
+                        onFocus={handleBirthInputFocus}
+                        onBlur={handleBirthInputBlur}
+                        ref={birthInput}
+                      />
+                      <select
+                        className="col-md-6 col-sm-12 form-control p-2"
+                        name="genero"
+                        value={genero}
+                        onChange={(e) => setGenero(e.target.value)}
+                        required
+                      >
+                        <option disabled hidden value="">
+                          Selecione seu Gênero
+                        </option>
+                        <option value="M">Masculino</option>
+                        <option value="F">Feminino</option>
+                        <option value="O">Outro</option>
+                      </select>
+                    </div>
+                    <div className="row">
+                      <textarea
+                        value={descricao}
+                        onChange={(e) => setDescricao(e.target.value)}
+                      />
+                    </div>
+                    <div className="d-flex mt-2 w-100 file-input-container">
+                      <div className="my-btn custom-file">
+                        <input
+                          name="photoProfile"
+                          type="file"
+                          ref={inputRef}
+                          className="custom-file-input"
+                          id="validatedCustomFile"
+                          accept="image/*"
+                          onChange={handleFileSelect}
+                          value=""
+                        />
+                        <span className="pos-icon">
+                          <i className="fas fa-camera"></i>
+                        </span>
+                      </div>
+                      <span className="my-input-file" id="arquivo">
+                        <p>
+                          {(file !== null && file.name) || "Selecione sua foto"}
+                        </p>
+                      </span>
+                    </div>
+
+                    <button
+                      className="btn btn-lg btn-block my-bg-orange-1 my-2 my-color-white mt-2"
+                      type="submit"
+                    >
+                      {(loading && <i className="fas fa-spinner" />) || (
+                        <>
+                          {" "}
+                          <i className="fas fa-user-check"></i> ATUALIZAR
+                        </>
+                      )}
+                    </button>
+                  </form>
+
+                  <div className="preview-container">
+                    <img
+                      className="preview-photo"
+                      src={avatarUrl}
+                      alt="Preview..."
+                      id="preview-photo"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div
+                aria-labelledby="password-tab"
+                className="tab-pane fade w-100 p-3"
+                id="password"
+                role="tabpanel"
+              >
+                {(passwordSubmitSuccess && (
+                  <p className="text-success">Senha alterada com sucesso.</p>
+                )) || <p className="text-danger">{passwordFormError}</p>}
+                <form
+                  className="form-signin"
+                  onSubmit={handleEditPasswordSubmit}
+                >
+                  <input
+                    name="password"
+                    type="password"
+                    className="form-control my-1 p-2"
+                    placeholder="Senha Atual"
+                    value={senhaAntiga}
+                    onChange={(e) => setSenhaAntiga(e.target.value)}
+                    required
+                  />
+                  <input
+                    name="new-password"
+                    type="password"
+                    className="form-control my-1 p-2"
+                    placeholder="Senha Nova"
+                    value={senhaNova}
+                    onChange={(e) => setSenhaNova(e.target.value)}
+                    required
+                  />
+                  <input
+                    name="confirm-new-password"
+                    type="password"
+                    className="form-control my-1 p-2"
+                    placeholder="Confirmar Senha Nova"
+                    value={confirmarSenhaNova}
+                    onChange={(e) => setConfirmarSenhaNova(e.target.value)}
+                    required
+                  />
+
+                  <button
+                    className="btn btn-lg btn-block my-bg-orange-1 my-2 my-color-white mt-2"
+                    type="submit"
+                  >
+                    {(loading && <i className="fas fa-spinner" />) || (
+                      <>
+                        {" "}
+                        <i className="fas fa-lock"></i> ATUALIZAR SENHA
+                      </>
+                    )}
+                  </button>
+                </form>
+              </div>
             </div>
+          </div>
         </div>
-    );
+      </div>
+    </>
+  );
 }

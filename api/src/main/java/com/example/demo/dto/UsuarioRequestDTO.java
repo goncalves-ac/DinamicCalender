@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
-import java.io.File;
+import org.springframework.lang.Nullable;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.model.entities.Usuario;
 
@@ -15,7 +16,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UsuarioRequestDTO extends Usuario {
 	
-	private File avatarImg;
+	@Nullable
+	private MultipartFile avatarImg;
 	
 	public Usuario toUsuario() {
 		return new Usuario(
@@ -24,7 +26,8 @@ public class UsuarioRequestDTO extends Usuario {
 				this.getNascimento(),
 				this.getGenero(),
 				this.getEmail(),
-				this.getSenha()
+				this.getSenha(),
+				this.getDescricao()
 				);
 	}
 	

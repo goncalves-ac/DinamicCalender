@@ -26,10 +26,8 @@ const providerObject = (provider) => {
   switch (provider) {
     case authMethods.GOOGLE:
       return new firebase.auth.GoogleAuthProvider();
-      break;
     case authMethods.FACEBOOK:
       return new firebase.auth.FacebookAuthProvider();
-      break;
     default:
       return null;
   }
@@ -54,12 +52,7 @@ export default function AuthSSO(provider) {
       user.fotoPerfil = result.user.photoURL;
       console.log(user);
     })
-    .catch((result) => {
-      console.log("Error");
-      let error = {
-        errorMessage: null,
-        errorCode: null,
-      };
-      console.log(error);
+    .catch((err) => {
+      console.error(err);
     });
 }

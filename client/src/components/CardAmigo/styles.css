@@ -1,0 +1,12 @@
+.my-btn-position {
+  position: absolute;
+  top: 0rem;
+  right: 0.5rem;
+}
+
+@media (max-width: 370px) {
+  .my-btn-position {
+    position: relative;
+    margin-left: auto;
+  }
+}

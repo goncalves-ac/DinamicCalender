@@ -1,5 +1,6 @@
 package com.example.demo.dto;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
@@ -15,6 +16,12 @@ public class UsuarioResponseDTO {
 	private String nome;
 	private String sobrenome;
 	private String email;
+	private String nascimento;
+	private String genero;
+	private String avatarUrl;
+	private String descricao;
+	
+	private final static SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
 	private Date nascimento;
 	private String genero;
 	
@@ -35,6 +42,10 @@ public class UsuarioResponseDTO {
 		this.nome=usuario.getNome();
 		this.sobrenome=usuario.getSobrenome();
 		this.email=usuario.getEmail();
+		this.nascimento=dateFormatter.format(usuario.getNascimento());
+		this.genero=usuario.getGenero();
+		this.avatarUrl = usuario.getAvatarUrl();
+		this.descricao = usuario.getDescricao();
 		this.nascimento=usuario.getNascimento();
 		this.genero=usuario.getGenero();
 		this.amigosRequisitados = usuario.getAmigosRequisitados();

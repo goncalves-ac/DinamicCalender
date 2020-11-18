@@ -1,10 +1,9 @@
 package com.example.demo.services;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.validation.ConstraintViolation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +15,7 @@ import com.example.demo.exceptions.ForbiddenActionException;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.model.entities.Evento;
 import com.example.demo.model.repositories.EventoRepository;
+import com.example.demo.validation.EntityValidator;
 
 @Service
 public class EventService {
@@ -32,22 +32,27 @@ public class EventService {
 	public EventService() {	
 	}
 	
+	private final EntityValidator<Evento> eventoValidator = new EntityValidator<Evento>();
+	
 	@Transactional
 	public Evento createEvent(EventoRequestDTO eventoDTO) throws Exception {
-		Date today = Date.valueOf(LocalDate.now());
+		Evento evento = eventoDTO.toEvent();
 		
-		if (eventoDTO.getInicio().before(today) || eventoDTO.getFim().before(today)) {
-			throw new BadRequestException("Evento com data inválida.");
+		Set<ConstraintViolation<Evento>> constraintViolations = eventoValidator.validate(evento);
+
+		if (!constraintViolations.isEmpty()) {
+			throw new BadRequestException(constraintViolations.iterator().next().getMessage());
 		}
 		
-			Evento evento = eventoDTO.toEvent();
-			Evento eventoSalvo = eventRepository.save(evento);
-			Set<Integer> idsConvidados = eventoDTO.getConvites();
-			eventInviteService.createEventInvites(eventoSalvo.getId_evento(), idsConvidados);
-			em.refresh(eventoSalvo);
-			return eventoSalvo;
-		
-
+		if (evento.getInicio().after(evento.getFim())) {
+			throw new BadRequestException("O fim do evento deve ser após o início.");
+		}
+			
+		Evento eventoSalvo = eventRepository.save(evento);
+		Set<Integer> idsConvidados = eventoDTO.getConvites();
+		eventInviteService.createEventInvites(eventoSalvo.getId_evento(), idsConvidados);
+		em.refresh(eventoSalvo);
+		return eventoSalvo;
 	}
 	
 	@Transactional(readOnly = true)
@@ -58,6 +63,11 @@ public class EventService {
 	@Transactional(readOnly = true)
 	public Evento findEventsByEventId(Integer idEvento) throws Exception {
 		return eventRepository.findById(idEvento).get();
+	}
+	
+	@Transactional(readOnly=true)
+	public Set<Evento> findNextRecentEventsByUserId(Integer idUsuario, Integer limit) {
+		return eventRepository.findNextRecentEventsByUserId(idUsuario, limit);
 	}
 	
 	@Transactional
@@ -93,6 +103,12 @@ public class EventService {
         	e.setCorDeFundo(dadosEvento.getCorDeFundo());
         }
         
+        Set<ConstraintViolation<Evento>> constraintViolations = eventoValidator.validate(e);
+
+		if (!constraintViolations.isEmpty()) {
+			throw new BadRequestException(constraintViolations.iterator().next().getMessage());
+		}
+
         eventInviteService.updateEventInvites(idEvento, dadosEvento.getConvites());
         em.refresh(e);
         

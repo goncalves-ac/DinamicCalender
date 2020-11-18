@@ -20,7 +20,11 @@ const ModalOverlay = ({ children, handleCloseModal }) => {
     >
       <div className="modal-content">
         {children}
-        <button className="modal-close-btn" onClick={handleCloseModal}>
+        <button
+          className="modal-close-btn 
+btn-outline-none"
+          onClick={handleCloseModal}
+        >
           <i className="fas fa-times fa-2x" />
         </button>
       </div>

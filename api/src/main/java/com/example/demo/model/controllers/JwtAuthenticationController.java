@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.config.JwtTokenUtil;
+import com.example.demo.dto.UsuarioResponseDTO;
 import com.example.demo.model.entities.JwtRequest;
 import com.example.demo.model.entities.JwtResponse;
+import com.example.demo.model.entities.Usuario;
 import com.example.demo.services.JwtUserDetailsService;
 
 @RestController
@@ -36,7 +38,8 @@ public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authR
 	final UserDetails userDetails = userDetailsService
 			.loadUserByUsername(authRequest.getUsername());
 	final String token = jwtTokenUtil.generateToken(userDetails);
-return ResponseEntity.ok(new JwtResponse(token));
+	final Usuario userInfo = userDetailsService.loadUserByUserDetail(userDetails);
+return ResponseEntity.ok(new JwtResponse(token, new UsuarioResponseDTO(userInfo), jwtTokenUtil.getExpirationDateFromToken(token)));
 }
 
 private void authenticate(String username, String password) throws Exception {

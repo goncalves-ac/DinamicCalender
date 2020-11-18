@@ -4,7 +4,7 @@ import CD from "../../img/CD.png";
 import CD_EX from "../../img/calendario-ex.PNG";
 import {Link} from "react-router-dom";
 
-export default function Calendario_Dinamico () {
+export default function CalendarioDinamico () {
     return (
         <main className="d-flex justify-content-end mt-5 my-mr-100 my-scroll-hidden">
             <section className="width-index">
