@@ -1,28 +1,47 @@
 import React from "react";
+import AvatarPlaceholder from "../../img/avatar-placeholder.png";
+import "./styles.css";
 
-const CardAmigo = ({ userInfo }) => {
-  const { avatarUrl, userName, profileLink, userDesc } = userInfo;
+const CardAmigo = ({ userInfo, search }) => {
+  const { idUsuario, avatarUrl, nome, sobrenome, descricao } = userInfo;
 
   return (
-    <div className="nearby-user">
-      <div className="row">
-        <div className="col-lg-3 col-md-3 col-sm-9">
-          <img alt="user" className="profile-photo-lg" src={avatarUrl} />
+    <div className="nearby-user my-text-align">
+      <div className="row position-relative">
+        <div className="col-lg-3 col-md-3 col-12">
+          <img
+            alt="user"
+            className="profile-photo-lg"
+            src={
+              (avatarUrl && `${process.env.REACT_APP_API_URL}/${avatarUrl}`) ||
+              AvatarPlaceholder
+            }
+          />
         </div>
-        <div className="col-lg-7 col-md-7 col-sm-12">
+        <div className="col-lg-7 col-md-7 col-12">
           <h5>
-            <a className="profile-link" href={profileLink}>
-              {userName}
+            <a className="profile-link" href="#">
+              {nome} {sobrenome}
             </a>
           </h5>
-          <p>{userDesc}</p>
+          <p>{descricao}</p>
         </div>
-        <div className="d-flex col-lg-2 col-md-2 col-sm-3">
-          <div className="btn-group btn-group-toggle" data-toggle="buttons">
-            <button type="button" className="btn btn-primary my-bg-orange-1 btn-height"><i className="fas fa-user"></i></button>
-            <button type="button" className="btn btn-primary btn-danger btn-height"><i className="fas fa-user-alt-slash"></i></button>
-          </div>
-        </div>
+
+        {(search && (
+          <button
+            type="button"
+            className="btn btn-primary my-bg-orange-1 btn-height my-btn-position"
+          >
+            <i className="fas fa-user-plus"></i>
+          </button>
+        )) || (
+          <button
+            type="button"
+            className="btn btn-primary btn-danger btn-height my-btn-position"
+          >
+            <i className="fas fa-user-alt-slash"></i>
+          </button>
+        )}
       </div>
     </div>
   );
