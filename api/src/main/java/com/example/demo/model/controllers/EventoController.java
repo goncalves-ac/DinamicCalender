@@ -1,104 +1,133 @@
 package com.example.demo.model.controllers;
 
-import com.example.demo.exception.UnauthorizedException;
-import com.example.demo.model.entities.Evento;
-import com.example.demo.model.repositories.EventoRepository;
-import com.example.demo.service.CreateEventService;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.dto.EventoRequestDTO;
+import com.example.demo.exceptions.ForbiddenActionException;
+import com.example.demo.model.entities.Evento;
+import com.example.demo.services.EventService;
+
+@CrossOrigin
 @RestController
 @RequestMapping(path = "eventos")
 public class EventoController {
-
-    @Autowired
-    private EventoRepository eventoRepository;
     
     @Autowired
-    private CreateEventService createEventService;
-    
-    @Autowired
-    private ModelMapper modelMapper;
+    private EventService eventService;
 
     @GetMapping()
     @ResponseBody
-    public Set<Evento> getEventos(Authentication auth) {
-    	UUID authUserId = UUID.fromString(auth.getPrincipal().toString().split(" ")[1]);
+    public Set<Evento> getEventosByAuthenticatedUser(Authentication auth, @RequestParam(required=false) boolean recent, @RequestParam(required=false) Integer limit) throws Exception {
+    	Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);
+    	System.out.println(recent);
+
     	
-    	return eventoRepository.findByFkIdDono(authUserId);
+    	try {
+    		if (recent) {
+        		if (limit == null) {
+        			limit = 3;
+        		}
+        		return eventService.findNextRecentEventsByUserId(authUserId, limit);
+        	}
+    		return eventService.findEventsByUserId(authUserId);
+        } catch (Exception e) {
+        	throw e;
+        }
     }
+    	
     
     @GetMapping("/dono")
     @ResponseBody
-    public Set<Evento> getEventos(@RequestParam UUID id) {
-         return eventoRepository.findByFkIdDono(id);
+    public Set<Evento> getEventosByDono(@RequestParam int id, @RequestParam(required=false) boolean recent, @RequestParam(required=false) Integer limit) throws Exception{
+    	try {
+    		if (recent) {
+        		if (limit == null) {
+        			limit = 3;
+        		}
+        		return eventService.findNextRecentEventsByUserId(id, limit);
+        	}
+    		return eventService.findEventsByUserId(id);
+    	} catch (Exception e) {
+    		throw e;
+    	}  
     }
 
     @GetMapping("/{id}")
-    public Optional<Evento> getById(@PathVariable UUID id){
-        return eventoRepository.findById(id);
+    public Evento getEventoById(@PathVariable int id) throws Exception {
+    	try {
+    		return eventService.findEventsByEventId(id);
+    	} catch (Exception e) {
+    		throw e;
+    	}   
     }
-
+    
     @PostMapping()
-    public Evento addEvento(@RequestBody Evento evento, Authentication auth) throws Exception {
-    	UUID authUserId = UUID.fromString(auth.getPrincipal().toString().split(" ")[1]);
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public Evento addEvento(@RequestBody EventoRequestDTO eventoDTO, Authentication auth) throws Exception {
+    	Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);
     	
-    	if (authUserId == null) {
-    		throw new UnauthorizedException();
+    	Set<Integer> idsConvidados = eventoDTO.getConvites();
+    	if (!idsConvidados.isEmpty()) {
+    		if (idsConvidados.contains(authUserId)) {
+    			throw new ForbiddenActionException("Usuário não pode convidar a si mesmo");
+    		}
     	}
     	
         try {
-        	evento.setFkIdDono(authUserId);
-        	Evento e = createEventService.createEvent(evento);
+        	eventoDTO.setFkIdDono(authUserId);
+        	Evento e = eventService.createEvent(eventoDTO);
         	return e;        	
         } catch (Exception e) {
         	throw e;
         }
     }
-
+    
     @PutMapping("/{idEvento}")
-    public Evento updateEvento(@PathVariable UUID idEvento, @RequestBody Evento dadosEvento) throws Exception{
-        Evento e = eventoRepository.findById(idEvento)
-                .orElseThrow(() -> new IllegalArgumentException());
-
-        if (dadosEvento.getInicio() != e.getInicio()) {
-        	e.setInicio(dadosEvento.getInicio());
+    @ResponseStatus(code = HttpStatus.OK)
+    public Evento updateEvento(@PathVariable int idEvento, @RequestBody EventoRequestDTO eventoDTO, Authentication auth) throws Exception{
+		Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);
+		
+    	Set<Integer> idsConvidados = eventoDTO.getConvites();
+    	if (!idsConvidados.isEmpty()) {
+    		if (idsConvidados.contains(authUserId)) {
+    			throw new ForbiddenActionException("Usuário não pode convidar a si mesmo");
+    		}
+    	}
+    	
+    	try {
+        	return eventService.updateEvent(authUserId, idEvento, eventoDTO);
+        } catch(Exception e) {
+        	throw e;
         }
-        
-        if (dadosEvento.getFim() != e.getFim()) {
-        	e.setFim(dadosEvento.getFim());
-        }
-        
-        if (dadosEvento.getTitulo() != e.getTitulo()) {
-        	e.setTitulo(dadosEvento.getTitulo());
-        }
-        
-        if (dadosEvento.getDescricao() != e.getDescricao()) {
-        	e.setDescricao(dadosEvento.getDescricao());
-        }
-        
-        if (dadosEvento.getPrivacidade() != e.getPrivacidade()) {
-        	e.setPrivacidade(dadosEvento.getPrivacidade());
-        }
-        
-        if (dadosEvento.getCorDeFundo() != e.getCorDeFundo()) {
-        	e.setCorDeFundo(dadosEvento.getCorDeFundo());
-        }
-        
-        return eventoRepository.save(e);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteEvento(@PathVariable UUID id) {
-        eventoRepository.deleteById(id);
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void deleteEvento(@PathVariable int id, Authentication auth) throws Exception {
+    	Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);
+    	
+    	try {
+    		eventService.deleteEventById(authUserId, id);
+    	} catch (Exception e) {
+    		throw e;
+    	}
+        
     }
 
 }

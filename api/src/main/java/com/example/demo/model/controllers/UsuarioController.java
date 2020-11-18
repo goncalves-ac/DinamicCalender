@@ -1,100 +1,137 @@
 package com.example.demo.model.controllers;
 
-import com.example.demo.dto.UsuarioDTO;
-import com.example.demo.exception.DuplicateEmailException;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.exception.UnauthorizedException;
-import com.example.demo.model.entities.Usuario;
-import com.example.demo.model.repositories.UsuarioRepository;
-import com.example.demo.service.CreateUserService;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.UUID;
+import com.example.demo.dto.NovaSenhaRequestDTO;
+import com.example.demo.dto.UsuarioRequestDTO;
+import com.example.demo.dto.UsuarioResponseDTO;
+import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.model.entities.Usuario;
+import com.example.demo.services.UserService;
+import com.example.demo.upload.utils.FileUploadUtil;
+import com.example.demo.upload.utils.OldNewImgFileState;
 
+@CrossOrigin
 @RestController
 @RequestMapping(path = "usuario")
 public class UsuarioController {
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
         
     @Autowired
-    CreateUserService createUserService;
+    UserService userService;
 
     @GetMapping("/{id}")
-    public UsuarioDTO getUsuarioById(@PathVariable UUID id) throws Exception {
-
-        	Usuario u = usuarioRepository.findById(id)
-        			.orElseThrow(() -> new ResourceNotFoundException("Usuário não pode ser encontrado"));
-        	return new UsuarioDTO(u);
-              
+    public UsuarioResponseDTO getUsuarioById(@PathVariable int id) throws Exception {
+    		try {
+    			Usuario u = userService.findUserById(id);
+				return new UsuarioResponseDTO(u);
+    		} catch(Exception e) {
+    			throw e;
+    		}      
+    }
+    
+    @GetMapping()
+    public Set<UsuarioResponseDTO> getUsuarioByNome(@RequestParam(required=false) String nome, Authentication auth) throws Exception {
+    	Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);
+    	if (nome==null) {
+    		try {
+    			Usuario u = userService.findUserById(authUserId);
+    			Set<UsuarioResponseDTO> usuarioSet = new HashSet<UsuarioResponseDTO>();
+    			usuarioSet.add(new UsuarioResponseDTO(u));
+    			return usuarioSet;
+    		} catch (Exception e) {
+    			throw e;
+    		}
+    	}
+    	
+    	try {
+    			Set<Usuario> u = userService.findUsersByNome(nome);
+    			Set<UsuarioResponseDTO> usuariosDTO = u.stream().map
+    					(usuario -> new UsuarioResponseDTO(usuario)).collect(Collectors.toSet());
+				return usuariosDTO;
+    		} catch(Exception e) {
+    			throw e;
+    		}      
     }
 
     @PostMapping()
     @ResponseStatus(code = HttpStatus.CREATED)
-    public UsuarioDTO addUsuario(@RequestBody Usuario usuario) throws Exception {
+    public UsuarioResponseDTO addUsuario(@RequestBody UsuarioRequestDTO usuarioRequestDTO) throws Exception {
+    	Usuario usuario = usuarioRequestDTO.toUsuario();
+    	
     	try {
-    		Usuario u = createUserService.createUserAccount(usuario);
-    		return new UsuarioDTO(u);
+    		Usuario u = userService.createUser(usuario);
+    		return new UsuarioResponseDTO(u);
     	} catch(Exception e) {
     		throw e;
     	}
     }
-
-    @PutMapping("/{idUsuario}")
+    
+    @PutMapping(value="/{idUsuario}", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public UsuarioDTO updateUsuario(@PathVariable UUID idUsuario, @RequestBody Usuario dadosUsuario, Authentication auth) throws Exception{       
-    	
-    	UUID authUserId = UUID.fromString(auth.getPrincipal().toString().split(" ")[1]);
-    	if (!authUserId.equals(idUsuario)) {
-    		throw new UnauthorizedException();
-    	}
-    	
-    	Usuario u = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuário não pode ser encontrado"));
-    	    	
-    	if (dadosUsuario.getEmail() != null && dadosUsuario.getEmail()!=u.getEmail()) {
-    		if (usuarioRepository.findByEmail(dadosUsuario.getEmail()) != null) {
-    			throw new DuplicateEmailException(dadosUsuario.getEmail());
-    		}
-    		
-    		u.setEmail(dadosUsuario.getEmail());
-    	}
-    	
-    	if (dadosUsuario.getNome() != null && dadosUsuario.getNome() != u.getNome()) {
-    		u.setNome(dadosUsuario.getNome());
-    	}
-    	
-    	if (dadosUsuario.getSobrenome() != null && dadosUsuario.getSobrenome() != u.getSobrenome()) {
-    		u.setSobrenome(dadosUsuario.getSobrenome());
-    	}
-    	
-    	if (dadosUsuario.getNascimento() != null && dadosUsuario.getNascimento() != u.getNascimento()) {
-    		u.setNascimento(dadosUsuario.getNascimento());
-    	}
-    	
-    	if (dadosUsuario.getGenero() != null && dadosUsuario.getGenero() != u.getGenero()) {
-    		u.setGenero(dadosUsuario.getGenero());
-    	}
+    @PreAuthorize("#idUsuario == authentication.principal.idUsuario")
+    public UsuarioResponseDTO updateUsuario(@PathVariable int idUsuario, @ModelAttribute UsuarioRequestDTO usuarioRequestDTO) throws Exception{       
+    	Usuario dadosUsuario = usuarioRequestDTO.toUsuario();
+		MultipartFile avatarImg = usuarioRequestDTO.getAvatarImg();
+		OldNewImgFileState state = new OldNewImgFileState();
+		if (!avatarImg.isEmpty()) {
+			try {
+				state = userService.changeUserAvatarImg(idUsuario, avatarImg);
+				dadosUsuario.setAvatarUrl(state.getNewImgUri());
+			} catch (Exception e) {
+				throw e;
+			}
+		}
 
-        usuarioRepository.save(u);
-        return new UsuarioDTO(u);
+    	try {
+    		Usuario u = userService.updateUser(idUsuario, dadosUsuario);
+    		return new UsuarioResponseDTO(u);
+    	} catch (Exception e) {
+    		FileUploadUtil.rollback(state);
+    		throw e;
+    	}
+    }
+    
+    @PatchMapping("/{idUsuario}")
+    @ResponseStatus(code = HttpStatus.ACCEPTED)
+    @PreAuthorize("#idUsuario == authentication.principal.idUsuario")
+    public UsuarioResponseDTO changeUsuarioPassword(@PathVariable int idUsuario, @RequestBody NovaSenhaRequestDTO novaSenhaDTO) throws Exception{       
+    	try {
+    		Usuario u = userService.changeUserPassword(idUsuario, novaSenhaDTO);
+    		return new UsuarioResponseDTO(u);
+    	} catch (Exception e) {
+    		throw e;
+    	}
     }
 
     @DeleteMapping("/{idUsuario}")
-    @ResponseStatus(code = HttpStatus.OK)
-    public void deleteUsuario(@PathVariable UUID idUsuario, Authentication auth) throws Exception{
-    	UUID authUserId = UUID.fromString(auth.getPrincipal().toString().split(" ")[1]);
-    	if (!authUserId.equals(idUsuario)) {
-    		throw new UnauthorizedException();
-    	}
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    @PreAuthorize("#idUsuario == authentication.principal.idUsuario")
+    public void deleteUsuario(@PathVariable int idUsuario) throws Exception{
 
     	try {
-    		usuarioRepository.deleteById(idUsuario);
+    		userService.deleteUserById(idUsuario);
     	} catch (Exception e) {
     		throw new ResourceNotFoundException("Usuário não pode ser encontrado");
     	}

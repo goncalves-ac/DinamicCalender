@@ -13,7 +13,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.example.demo.service.JwtUserDetailsService;
+
+import com.example.demo.services.JwtUserDetailsService;
+
 import io.jsonwebtoken.ExpiredJwtException;
 
 @Component
@@ -33,7 +35,6 @@ throws ServletException, IOException {
 String username = null;
 String jwtToken = null;
 
-// JWT Token está no form "Bearer token". Remova a palavra Bearer e pegue somente o Token
 if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
 	jwtToken = requestTokenHeader.substring(7);
 try {
@@ -47,11 +48,8 @@ try {
 	logger.warn("JWT Token does not begin with Bearer String");
 }
 
-// Tendo o token, valide o.
 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 	UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
-
-
 
 if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
 	UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
