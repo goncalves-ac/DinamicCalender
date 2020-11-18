@@ -57,6 +57,7 @@ protected void configure(HttpSecurity httpSecurity) throws Exception {
 httpSecurity.csrf().disable()
 .authorizeRequests().antMatchers(HttpMethod.POST, "/authenticate").permitAll()
 .antMatchers(HttpMethod.POST, "/usuario").permitAll()
+.antMatchers(HttpMethod.GET, "/usuario/**").permitAll()
 .antMatchers(HttpMethod.GET, "/static/**").permitAll()
 .anyRequest().authenticated().and().cors().and().
 exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
