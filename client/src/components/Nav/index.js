@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
 import Icon from "../../img/icon.png";
-import UserModelo from "../../img/user1.jpg";
+import avatarPlaceholder from "../../img/avatar-placeholder.png";
 
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../providers/AuthProvider";
 
-export default function Index() {
+import "./Nav.css";
+
+export default function Nav() {
+  const { authState, setAuthState } = useContext(AuthContext);
+  const handleLogout = () => {
+    setAuthState({
+      jwttoken: null,
+      expiresAt: null,
+      userInfo: {},
+    });
+  };
   return (
     <nav
       className="navbar navbar-expand-lg navbar-light bg-light"
@@ -15,7 +26,11 @@ export default function Index() {
       </Link>
       <Link className="navbar-brand mx-3" to="/usuario">
         <img
-          src={UserModelo}
+          src={
+            (authState.userInfo.avatarUrl &&
+              `${process.env.REACT_APP_API_URL}/${authState.userInfo.avatarUrl}`) ||
+            avatarPlaceholder
+          }
           width="50"
           height="50"
           className="rounded-circle border border-dark"
@@ -40,24 +55,27 @@ export default function Index() {
             <ul className="navbar-nav ml-auto">
               <li className="nav-item active">
                 <Link className="nav-link" to="/calendario">
-                  <i className="fas fa-calendar-alt fa-lg"></i> Calendário{" "}
+                  <span>
+                    <i className="fas fa-calendar-alt fa-lg"></i>
+                  </span>
+                  Calendário{" "}
                 </Link>
               </li>
               <li className="nav-item active">
                 <Link className="nav-link" to="/editarPerfil">
-                  <i className="fas fa-user-cog fa-lg"></i> Editar Perfil{" "}
+                  <span>
+                    <i className="fas fa-user-cog fa-lg"></i>
+                  </span>
+                  Editar Perfil{" "}
                 </Link>
               </li>
               <li className="nav-item active">
-                <Link className="nav-link" to="#">
-                  <i className="fas fa-cogs fa-lg"></i> Configuração{" "}
-                </Link>
-              </li>
-              <hr />
-              <li className="nav-item active">
-                <a className="nav-link" href="#">
-                  <i className="fas fa-power-off"></i> Sair
-                </a>
+                <button className="nav-link" onClick={handleLogout}>
+                  <span>
+                    <i className="fas fa-power-off"></i>
+                  </span>{" "}
+                  Sair
+                </button>
               </li>
             </ul>
           </div>

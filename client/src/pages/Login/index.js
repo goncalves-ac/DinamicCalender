@@ -25,15 +25,23 @@ export default function Login() {
         username,
         password,
       });
-      setAuthState(data);
+      setAuthState({
+        jwttoken: data.jwttoken,
+        userInfo: data.infoUsuario,
+        expiresAt: data.expiresAt,
+      });
       setTimeout(() => {
         setLoading(false);
         setRedirect(true);
       }, 1000);
     } catch (e) {
-      const errorData = e.response.data;
       setLoading(false);
-      setFormError(errorData.message);
+      const errorData = e.response.data;
+      if (errorData.status === 401) {
+        setFormError("Email ou senha inválidos.");
+      } else {
+        setFormError("Ocorreu um erro. Por favor, tente novamente.");
+      }
     }
   };
 
@@ -43,10 +51,9 @@ export default function Login() {
     <div className="row no-gutters my-bg-orange-0" id="container-base-login">
       <div className="align-self-center container-md text-center col-lg-4 col-md-6 col-sm-12">
         <form className="form-signin" onSubmit={handleLoginSubmit}>
-          <img className="mb-4" src={Logo_Black} alt="" width="120" />
+          <img className="mb-4" src={Logo_Black} alt="" width="100" />
           <h1 className="h3 mb-3 font-weight-normal">Calendário Dinâmico</h1>
-          <p style={{ color: "red", height: "1rem" }}>{formError}</p>
-
+          <p className="mb-0 text-danger">{formError}</p>
           <label htmlFor="inputEmail" className="sr-only">
             <i className="fas fa-at"></i> Email
           </label>

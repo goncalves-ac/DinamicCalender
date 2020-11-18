@@ -1,3 +1,25 @@
 #container-base-cadastro {
   min-height: 100vh;
 }
+
+.my-modal-open-btn {
+  background: none;
+  border: none;
+  color: #007bff;
+}
+
+.my-modal-open-btn:hover {
+  color: #003aff;
+  text-decoration: underline;
+}
+
+.use-terms-modal {
+  background-color: #212121;
+  overflow: auto;
+  padding: 2rem;
+  color: white;
+}
+
+.use-terms-modal > p {
+  text-align: justify;
+}
