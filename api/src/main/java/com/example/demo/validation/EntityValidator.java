@@ -6,15 +6,14 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import com.example.demo.model.entities.Evento;
-
-public class EventoValidator {
+public class EntityValidator<T> {
 	
 	private static final Validator validator =
 			Validation.buildDefaultValidatorFactory().getValidator();
 	
-	public static final Set<ConstraintViolation<Evento>> validate(Evento e) {
-		return validator.validate(e);
+	public final Set<ConstraintViolation<T>> validate(T t) {
+		return validator.validate(t);
 		
 	}
+
 }
