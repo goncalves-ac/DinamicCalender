@@ -18,6 +18,7 @@ public class UsuarioResponseDTO {
 	private String nascimento;
 	private String genero;
 	private String avatarUrl;
+	private String descricao;
 	
 	private final static SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
 	
@@ -41,6 +42,7 @@ public class UsuarioResponseDTO {
 		this.nascimento=dateFormatter.format(usuario.getNascimento());
 		this.genero=usuario.getGenero();
 		this.avatarUrl = usuario.getAvatarUrl();
+		this.descricao = usuario.getDescricao();
 		this.amigosRequisitados = usuario.getAmigosRequisitados();
 		this.requisicoesAmigos = usuario.getRequisicoesAmigos();
 		this.eventosAlheios = usuario.getEventosAlheios();
