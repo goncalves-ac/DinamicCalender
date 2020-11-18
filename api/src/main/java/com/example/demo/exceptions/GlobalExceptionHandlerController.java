@@ -1,4 +1,4 @@
-package com.example.demo.model.controllers;
+package com.example.demo.exceptions;
 
 
 import java.time.LocalDateTime;
@@ -13,14 +13,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import com.example.demo.exceptions.BadRequestException;
-import com.example.demo.exceptions.DuplicateEntryException;
-import com.example.demo.exceptions.ForbiddenActionException;
-import com.example.demo.exceptions.GlobalExceptionResponse;
-import com.example.demo.exceptions.ResourceNotFoundException;
-import com.example.demo.exceptions.ServerErrorException;
-import com.example.demo.exceptions.UnauthorizedException;
 
 @RestControllerAdvice
 @ResponseBody
