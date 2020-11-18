@@ -2,6 +2,8 @@ package com.example.demo.services;
 
 import java.util.Set;
 
+import javax.validation.ConstraintViolation;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import com.example.demo.model.entities.Usuario;
 import com.example.demo.model.repositories.UsuarioRepository;
 import com.example.demo.upload.utils.FileUploadUtil;
 import com.example.demo.upload.utils.OldNewImgFileState;
+import com.example.demo.validation.UsuarioValidator;
 
 @Service
 public class UserService {
@@ -31,9 +34,21 @@ public class UserService {
 	
 	@Transactional
 	public Usuario createUser(Usuario user) throws Exception {
+		Set<ConstraintViolation<Usuario>> constraintViolations = UsuarioValidator.validate(user);
+		
+		if (!constraintViolations.isEmpty()) {
+			throw new BadRequestException(constraintViolations.iterator().next().getMessage());
+		}
+		
 		if (userRepository.findByEmail(user.getEmail()) != null) {
 			throw new DuplicateEntryException(user.getEmail() + " já está cadastrado.");
 		}
+		
+		if (user.getSenha().length() < 8 || user.getSenha()==null) {
+			throw new BadRequestException("A senha deve conter pelo menos 8 caractéres");
+		}
+		
+		
 		user.setSenha(passwordEncoder.encode(user.getSenha()));
 		Usuario u = userRepository.save(user);
 		
@@ -59,8 +74,7 @@ public class UserService {
 	}
 	
 	@Transactional
-	public Usuario updateUser(int id, Usuario dadosUsuario) throws Exception {
-
+	public Usuario updateUser(int id, Usuario dadosUsuario) throws Exception {	
     	Usuario u = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não pode ser encontrado"));
     	
@@ -90,6 +104,12 @@ public class UserService {
     	if (dadosUsuario.getAvatarUrl() != null && dadosUsuario.getAvatarUrl() != u.getAvatarUrl()) {
     		u.setAvatarUrl(dadosUsuario.getAvatarUrl());
     	}
+    	
+		Set<ConstraintViolation<Usuario>> constraintViolations = UsuarioValidator.validate(u);
+		
+		if (!constraintViolations.isEmpty()) {
+			throw new BadRequestException(constraintViolations.iterator().next().getMessage());
+		}
     	
         userRepository.save(u);
         return u;

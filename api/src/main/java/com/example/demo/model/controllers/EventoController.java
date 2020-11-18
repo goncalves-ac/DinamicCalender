@@ -33,10 +33,18 @@ public class EventoController {
 
     @GetMapping()
     @ResponseBody
-    public Set<Evento> getEventosByAuthenticatedUser(Authentication auth) throws Exception {
+    public Set<Evento> getEventosByAuthenticatedUser(Authentication auth, @RequestParam(required=false) boolean recent, @RequestParam(required=false) Integer limit) throws Exception {
     	Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);
+    	System.out.println(recent);
+
     	
     	try {
+    		if (recent) {
+        		if (limit == null) {
+        			limit = 3;
+        		}
+        		return eventService.findNextRecentEventsByUserId(authUserId, limit);
+        	}
     		return eventService.findEventsByUserId(authUserId);
         } catch (Exception e) {
         	throw e;
@@ -46,8 +54,14 @@ public class EventoController {
     
     @GetMapping("/dono")
     @ResponseBody
-    public Set<Evento> getEventosByDono(@RequestParam int id) throws Exception{
+    public Set<Evento> getEventosByDono(@RequestParam int id, @RequestParam(required=false) boolean recent, @RequestParam(required=false) Integer limit) throws Exception{
     	try {
+    		if (recent) {
+        		if (limit == null) {
+        			limit = 3;
+        		}
+        		return eventService.findNextRecentEventsByUserId(id, limit);
+        	}
     		return eventService.findEventsByUserId(id);
     	} catch (Exception e) {
     		throw e;

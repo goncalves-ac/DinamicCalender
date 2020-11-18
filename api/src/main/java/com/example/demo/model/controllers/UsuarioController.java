@@ -78,8 +78,10 @@ public class UsuarioController {
     @PostMapping()
     @ResponseStatus(code = HttpStatus.CREATED)
     public UsuarioResponseDTO addUsuario(@RequestBody UsuarioRequestDTO usuarioRequestDTO) throws Exception {
+    	Usuario usuario = usuarioRequestDTO.toUsuario();
+    	
     	try {
-    		Usuario u = userService.createUser(usuarioRequestDTO.toUsuario());
+    		Usuario u = userService.createUser(usuario);
     		return new UsuarioResponseDTO(u);
     	} catch(Exception e) {
     		throw e;
