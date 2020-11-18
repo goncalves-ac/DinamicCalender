@@ -15,7 +15,7 @@ import com.example.demo.exceptions.ForbiddenActionException;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.model.entities.Evento;
 import com.example.demo.model.repositories.EventoRepository;
-import com.example.demo.validation.EventoValidator;
+import com.example.demo.validation.EntityValidator;
 
 @Service
 public class EventService {
@@ -32,11 +32,13 @@ public class EventService {
 	public EventService() {	
 	}
 	
+	private final EntityValidator<Evento> eventoValidator = new EntityValidator<Evento>();
+	
 	@Transactional
 	public Evento createEvent(EventoRequestDTO eventoDTO) throws Exception {
 		Evento evento = eventoDTO.toEvent();
 		
-		Set<ConstraintViolation<Evento>> constraintViolations = EventoValidator.validate(evento);
+		Set<ConstraintViolation<Evento>> constraintViolations = eventoValidator.validate(evento);
 
 		if (!constraintViolations.isEmpty()) {
 			throw new BadRequestException(constraintViolations.iterator().next().getMessage());
@@ -103,7 +105,7 @@ public class EventService {
         	e.setCorDeFundo(dadosEvento.getCorDeFundo());
         }
         
-        Set<ConstraintViolation<Evento>> constraintViolations = EventoValidator.validate(e);
+        Set<ConstraintViolation<Evento>> constraintViolations = eventoValidator.validate(e);
 
 		if (!constraintViolations.isEmpty()) {
 			throw new BadRequestException(constraintViolations.iterator().next().getMessage());

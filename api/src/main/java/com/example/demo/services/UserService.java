@@ -19,7 +19,7 @@ import com.example.demo.model.entities.Usuario;
 import com.example.demo.model.repositories.UsuarioRepository;
 import com.example.demo.upload.utils.FileUploadUtil;
 import com.example.demo.upload.utils.OldNewImgFileState;
-import com.example.demo.validation.UsuarioValidator;
+import com.example.demo.validation.EntityValidator;
 
 @Service
 public class UserService {
@@ -29,12 +29,14 @@ public class UserService {
 	@Autowired
 	private UsuarioRepository userRepository;
 	
+	private final EntityValidator<Usuario> usuarioValidator = new EntityValidator<Usuario>();
+	
 	public UserService() {
 	}
 	
 	@Transactional
 	public Usuario createUser(Usuario user) throws Exception {
-		Set<ConstraintViolation<Usuario>> constraintViolations = UsuarioValidator.validate(user);
+		Set<ConstraintViolation<Usuario>> constraintViolations = usuarioValidator.validate(user);
 		
 		if (!constraintViolations.isEmpty()) {
 			throw new BadRequestException(constraintViolations.iterator().next().getMessage());
@@ -66,14 +68,14 @@ public class UserService {
 	public Set<Usuario> findUsersByNome(String nome) throws Exception {
 		Set<Usuario> u = userRepository.findByNome(nome);
 		
-		if (u == null) {
+		if (u == null || u.isEmpty()) {
 			throw new ResourceNotFoundException("Nenhum usuário pode ser encontrado");
 		}
 		
 		return u;
 	}
 	
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public Usuario updateUser(int id, Usuario dadosUsuario) throws Exception {	
     	Usuario u = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não pode ser encontrado"));
@@ -105,7 +107,11 @@ public class UserService {
     		u.setAvatarUrl(dadosUsuario.getAvatarUrl());
     	}
     	
-		Set<ConstraintViolation<Usuario>> constraintViolations = UsuarioValidator.validate(u);
+    	if (dadosUsuario.getDescricao() != null && !dadosUsuario.getDescricao().equals(u.getDescricao())) {
+    		u.setDescricao(dadosUsuario.getDescricao());
+    	}
+    	
+		Set<ConstraintViolation<Usuario>> constraintViolations = usuarioValidator.validate(u);
 		
 		if (!constraintViolations.isEmpty()) {
 			throw new BadRequestException(constraintViolations.iterator().next().getMessage());
@@ -118,23 +124,27 @@ public class UserService {
 	
 	@Transactional
 	public Usuario changeUserPassword(int id, NovaSenhaRequestDTO novaSenhaDTO) throws Exception {
-		
 		Usuario u = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não pode ser encontrado"));
-		
-		if (novaSenhaDTO.getNovaSenha().length() < 8 || novaSenhaDTO.getNovaSenha()==null) {
-			throw new BadRequestException("A senha deve conter pelo menos 8 caractéres");
+		if (!passwordEncoder.matches(novaSenhaDTO.getSenhaAtual(), u.getSenha())) {
+			throw new UnauthorizedException("Senha atual incorreta.");
 		}
 		
-		if (passwordEncoder.matches(novaSenhaDTO.getSenhaAtual(), u.getSenha())) {
+		if (novaSenhaDTO.getNovaSenha().length() < 8 || novaSenhaDTO.getNovaSenha()==null) {
+			throw new BadRequestException("A nova senha deve conter pelo menos 8 caractéres");
+		}
+		
+		if (passwordEncoder.matches(novaSenhaDTO.getNovaSenha(), u.getSenha())) {
+			throw new BadRequestException("A nova senha deve ser diferente da atual.");
+		}
+		
 			String senha = passwordEncoder.encode(novaSenhaDTO.getNovaSenha());
 			u.setSenha(senha);
 			
 			userRepository.save(u);
 			return u;
-		}
 		
-		throw new UnauthorizedException();
+		
 		
 	}
 	

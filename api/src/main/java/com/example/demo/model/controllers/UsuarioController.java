@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,19 +28,23 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.demo.dto.NovaSenhaRequestDTO;
 import com.example.demo.dto.UsuarioRequestDTO;
 import com.example.demo.dto.UsuarioResponseDTO;
+import com.example.demo.exceptions.BadRequestException;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.model.entities.Usuario;
 import com.example.demo.services.UserService;
 import com.example.demo.upload.utils.FileUploadUtil;
 import com.example.demo.upload.utils.OldNewImgFileState;
+import com.example.demo.validation.EntityValidator;
 
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping(path = "usuario")
 public class UsuarioController {
         
     @Autowired
     UserService userService;
+    
+    private final EntityValidator<UsuarioRequestDTO> usuarioRequestValidator = new EntityValidator<UsuarioRequestDTO>();
 
     @GetMapping("/{id}")
     public UsuarioResponseDTO getUsuarioById(@PathVariable int id) throws Exception {
@@ -53,9 +58,10 @@ public class UsuarioController {
     
     @GetMapping()
     public Set<UsuarioResponseDTO> getUsuarioByNome(@RequestParam(required=false) String nome, Authentication auth) throws Exception {
-    	Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);
+
     	if (nome==null) {
     		try {
+    	    	Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);
     			Usuario u = userService.findUserById(authUserId);
     			Set<UsuarioResponseDTO> usuarioSet = new HashSet<UsuarioResponseDTO>();
     			usuarioSet.add(new UsuarioResponseDTO(u));
@@ -67,6 +73,7 @@ public class UsuarioController {
     	
     	try {
     			Set<Usuario> u = userService.findUsersByNome(nome);
+
     			Set<UsuarioResponseDTO> usuariosDTO = u.stream().map
     					(usuario -> new UsuarioResponseDTO(usuario)).collect(Collectors.toSet());
 				return usuariosDTO;
@@ -78,6 +85,7 @@ public class UsuarioController {
     @PostMapping()
     @ResponseStatus(code = HttpStatus.CREATED)
     public UsuarioResponseDTO addUsuario(@RequestBody UsuarioRequestDTO usuarioRequestDTO) throws Exception {
+    	
     	Usuario usuario = usuarioRequestDTO.toUsuario();
     	
     	try {
@@ -95,7 +103,7 @@ public class UsuarioController {
     	Usuario dadosUsuario = usuarioRequestDTO.toUsuario();
 		MultipartFile avatarImg = usuarioRequestDTO.getAvatarImg();
 		OldNewImgFileState state = new OldNewImgFileState();
-		if (!avatarImg.isEmpty()) {
+		if (avatarImg!=null) {
 			try {
 				state = userService.changeUserAvatarImg(idUsuario, avatarImg);
 				dadosUsuario.setAvatarUrl(state.getNewImgUri());
@@ -107,9 +115,17 @@ public class UsuarioController {
     	try {
     		Usuario u = userService.updateUser(idUsuario, dadosUsuario);
     		return new UsuarioResponseDTO(u);
+    	} catch (ConstraintViolationException e) {
+    		if (state.getNewImgUri() != null && state.getOldImg() != null) {
+    	   		FileUploadUtil.rollback(state);
+    		}
+    		throw new BadRequestException(e.getMessage());
     	} catch (Exception e) {
-    		FileUploadUtil.rollback(state);
     		throw e;
+    	} finally {
+    		if (state.getNewImgUri() != null && state.getOldImg() != null) {
+    	   		FileUploadUtil.rollback(state);
+    		}
     	}
     }
     
