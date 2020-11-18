@@ -76,7 +76,8 @@ const CreateEditEventModal = ({
     setNotInvitedFriendsCallback();
   }, [invitedFriends, setNotInvitedFriendsCallback]);
 
-  const handleInviteFriend = (friend) => {
+  const handleInviteFriend = (e, friend) => {
+    e.stopPropagation();
     setInvitedFriends([...invitedFriends, friend]);
   };
 
@@ -228,15 +229,23 @@ const CreateEditEventModal = ({
           className="not-invited-friends-container"
           style={{ backgroundColor: eventInfo.backgroundColor || "#3788d8" }}
         >
+          <span
+            className="close-friend-list"
+            onClick={() => setAddFriendsVisible(false)}
+          >
+            <i className="fas fa-times" />
+          </span>
           <h3>Amigos</h3>
           {(notInvitedFriends.length > 1 &&
             notInvitedFriends.map((friend) => {
               return (
-                <div
-                  className="not-invited-friend-card"
-                  onClick={() => handleInviteFriend(friend)}
-                  key={friend.id}
-                >
+                <div className="not-invited-friend-card" key={friend.id}>
+                  <span
+                    className="add-friend-button"
+                    onClick={(e) => handleInviteFriend(e, friend)}
+                  >
+                    <i className="fas fa-user-plus" />
+                  </span>
                   <FriendCard friend={friend} />
                 </div>
               );
