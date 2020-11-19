@@ -11,12 +11,10 @@ import lombok.Getter;
 public class JwtResponse implements Serializable {
 
 private static final long serialVersionUID = -8091879091924046844L;
-private final String jwttoken;
 private final UsuarioResponseDTO infoUsuario;
 private final Date expiresAt;
 
-public JwtResponse(String jwttoken, UsuarioResponseDTO infoUsuario, Date expiresAt) {
-	this.jwttoken = jwttoken;
+public JwtResponse(UsuarioResponseDTO infoUsuario, Date expiresAt) {
 	this.infoUsuario = infoUsuario;
 	this.expiresAt = expiresAt;
 }
