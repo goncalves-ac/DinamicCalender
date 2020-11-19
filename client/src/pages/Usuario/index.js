@@ -7,23 +7,15 @@ import ListaBusca from "../../components/ListaBusca";
 import Nav from "../../components/Nav";
 import DadosUsuario from "../../components/DadosUsuario";
 import avatarPlaceholder from "../../img/avatar-placeholder.png";
-import { useContext } from "react";
-import { AuthContext } from "../../providers/AuthProvider";
 
 export default function Usuario({ userInfo }) {
-  const { authState } = useContext(AuthContext);
-
-  useEffect(() => {
-    console.log(authState);
-  }, [authState]);
-
   return (
     <section>
       <Nav />
       <DadosUsuario
         avatarUrl={
           (userInfo.avatarUrl &&
-            `${process.env.REACT_APP_API_URL}/${userInfo.avatarUrl}`) ||
+            `${process.env.REACT_APP_API_URL}${userInfo.avatarUrl}`) ||
           avatarPlaceholder
         }
         name={userInfo.nome}
