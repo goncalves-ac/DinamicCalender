@@ -16,14 +16,12 @@ public class UsuarioResponseDTO {
 	private String nome;
 	private String sobrenome;
 	private String email;
-	private String nascimento;
+	private Date nascimento;
 	private String genero;
 	private String avatarUrl;
 	private String descricao;
 	
-	private final static SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
-	private Date nascimento;
-	private String genero;
+	//private final static SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
 	
 	@JsonIgnoreProperties(value={"eventosAlheios", "senha", "email", "genero", "amigosRequisitados"
 			, "requisicoesAmigos", "eventosProprios"})
@@ -42,7 +40,7 @@ public class UsuarioResponseDTO {
 		this.nome=usuario.getNome();
 		this.sobrenome=usuario.getSobrenome();
 		this.email=usuario.getEmail();
-		this.nascimento=dateFormatter.format(usuario.getNascimento());
+		this.nascimento=usuario.getNascimento();
 		this.genero=usuario.getGenero();
 		this.avatarUrl = usuario.getAvatarUrl();
 		this.descricao = usuario.getDescricao();
