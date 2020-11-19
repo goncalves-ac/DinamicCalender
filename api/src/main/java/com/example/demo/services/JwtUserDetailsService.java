@@ -23,7 +23,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 		com.example.demo.model.entities.Usuario u = userRepository.findByEmail(email);
 		
 		if (u == null) {
-			throw new UsernameNotFoundException("User not found with email: " + email);
+			throw new UsernameNotFoundException("Usuário ou senha inválidos");
 		}
 		
 		return new UserDetail(u.getIdUsuario(), email, u.getSenha(),
@@ -34,7 +34,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 		Usuario u = userRepository.findByEmail(userDetail.getUsername());
 		
 		if (u == null) {
-			throw new UsernameNotFoundException("User not found with email: " + userDetail.getUsername());
+			throw new UsernameNotFoundException("Usuário ou senha inválidos");
 		}
 		
 		return u;
