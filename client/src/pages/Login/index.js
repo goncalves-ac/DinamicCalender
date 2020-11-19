@@ -18,6 +18,7 @@ export default function Login() {
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
     try {
       setFormError(null);
       setLoading(true);
@@ -26,19 +27,22 @@ export default function Login() {
         password,
       });
       setAuthState({
-        jwttoken: data.jwttoken,
         userInfo: data.infoUsuario,
         expiresAt: data.expiresAt,
       });
+      localStorage.setItem("eat", data.expiresAt);
       setTimeout(() => {
-        setLoading(false);
         setRedirect(true);
       }, 1000);
     } catch (e) {
       setLoading(false);
-      const errorData = e.response.data;
-      if (errorData.status === 401) {
-        setFormError("Email ou senha inválidos.");
+      if (e.response) {
+        const errorData = e.response.data;
+        if (errorData.status === 401) {
+          setFormError("Email ou senha inválidos.");
+        } else {
+          setFormError("Ocorreu um erro. Por favor, tente novamente.");
+        }
       } else {
         setFormError("Ocorreu um erro. Por favor, tente novamente.");
       }
