@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.example.demo.upload.utils;
 
 import java.io.Serializable;
 
