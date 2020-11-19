@@ -1,10 +1,12 @@
 package com.example.demo.model.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,12 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.config.JwtTokenUtil;
 import com.example.demo.dto.UsuarioResponseDTO;
 import com.example.demo.model.entities.JwtRequest;
 import com.example.demo.model.entities.JwtResponse;
 import com.example.demo.model.entities.Usuario;
 import com.example.demo.services.JwtUserDetailsService;
+import com.example.demo.upload.utils.JwtCookieUtil;
+import com.example.demo.upload.utils.JwtTokenUtil;
 
 @RestController
 @CrossOrigin
@@ -39,8 +42,21 @@ public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authR
 			.loadUserByUsername(authRequest.getUsername());
 	final String token = jwtTokenUtil.generateToken(userDetails);
 	final Usuario userInfo = userDetailsService.loadUserByUserDetail(userDetails);
-return ResponseEntity.ok(new JwtResponse(token, new UsuarioResponseDTO(userInfo), jwtTokenUtil.getExpirationDateFromToken(token)));
+	System.out.println(userInfo.getEmail());
+return ResponseEntity.ok()
+		.header(HttpHeaders.SET_COOKIE, JwtCookieUtil.getCookieForToken(token))
+		.body(new JwtResponse(new UsuarioResponseDTO(userInfo),
+		jwtTokenUtil.getExpirationDateFromToken(token)));
 }
+
+@RequestMapping(value = "/unauthenticate", method = RequestMethod.POST)
+public ResponseEntity<?> logout(Authentication auth) throws Exception {
+	
+return ResponseEntity.ok()
+		.header(HttpHeaders.SET_COOKIE, JwtCookieUtil.clearCookieForToken())
+		.build();
+}
+
 
 private void authenticate(String username, String password) throws Exception {
 try {
@@ -51,4 +67,7 @@ try {
 	throw new Exception("INVALID_CREDENTIALS", e);
 }
 }
+
+
+
 }
