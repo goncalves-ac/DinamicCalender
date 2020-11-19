@@ -46,9 +46,17 @@ export default function Cadastro() {
         setRedirectOnSuccess(true);
       }, 1000);
     } catch (e) {
-      const errorData = e.response.data;
-      setLoading(false);
-      setFormError(errorData.message);
+      if (e.response) {
+        const errorData = e.response.data;
+        setLoading(false);
+        if (errorData.status === 400) {
+          setFormError(errorData.message);
+        } else {
+          setFormError("Ocorreu um erro. Por favor, tente novamente.");
+        }
+      } else {
+        setFormError("Ocorreu um erro. Por favor, tente novamente.");
+      }
     }
   };
 
