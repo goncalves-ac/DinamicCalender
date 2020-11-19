@@ -2,6 +2,7 @@ body {
   min-height: 100vh !important;
   background-color: #212121 !important;
   overflow: auto !important;
+  font-size: 14px;
 }
 
 * {
@@ -139,4 +140,14 @@ body {
 .btn-outline-none:focus,
 .btn-outline-none:active {
   outline: none;
+}
+
+.full-height {
+  height: 100vh;
+}
+
+@media (max-width: 320px) {
+  body {
+    font-size: 12px;
+  }
 }
