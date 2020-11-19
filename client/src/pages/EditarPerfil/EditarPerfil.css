@@ -53,6 +53,12 @@
   text-align: center;
 }
 
+.my-textarea {
+  width: 90%;
+  height: 100px;
+  overflow: auto;
+}
+
 @media (min-width: 992px) {
   .preview-photo {
     margin-left: 16px;
