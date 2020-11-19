@@ -27,12 +27,11 @@ export default function Login() {
         password,
       });
       setAuthState({
-        jwttoken: data.jwttoken,
         userInfo: data.infoUsuario,
         expiresAt: data.expiresAt,
       });
+      localStorage.setItem("eat", data.expiresAt);
       setTimeout(() => {
-        setLoading(false);
         setRedirect(true);
       }, 1000);
     } catch (e) {
