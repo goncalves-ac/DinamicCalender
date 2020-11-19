@@ -277,8 +277,9 @@ export default function EditarPerfil() {
                         <option value="O">Outro</option>
                       </select>
                     </div>
-                    <div className="row">
+                    <div className="d-flex justify-content-center row">
                       <textarea
+                          className="my-textarea mt-2"
                         value={descricao}
                         onChange={(e) => setDescricao(e.target.value)}
                       />
