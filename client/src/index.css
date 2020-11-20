@@ -133,6 +133,11 @@ body {
   }
 }
 
+.my-profile-page-content-container-sizing {
+  height: 100vh !important;
+  overflow-y: hidden;
+}
+
 .btn-outline-none {
   outline: none;
 }
