@@ -4,13 +4,18 @@ import { AuthContext } from "../../providers/AuthProvider";
 import CardAmigo from "../CardAmigo";
 import "./ListaBusca.css";
 
-const ListaAmigos = () => {
+const ListaBusca = ({ friendsWith }) => {
   const { authState } = useContext(AuthContext);
   const [amigos, setAmigos] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [formError, setFormError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [postSearch, setPostSearch] = useState(false);
+  const [friendsWithIds, setFriendsWithIds] = useState([]);
+
+  useEffect(() => {
+    setFriendsWithIds(friendsWith.map((user) => user.idUsuario));
+  }, [friendsWith]);
 
   const handleSearchFriends = async (e) => {
     e.preventDefault();
@@ -50,7 +55,10 @@ const ListaAmigos = () => {
   }, [amigos, postSearch]);
 
   return (
-    <div className="col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-sm-12">
+    <div className="col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-sm-12 people-nearby my-profile-page-content-container-sizing">
+      <h3 className="mb-3 text-center h4 my-blue-1 my-bolder">
+        Encontre pessoas
+      </h3>
       <form className="form-inline py-3" onSubmit={handleSearchFriends}>
         <input
           aria-label="Search"
@@ -73,20 +81,25 @@ const ListaAmigos = () => {
         <p className="text-info">Pesquise pessoas por nome acima</p>
       )}
       {postSearch && (
-        <>
-          {(formError && <p className="text-danger">{formError}</p>) || (
-            <h4 className="my-text-align anim-fade-in">Pessoas encontradas</h4>
-          )}
-        </>
+        <>{formError && <p className="text-danger">{formError}</p>}</>
       )}
 
-      <div className="people-nearby pt-0">
-        {amigos.map((amigo) => (
-          <CardAmigo key={amigo.idUsuario} userInfo={amigo} search={true} />
-        ))}
+      <div className="people-nearby pt-0 overflow-auto h-75">
+        {amigos
+          .sort((a, b) =>
+            `${a.nome} ${a.sobrenome}`.localeCompare(`${b.nome} ${b.sobrenome}`)
+          )
+          .map((amigo) => (
+            <CardAmigo
+              key={amigo.idUsuario}
+              userInfo={amigo}
+              mode="SEARCH"
+              friendListIds={friendsWithIds}
+            />
+          ))}
       </div>
     </div>
   );
 };
 
-export default ListaAmigos;
+export default ListaBusca;
