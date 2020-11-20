@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useCallback } from "react";
-import FriendsCarousel from "../FriendsCarousel";
-import FriendCard from "../FriendsCarousel/FriendCard";
+import FriendsCarousel from "../../FriendsCarousel";
+import FriendCard from "../../FriendsCarousel/FriendCard";
 import "./styles.css";
 
 const CreateEditEventModal = ({
