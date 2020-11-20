@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import CreateEditEventModal from "../CreateEditEventModal";
+import CreateEditEventModal from "./CreateEditEventModal";
 import FriendsCarousel from "../FriendsCarousel";
 import "./styles.css";
 
