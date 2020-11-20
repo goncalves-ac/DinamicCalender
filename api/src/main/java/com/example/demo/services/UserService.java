@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.dto.NovaSenhaRequestDTO;
+import com.example.demo.dto.UpdateUserReturnDTO;
 import com.example.demo.exceptions.BadRequestException;
 import com.example.demo.exceptions.DuplicateEntryException;
 import com.example.demo.exceptions.ResourceNotFoundException;
@@ -75,15 +76,17 @@ public class UserService {
 	}
   
 	@Transactional(rollbackFor = Exception.class)
-	public Usuario updateUser(int id, Usuario dadosUsuario) throws Exception {	
+	public UpdateUserReturnDTO updateUser(int id, Usuario dadosUsuario) throws Exception {	
     	Usuario u = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não pode ser encontrado"));
-    	
+    	UpdateUserReturnDTO dto = new UpdateUserReturnDTO(null, false);
     	if (dadosUsuario.getEmail() != null && !dadosUsuario.getEmail().equals(u.getEmail())) {
     		if (userRepository.findByEmail(dadosUsuario.getEmail()) != null) {
     			throw new DuplicateEntryException(dadosUsuario.getEmail() + " já está cadastrado.");
     		}
     		u.setEmail(dadosUsuario.getEmail());
+    		dto.setHasChangedEmail(true);
+    		    			
     	}
     	
     	if (dadosUsuario.getNome() != null && dadosUsuario.getNome() != u.getNome()) {
@@ -117,7 +120,8 @@ public class UserService {
 		}
     	
         userRepository.save(u);
-        return u;
+        dto.setUsuario(u);
+        return dto;
 		
 	}
 	
@@ -161,6 +165,7 @@ public class UserService {
 		MultipartFile oldImg = null;
 		if (u.getAvatarUrl() != null) {
 			oldImg = FileUploadUtil.getFile(u.getAvatarUrl());
+
 			if (oldImg != null) {
 				FileUploadUtil.deleteFile(u.getAvatarUrl());
 			}

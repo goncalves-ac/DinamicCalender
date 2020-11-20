@@ -1,19 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import api from "../../api";
-import useAuthorization from "../../hooks/useAuthorization";
 import { AuthContext } from "../../providers/AuthProvider";
 import CardAmigo from "../CardAmigo";
 import "./ListaAmigos.css";
 
 const ListaAmigos = () => {
-  const { authorization } = useAuthorization();
   const [amigos, setAmigos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const getFriends = async () => {
-      const { data } = await api.get(`/amigos`, authorization);
+      const { data } = await api.get(`/amigos`);
       return data;
     };
 

@@ -10,8 +10,6 @@ import ModalOverlay from "../../components/ModalOverlay";
 import CalenderModal from "../../components/CalenderModal";
 import "./style.css";
 import CreateEditEventModal from "../../components/CreateEditEventModal";
-import allFriends from "./../../mock/allFriends";
-import invitedFriends from "./../../mock/invitedFriends";
 
 export default class Calendario extends React.Component {
   state = {
@@ -22,7 +20,7 @@ export default class Calendario extends React.Component {
     selectedDate: `${new Date().getFullYear}-${
       new Date().getMonth() + 1
     }-${new Date().getDate()}`,
-    allFriends: allFriends,
+    allFriends: [],
     INITIAL_EVENTS: [
       {
         id: 1,
@@ -36,7 +34,7 @@ export default class Calendario extends React.Component {
         start: new Date().toISOString().replace(/T.*$/, ""),
         duration: "02:00",
         place: "Pizzaria Margarithe",
-        invitedFriends: invitedFriends,
+        invitedFriends: [],
         description: "",
         allDay: false,
         backgroundColor: "#dd3333",
@@ -96,6 +94,8 @@ export default class Calendario extends React.Component {
   }
 
   render() {
+    const allFriends = [];
+    const invitedFriends = [];
     return (
       <section>
         {this.state.selectedEvent && (

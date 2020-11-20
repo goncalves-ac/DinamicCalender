@@ -6,15 +6,22 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
 
 import "./Nav.css";
+import api from "../../api";
 
 export default function Nav() {
   const { authState, setAuthState } = useContext(AuthContext);
-  const handleLogout = () => {
-    setAuthState({
-      jwttoken: null,
-      expiresAt: null,
-      userInfo: {},
-    });
+
+  const handleLogout = async () => {
+    try {
+      await api.post("/unauthenticate");
+      setAuthState({
+        expiresAt: null,
+        userInfo: {},
+      });
+      localStorage.removeItem("eat");
+    } catch (e) {
+      console.log(e);
+    }
   };
   return (
     <nav
@@ -28,7 +35,7 @@ export default function Nav() {
         <img
           src={
             (authState.userInfo.avatarUrl &&
-              `${process.env.REACT_APP_API_URL}/${authState.userInfo.avatarUrl}`) ||
+              `${process.env.REACT_APP_API_URL}${authState.userInfo.avatarUrl}`) ||
             avatarPlaceholder
           }
           width="50"

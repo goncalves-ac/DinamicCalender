@@ -3,7 +3,6 @@ import Nav from "../../components/Nav";
 import "./EditarPerfil.css";
 import AvatarPlaceholder from "../../img/avatar-placeholder.png";
 import { AuthContext } from "../../providers/AuthProvider";
-import useAuthorization from "../../hooks/useAuthorization";
 import api from "../../api";
 
 export default function EditarPerfil() {
@@ -11,6 +10,9 @@ export default function EditarPerfil() {
     if (nascimento.match("^[0-9]{2}/[0-9]{2}/[0-9]{4}$")) {
       const nascimentoValues = nascimento.split("/");
       return `${nascimentoValues[2]}-${nascimentoValues[1]}-${nascimentoValues[0]}`;
+    } else if (nascimento.match("T")) {
+      const nascimentoValues = nascimento.split("T")[0].split("-");
+      return `${nascimentoValues[2]}/${nascimentoValues[1]}/${nascimentoValues[0]}`;
     } else {
       return nascimento;
     }
@@ -21,7 +23,9 @@ export default function EditarPerfil() {
   const [nome, setNome] = useState(authState.userInfo.nome);
   const [sobrenome, setSobrenome] = useState(authState.userInfo.sobrenome);
   const [email, setEmail] = useState(authState.userInfo.email);
-  const [nascimento, setNascimento] = useState(authState.userInfo.nascimento);
+  const [nascimento, setNascimento] = useState(
+    parseNascimento(authState.userInfo.nascimento)
+  );
   const [genero, setGenero] = useState(authState.userInfo.genero);
   const [descricao, setDescricao] = useState(
     authState.userInfo.descricao || ""
@@ -54,8 +58,6 @@ export default function EditarPerfil() {
       birthInput.current.type = "text";
     }
   };
-
-  const { authorization } = useAuthorization();
 
   useEffect(() => {
     setProfileFormSubmitSuccess(false);
@@ -101,9 +103,9 @@ export default function EditarPerfil() {
       setProfileFormSubmitSuccess(false);
       const { data } = await api.put(
         `/usuario/${authState.userInfo.idUsuario}`,
-        formData,
-        authorization
+        formData
       );
+      console.log(data);
       setAuthState(Object.assign(authState, { userInfo: data }));
 
       setProfileFormSubmitSuccess(true);
@@ -111,8 +113,13 @@ export default function EditarPerfil() {
     } catch (e) {
       setProfileFormSubmitSuccess(false);
       setLoading(false);
-      if (e.response.data.status === 400) {
-        setProfileFormError(e.response.data.message);
+      if (e.response) {
+        const errorData = e.response.data;
+        if (errorData.status === 400) {
+          setProfileFormError(errorData.message);
+        } else {
+          setProfileFormError("Ocorreu um erro. Por favor, tente novamente.");
+        }
       } else {
         setProfileFormError("Ocorreu um erro. Por favor, tente novamente.");
       }
@@ -135,11 +142,7 @@ export default function EditarPerfil() {
     try {
       setLoading(true);
       setPasswordSubmitSuccess(false);
-      await api.patch(
-        `/usuario/${authState.userInfo.idUsuario}`,
-        formData,
-        authorization
-      );
+      await api.patch(`/usuario/${authState.userInfo.idUsuario}`, formData);
       setPasswordSubmitSuccess(true);
       setLoading(false);
     } catch (e) {
@@ -279,7 +282,7 @@ export default function EditarPerfil() {
                     </div>
                     <div className="d-flex justify-content-center row">
                       <textarea
-                          className="my-textarea mt-2"
+                        className="my-textarea mt-2"
                         value={descricao}
                         onChange={(e) => setDescricao(e.target.value)}
                       />

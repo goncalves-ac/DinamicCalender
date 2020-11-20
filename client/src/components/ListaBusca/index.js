@@ -22,14 +22,19 @@ const ListaAmigos = () => {
         data.filter((user) => user.idUsuario !== authState.userInfo.idUsuario)
       );
       setLoading(false);
+    } catch (e) {
+      setLoading(false);
+      setAmigos([]);
+      if (e.response) {
+        const errorData = e.response.data;
+        setFormError(errorData.message);
+      } else {
+        setFormError("Ocorreu um erro. Por favor, tente novamente.");
+      }
+    } finally {
       if (!postSearch) {
         setPostSearch(true);
       }
-    } catch (e) {
-      console.log(e);
-      setLoading(false);
-      setAmigos([]);
-      setFormError(e.response.data.message);
     }
   };
 

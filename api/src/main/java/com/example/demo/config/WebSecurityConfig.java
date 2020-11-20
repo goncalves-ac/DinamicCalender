@@ -62,6 +62,7 @@ return super.authenticationManagerBean();
 public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
     StrictHttpFirewall firewall = new StrictHttpFirewall();
     firewall.setAllowUrlEncodedSlash(true);
+    firewall.setAllowUrlEncodedDoubleSlash(true);
     firewall.setAllowSemicolon(true);
     return firewall;
 }
@@ -72,6 +73,7 @@ public CorsConfigurationSource corsConfigurationSource() {
     configuration.setAllowedOrigins(Arrays.asList("*"));
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
     configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
+    configuration.setAllowCredentials(true);
     configuration.setExposedHeaders(Arrays.asList("x-auth-token"));
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
@@ -81,9 +83,11 @@ public CorsConfigurationSource corsConfigurationSource() {
 @Override
 protected void configure(HttpSecurity httpSecurity) throws Exception {
 httpSecurity.cors().and().csrf().disable()
-.authorizeRequests().antMatchers(HttpMethod.POST, "/authenticate").permitAll()
+.authorizeRequests()
+.antMatchers(HttpMethod.POST, "/unauthenticate/**").permitAll()
+.antMatchers(HttpMethod.POST, "/authenticate/**").permitAll()
 .antMatchers(HttpMethod.POST, "/usuario").permitAll()
-.antMatchers(HttpMethod.GET, "/usuario/**").permitAll()
+.antMatchers(HttpMethod.GET, "/usuario/{\\d+}").permitAll()
 .antMatchers(HttpMethod.GET, "/static/**").permitAll()
 .anyRequest().authenticated().and().
 exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
