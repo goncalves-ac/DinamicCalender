@@ -7,6 +7,7 @@ import Calendario from "./pages/Calendario";
 import EditarPerfil from "./pages/EditarPerfil";
 import CalendarioDinamico from "./pages/CalendarioDinamico";
 import { AuthContext } from "./providers/AuthProvider";
+import AtualizarSenhaEsquecida from "./pages/AtualizarSenhaEsquecida";
 
 const Routes = () => {
   const { authState, setAuthState } = useContext(AuthContext);
@@ -60,6 +61,9 @@ const Routes = () => {
         <Route path="/login" exact>
           <Login />
         </Route>
+          <Route path="/atualizarsenha" exact>
+              <AtualizarSenhaEsquecida />
+          </Route>
         <Route path="/cadastro" exact>
           <Cadastro />
         </Route>
