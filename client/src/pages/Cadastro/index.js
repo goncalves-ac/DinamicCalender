@@ -4,7 +4,10 @@ import api from "../../api";
 import ModalOverlay from "../../components/ModalOverlay";
 import Logo_Black from "./../../img/logo-black.png";
 import "./style.css";
+import Cookies from "./Cookies";
+import PoliticaDeDados from "./PoliticaDeDados";
 import TermosDeUso from "./TermosDeUso";
+
 
 export default function Cadastro() {
   const [nome, setNome] = useState("");
@@ -17,6 +20,8 @@ export default function Cadastro() {
   const [loading, setLoading] = useState(false);
   const [redirectOnSuccess, setRedirectOnSuccess] = useState(false);
   const [useTermsModalVisible, setUseTermsModalVisible] = useState(false);
+  const [useCookiesVisible, setUseCookiesVisible] = useState(false);
+  const [usePoliticaDeDadosVisible, setUsePoliticaDeDadosVisible] = useState(false);
 
   const birthInput = React.createRef();
 
@@ -58,6 +63,14 @@ export default function Cadastro() {
     setUseTermsModalVisible(false);
   };
 
+  const handleCloseUseCookies = () => {
+    setUseCookiesVisible(false);
+  };
+
+  const handleCloseUsePoliticaDeDados = () => {
+    setUsePoliticaDeDadosVisible(false);
+  };
+
   return (
     <>
       {useTermsModalVisible && (
@@ -65,6 +78,19 @@ export default function Cadastro() {
           <TermosDeUso />
         </ModalOverlay>
       )}
+
+      {useCookiesVisible && (
+          <ModalOverlay handleCloseModal={handleCloseUseCookies}>
+            <Cookies />
+          </ModalOverlay>
+      )}
+
+      {usePoliticaDeDadosVisible && (
+          <ModalOverlay handleCloseModal={handleCloseUsePoliticaDeDados}>
+            <PoliticaDeDados />
+          </ModalOverlay>
+      )}
+
       <div
         className="row no-gutters my-bg-orange-0"
         id="container-base-cadastro"
@@ -158,6 +184,9 @@ export default function Cadastro() {
                 type="button"
                 className="my-modal-open-btn 
 btn-outline-none"
+                onClick={() => {
+                  setUsePoliticaDeDadosVisible(true);
+                }}
               >
                 Política de Dados
               </button>{" "}
@@ -166,6 +195,9 @@ btn-outline-none"
                 type="button"
                 className="my-modal-open-btn 
 btn-outline-none"
+                onClick={() => {
+                  setUseCookiesVisible(true);
+                }}
               >
                 Utilização de Cookies
               </button>
