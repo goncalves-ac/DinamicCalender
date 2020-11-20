@@ -15,9 +15,8 @@
   flex-direction: column;
   background: none;
   border: none;
-  max-width: 600px;
-  width: 90%;
-  height: 100%;
+  width: fit-content;
+  height: fit-content;
 }
 
 .modal-close-btn {

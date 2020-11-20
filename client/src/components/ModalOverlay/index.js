@@ -2,7 +2,7 @@ import React from "react";
 import { createPortal } from "react-dom";
 import "./styles.css";
 
-const ModalOverlay = ({ children, handleCloseModal }) => {
+const ModalOverlay = ({ children, handleCloseModal, closeButton = true }) => {
   const targetDiv = document.getElementById("modal-layer");
   const overlayRef = React.createRef();
 
@@ -20,13 +20,15 @@ const ModalOverlay = ({ children, handleCloseModal }) => {
     >
       <div className="modal-content">
         {children}
-        <button
-          className="modal-close-btn 
+        {closeButton && (
+          <button
+            className="modal-close-btn 
 btn-outline-none"
-          onClick={handleCloseModal}
-        >
-          <i className="fas fa-times fa-2x" />
-        </button>
+            onClick={handleCloseModal}
+          >
+            <i className="fas fa-times fa-2x" />
+          </button>
+        )}
       </div>
     </div>,
     targetDiv
