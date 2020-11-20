@@ -1,7 +1,9 @@
 .calender-modal-container {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  max-width: 600px;
+  height: 100vh;
   position: relative;
+  overflow: hidden;
 }
 
 .calender-modal-background {
@@ -31,8 +33,9 @@
   display: flex;
   flex-direction: column;
   padding: 2rem 4rem 2rem 2rem;
-  gap: 0.7rem;
+  margin: 0;
   z-index: 10;
+  overflow-y: auto;
 }
 
 .calender-modal-edit-event-button {
@@ -56,6 +59,7 @@
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+  margin-top: auto;
 }
 
 .event-field h2 {
