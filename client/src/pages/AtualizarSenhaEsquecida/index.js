@@ -1,5 +1,6 @@
 import React, {useContext, useState} from "react";
 import "./AtualizarSenhaEsquecida.css";
+import Logo from "../../img/logo-default.png"
 import api from "../../api";
 import {AuthContext} from "../../providers/AuthProvider";
 import useAuthorization from "../../hooks/useAuthorization";
@@ -52,55 +53,49 @@ const AtualizarSenhaEsquecida = () => {
     };
 
     return (
-        <>
-            <div id="container-base-cadastro">
-                <div
-                    aria-labelledby="password-tab"
-                    className="tab-pane fade w-100 p-3"
-                    id="password"
-                    role="tabpanel"
-                >
+        <section className="my-center">
+            <img src={Logo} width="150" className="mb-3"/>
+            <div className="my-input-new-password">
                 {(passwordSubmitSuccess && (
                     <p className="text-success">Senha alterada com sucesso.</p>
                 )) || <p className="text-danger">{passwordFormError}</p>}
-                    <form
-                        className="form-signin"
-                        onSubmit={handleEditPasswordSubmit}
-                    >
-                        <input
-                            name="new-password"
-                            type="password"
-                            className="form-control my-1 p-2"
-                            placeholder="Senha Nova"
-                            value={senhaNova}
-                            onChange={(e) => setSenhaNova(e.target.value)}
-                            required
-                        />
-                        <input
-                            name="confirm-new-password"
-                            type="password"
-                            className="form-control my-1 p-2"
-                            placeholder="Confirmar Senha Nova"
-                            value={confirmarSenhaNova}
-                            onChange={(e) => setConfirmarSenhaNova(e.target.value)}
-                            required
-                        />
+                <form
+                    className="form-signin"
+                    onSubmit={handleEditPasswordSubmit}
+                >
+                    <input
+                        name="new-password"
+                        type="password"
+                        className="form-control my-1 p-2"
+                        placeholder="Senha Nova"
+                        value={senhaNova}
+                        onChange={(e) => setSenhaNova(e.target.value)}
+                        required
+                    />
+                    <input
+                        name="confirm-new-password"
+                        type="password"
+                        className="form-control my-1 p-2"
+                        placeholder="Confirmar Senha Nova"
+                        value={confirmarSenhaNova}
+                        onChange={(e) => setConfirmarSenhaNova(e.target.value)}
+                        required
+                    />
 
-                        <button
-                            className="btn btn-lg btn-block my-bg-orange-1 my-2 my-color-white mt-2"
-                            type="submit"
-                        >
-                            {(loading && <i className="fas fa-spinner" />) || (
-                                <>
-                                    {" "}
-                                    <i className="fas fa-lock"></i> ATUALIZAR SENHA
-                                </>
-                            )}
-                        </button>
-                    </form>
-                </div>
+                    <button
+                        className="btn btn-lg btn-block my-bg-orange-1 my-2 my-color-white mt-2"
+                        type="submit"
+                    >
+                        {(loading && <i className="fas fa-spinner" />) || (
+                            <>
+                                {" "}
+                                <i className="fas fa-lock"></i> ATUALIZAR SENHA
+                            </>
+                        )}
+                    </button>
+                </form>
             </div>
-        </>
+        </section>
     );
 }
 
