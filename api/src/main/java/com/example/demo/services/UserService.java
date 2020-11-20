@@ -154,6 +154,7 @@ public class UserService {
 		userRepository.deleteById(id);
 	}
 	
+	@Transactional(rollbackFor = Exception.class)
 	public OldNewImgFileState changeUserAvatarImg(int id, MultipartFile avatarImg) throws Exception {
 		Usuario u = userRepository.findById(id).get();
 		
