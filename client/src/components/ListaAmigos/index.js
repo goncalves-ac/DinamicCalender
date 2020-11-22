@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { useContext } from "react";
+import { useParams } from "react-router-dom";
 import api from "../../api";
+import useAuthUserFriendlist from "../../hooks/useAuthUserFriendlist";
+import { AuthContext } from "../../providers/AuthProvider";
 import CardAmigo from "../CardAmigo";
 import "./ListaAmigos.css";
 
 const ListaAmigos = ({ friendList }) => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [filteredFriendList, setFilteredFriendList] = useState([]);
   const [filterQuery, setFilterQuery] = useState([]);
+  const { id } = useParams();
+
+  const { authUserFriendlistIds } = useAuthUserFriendlist();
 
   useEffect(() => {
     if (filterQuery !== "") {
@@ -24,19 +30,7 @@ const ListaAmigos = ({ friendList }) => {
     } else {
       setFilteredFriendList(friendList);
     }
-    console.log(friendList);
   }, [friendList, filterQuery]);
-
-  useEffect(() => {
-    try {
-      setLoading(true);
-      setError(null);
-      setLoading(false);
-    } catch (e) {
-      setLoading(false);
-      setError(e.response.data.message);
-    }
-  }, []);
 
   return (
     <div className=" col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-sm-12 my-profile-page-content-container-sizing">
@@ -45,7 +39,7 @@ const ListaAmigos = ({ friendList }) => {
 
         {friendList.length > 0 && (
           <input
-            placeholder="Filtre seus amigos pelo nome..."
+            placeholder="Filtrar por nome..."
             value={filterQuery}
             onChange={(e) => setFilterQuery(e.target.value)}
             className="form-control my-1 p-2"
@@ -63,6 +57,7 @@ const ListaAmigos = ({ friendList }) => {
                     key={friend.idUsuario}
                     userInfo={friend}
                     mode="FRIENDLIST"
+                    authUserFriendlistIds={authUserFriendlistIds}
                   />
                 ))) ||
                 (friendList.length > 0 && (
@@ -71,7 +66,23 @@ const ListaAmigos = ({ friendList }) => {
             </>
           )}
           {!loading && friendList.length < 1 && (
-            <p className="text-center">Você ainda não tem nenhum amigo 😔</p>
+            <>
+              {(id && (
+                <p className="text-center">
+                  Ainda não tem nenhum amigo{" "}
+                  <span role="img" aria-label="Emoji Triste">
+                    😔
+                  </span>
+                </p>
+              )) || (
+                <p className="text-center">
+                  Você ainda não tem nenhum amigo{" "}
+                  <span role="img" aria-label="Emoji Triste">
+                    😔
+                  </span>
+                </p>
+              )}
+            </>
           )}
         </div>
       </div>
