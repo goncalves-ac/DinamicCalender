@@ -6,7 +6,7 @@ import ListaAmigos from "../../components/ListaAmigos";
 import ListaBusca from "../../components/ListaBusca";
 import Nav from "../../components/Nav";
 import DadosUsuario from "../../components/DadosUsuario";
-import avatarPlaceholder from "../../img/avatar-placeholder.png";
+
 import ListaConvites from "../../components/ListaConvites";
 import api from "../../api";
 import { useContext } from "react";
@@ -36,7 +36,7 @@ export default function Usuario({ userInfo }) {
           (user) => user.idUsuario1
         );
         const acceptedFriendsIdUsuario2List = acceptedFriends.map(
-          (user) => user.idUsuario1
+          (user) => user.idUsuario2
         );
 
         const friendList = [
@@ -49,7 +49,6 @@ export default function Usuario({ userInfo }) {
         );
 
         setFriends(friendList);
-        console.log(friendList);
       } catch (e) {}
     };
     fetchFriends();
@@ -65,16 +64,7 @@ export default function Usuario({ userInfo }) {
   return (
     <section>
       <Nav />
-      <DadosUsuario
-        avatarUrl={
-          (userInfo.avatarUrl &&
-            `${process.env.REACT_APP_API_URL}${userInfo.avatarUrl}`) ||
-          avatarPlaceholder
-        }
-        name={userInfo.nome}
-        surname={userInfo.sobrenome}
-        description={userInfo.descricao}
-      />
+      <DadosUsuario userInfo={userInfo} />
       <div className="my-5 w-100">
         <ul
           className="nav nav-tabs font-weight-bold"
@@ -174,7 +164,7 @@ export default function Usuario({ userInfo }) {
             id="search"
             role="tabpanel"
           >
-            <ListaBusca friendsWith={friends} />
+            <ListaBusca />
           </div>
 
           <div
