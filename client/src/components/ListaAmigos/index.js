@@ -20,7 +20,10 @@ const ListaAmigos = ({ friendList }) => {
       setFilteredFriendList(
         friendList.filter((friend) => {
           const friendFullname = `${friend.nome} ${friend.sobrenome}`;
-          if (friendFullname.match(filterQuery)) {
+
+          const regexpQuery = new RegExp(filterQuery, "ig");
+
+          if (friendFullname.match(regexpQuery)) {
             return true;
           } else {
             return false;
