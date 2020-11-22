@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../api";
+import useAuthUserFriendlist from "../../hooks/useAuthUserFriendlist";
 import AvatarPlaceholder from "../../img/avatar-placeholder.png";
 import { AuthContext } from "../../providers/AuthProvider";
 import ModalOverlay from "../ModalOverlay";
 import "./styles.css";
 
-const CardAmigo = ({ userInfo, mode, authUserFriendlistIds }) => {
+const CardAmigo = ({ userInfo, mode }) => {
   const { idUsuario, avatarUrl, nome, sobrenome, descricao } = userInfo;
   const { authState, setAuthState } = useContext(AuthContext);
   const [idsOfUsersThatAddedYou, setIdsOfUsersThatAddedYou] = useState([]);
@@ -19,8 +20,13 @@ const CardAmigo = ({ userInfo, mode, authUserFriendlistIds }) => {
 
   const { id } = useParams();
 
+  const {
+    authUserFriendlistIds,
+    loadingAuthUserFriendList,
+  } = useAuthUserFriendlist();
+
   useEffect(() => {
-    if (authState.userInfo && authState.userInfo.requisicoesAmigos) {
+    if (authState.userInfo && authState.userInfo.idUsuario) {
       setIdsOfUsersThatAddedYou(
         authState.userInfo.requisicoesAmigos.map((user) => user.idUsuario)
       );
@@ -154,6 +160,7 @@ const CardAmigo = ({ userInfo, mode, authUserFriendlistIds }) => {
   };
 
   const getSearchCardMessageOrButton = () => {
+    if (loadingAuthUserFriendList) return null;
     if (authUserFriendlistIds.includes(idUsuario)) {
       return <p className="ml-auto mb-0 text-success">Já é seu amigo.</p>;
     } else if (idsOfUsersThatAddedYou.includes(idUsuario)) {
@@ -166,14 +173,21 @@ const CardAmigo = ({ userInfo, mode, authUserFriendlistIds }) => {
   };
 
   const getFriendlistCardMessageOrButton = () => {
+    if (loadingAuthUserFriendList) return null;
     if (authState.userInfo && idUsuario === authState.userInfo.idUsuario) {
       return <p className="ml-auto mt-auto mb-0 text-success">Você.</p>;
     }
     if (authUserFriendlistIds.includes(idUsuario)) {
       return <p className="ml-auto mb-0 text-success">Já é seu amigo.</p>;
-    } else if (idsOfUsersThatAddedYou.includes(idUsuario)) {
+    } else if (
+      authUserFriendlistIds.length > 0 &&
+      idsOfUsersThatAddedYou.includes(idUsuario)
+    ) {
       return <InviteButtons />;
-    } else if (idsOfUsersThatYouAdded.includes(idUsuario)) {
+    } else if (
+      authUserFriendlistIds.length > 0 &&
+      idsOfUsersThatYouAdded.includes(idUsuario)
+    ) {
       return <p className="ml-auto mb-0 text-success">Já adicionado.</p>;
     } else {
       return <SearchButton />;

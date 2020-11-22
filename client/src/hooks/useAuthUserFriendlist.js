@@ -6,6 +6,13 @@ import { AuthContext } from "../providers/AuthProvider";
 const useAuthUserFriendlist = () => {
   const { authState } = useContext(AuthContext);
   const [authUserFriendlistIds, setAuthUserFriendlistIds] = useState([]);
+  const [loadingAuthUserFriendList, setLoadingAuthUserFriendList] = useState(
+    true
+  );
+
+  useEffect(() => {
+    setLoadingAuthUserFriendList(false);
+  }, [authUserFriendlistIds]);
 
   useEffect(() => {
     const fetchAuthUserFriends = async () => {
@@ -37,7 +44,8 @@ const useAuthUserFriendlist = () => {
 
         setAuthUserFriendlistIds(friendList.map((friend) => friend.idUsuario));
       } catch (e) {
-        alert("Houve um erro. Por favor atualize a página.  ");
+        alert("Houve um erro. Por favor atualize a página.");
+        setAuthUserFriendlistIds([]);
       }
     };
 
@@ -46,7 +54,7 @@ const useAuthUserFriendlist = () => {
     }
   }, [authState]);
 
-  return { authUserFriendlistIds, setAuthUserFriendlistIds };
+  return { authUserFriendlistIds, loadingAuthUserFriendList };
 };
 
 export default useAuthUserFriendlist;
