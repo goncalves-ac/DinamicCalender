@@ -27,14 +27,25 @@ public class AmizadeController {
 	FriendshipService friendshipService;
 	
     @GetMapping()
-    public Set<Amizade> getConvites(Authentication auth) throws Exception {
-    	Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);
+    public Set<Amizade> getConvites(@RequestParam(required=false) Integer idUsuario, Authentication auth) throws Exception {
+    	
+    	
+    	if (idUsuario==null) {
+        	try {
+        		Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);
+        		return friendshipService.findInvites(authUserId);
+            } catch (Exception e) {
+            	throw e;
+            }
+    	}
     	
     	try {
-    		return friendshipService.findSelfFriendships(authUserId);
-        } catch (Exception e) {
-        	throw e;
-        }
+    		return friendshipService.findInvites(idUsuario);
+    	} catch (Exception e) {
+    		throw e;
+    	}
+    	
+
     }
 
     @PostMapping("/convites")
