@@ -181,16 +181,23 @@ const CardAmigo = ({ userInfo, mode }) => {
       return <p className="ml-auto mb-0 text-success">Já é seu amigo.</p>;
     } else if (
       authUserFriendlistIds.length > 0 &&
+      authUserFriendlistIds[0] !== "INIT" &&
       idsOfUsersThatAddedYou.includes(idUsuario)
     ) {
       return <InviteButtons />;
     } else if (
       authUserFriendlistIds.length > 0 &&
+      authUserFriendlistIds[0] !== "INIT" &&
       idsOfUsersThatYouAdded.includes(idUsuario)
     ) {
       return <p className="ml-auto mb-0 text-success">Já adicionado.</p>;
-    } else {
+    } else if (
+      authUserFriendlistIds[0] &&
+      authUserFriendlistIds[0] !== "INIT"
+    ) {
       return <SearchButton />;
+    } else {
+      return null;
     }
   };
 

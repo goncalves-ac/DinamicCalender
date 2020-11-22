@@ -5,7 +5,7 @@ import { AuthContext } from "../providers/AuthProvider";
 
 const useAuthUserFriendlist = () => {
   const { authState } = useContext(AuthContext);
-  const [authUserFriendlistIds, setAuthUserFriendlistIds] = useState([]);
+  const [authUserFriendlistIds, setAuthUserFriendlistIds] = useState(["INIT"]);
   const [loadingAuthUserFriendList, setLoadingAuthUserFriendList] = useState(
     true
   );
