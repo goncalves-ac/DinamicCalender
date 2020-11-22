@@ -1,8 +1,17 @@
-.my-card-btn {
+.invite-buttons-container {
   position: absolute;
   top: 0rem;
   right: 0.5rem;
   margin-top: -1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.1rem;
+  width: fit-content;
+  flex-wrap: wrap;
+}
+
+.my-card-btn {
   width: 2rem;
   height: 2rem;
   display: flex;
@@ -10,22 +19,11 @@
   justify-content: center;
 }
 
-.my-card-btn:last-child {
-  margin-top: 1.1rem;
-}
-
 @media (max-width: 576px) {
-  .my-card-btn {
+  .invite-buttons-container {
     position: relative;
-    margin-top: 0;
-  }
-
-  .my-card-btn:last-child {
-    margin-top: 0;
-  }
-
-  .my-card-btn:not(:last-child) {
-    margin-left: auto;
-    margin-right: 0.1rem;
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-end;
   }
 }
