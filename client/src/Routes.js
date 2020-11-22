@@ -8,9 +8,11 @@ import EditarPerfil from "./pages/EditarPerfil";
 import CalendarioDinamico from "./pages/CalendarioDinamico";
 import { AuthContext } from "./providers/AuthProvider";
 import api from "./api";
+import OutroUsuario from "./pages/Usuario/OutroUsuario";
+import AtualizarSenhaEsquecida from "./pages/AtualizarSenhaEsquecida";
 
 const Routes = () => {
-  const { setAuthState } = useContext(AuthContext);
+  const { authState, setAuthState } = useContext(AuthContext);
   const AuthConsumer = AuthContext.Consumer;
   const [loading, setLoading] = useState(true);
 
@@ -54,7 +56,7 @@ const Routes = () => {
 
   const getAuthRoutes = () => {
     return (
-      <Switch>
+      <>
         <Route path="/" exact>
           <AuthConsumer>
             {({ authState }) => <Usuario userInfo={authState.userInfo} />}
@@ -77,13 +79,13 @@ const Routes = () => {
         <Route path="/editarPerfil" exact>
           <EditarPerfil />
         </Route>
-      </Switch>
+      </>
     );
   };
 
   const getUnauthRoutes = () => {
     return (
-      <Switch>
+      <>
         <Route path="/" exact>
           <CalendarioDinamico />
         </Route>
@@ -102,7 +104,7 @@ const Routes = () => {
         <Route path="/editarPerfil" exact>
           <Redirect to="/" />
         </Route>
-      </Switch>
+      </>
     );
   };
 
@@ -120,11 +122,18 @@ const Routes = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <AuthConsumer>
-          {({ authState }) =>
-            (authState.expiresAt && getAuthRoutes()) || getUnauthRoutes()
-          }
-        </AuthConsumer>
+        <>
+          {(authState.expiresAt && getAuthRoutes()) || getUnauthRoutes()}
+          <Route path="/usuario/:id" exact>
+            <OutroUsuario />
+          </Route>
+          <Route path="/recuperarsenha" exact>
+            <AtualizarSenhaEsquecida />
+          </Route>
+          <Route path="/recuperarsenha/:token" exact>
+            <AtualizarSenhaEsquecida />
+          </Route>
+        </>
       </Switch>
     </BrowserRouter>
   );
