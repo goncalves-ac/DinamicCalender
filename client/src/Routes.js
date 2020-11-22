@@ -10,6 +10,8 @@ import { AuthContext } from "./providers/AuthProvider";
 import api from "./api";
 import OutroUsuario from "./pages/Usuario/OutroUsuario";
 import AtualizarSenhaEsquecida from "./pages/AtualizarSenhaEsquecida";
+import Page404 from "./pages/Page404";
+import Loading from "./pages/Loading";
 
 const Routes = () => {
   const { authState, setAuthState } = useContext(AuthContext);
@@ -56,7 +58,7 @@ const Routes = () => {
 
   const getAuthRoutes = () => {
     return (
-      <>
+      <Switch>
         <Route path="/" exact>
           <AuthConsumer>
             {({ authState }) => <Usuario userInfo={authState.userInfo} />}
@@ -79,13 +81,13 @@ const Routes = () => {
         <Route path="/editarPerfil" exact>
           <EditarPerfil />
         </Route>
-      </>
+      </Switch>
     );
   };
 
   const getUnauthRoutes = () => {
     return (
-      <>
+      <Switch>
         <Route path="/" exact>
           <CalendarioDinamico />
         </Route>
@@ -104,37 +106,35 @@ const Routes = () => {
         <Route path="/editarPerfil" exact>
           <Redirect to="/" />
         </Route>
-      </>
+      </Switch>
     );
   };
 
-  if (loading) {
+  const getCommonRoutes = () => {
     return (
-      <div className="full-height d-flex flex-column align-items-center justify-content-center">
-        <span style={{ height: "fit-content" }}>
-          <i className="fas fa-spinner my-blue-1 fa-3x" />
-        </span>
-        <h2 className="my-blue-1 fa-2x">Carregando...</h2>
-      </div>
+      <Switch>
+        <Route path="/usuario/:id" exact>
+          <OutroUsuario />
+        </Route>
+        <Route path="/recuperarsenha" exact>
+          <AtualizarSenhaEsquecida />
+        </Route>
+        <Route path="/recuperarsenha/:token" exact>
+          <AtualizarSenhaEsquecida />
+        </Route>
+        <Route path="*">
+          <Page404 />
+        </Route>
+      </Switch>
     );
-  }
+  };
+
+  if (loading) return <Loading />;
 
   return (
     <BrowserRouter>
-      <Switch>
-        <>
-          {(authState.expiresAt && getAuthRoutes()) || getUnauthRoutes()}
-          <Route path="/usuario/:id" exact>
-            <OutroUsuario />
-          </Route>
-          <Route path="/recuperarsenha" exact>
-            <AtualizarSenhaEsquecida />
-          </Route>
-          <Route path="/recuperarsenha/:token" exact>
-            <AtualizarSenhaEsquecida />
-          </Route>
-        </>
-      </Switch>
+      {(authState.expiresAt && getAuthRoutes()) || getUnauthRoutes()}
+      {getCommonRoutes()}
     </BrowserRouter>
   );
 };
