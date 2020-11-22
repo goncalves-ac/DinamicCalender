@@ -1,21 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
 import api from "../../api";
+import useAuthUserFriendlist from "../../hooks/useAuthUserFriendlist";
 import { AuthContext } from "../../providers/AuthProvider";
 import CardAmigo from "../CardAmigo";
 import "./ListaBusca.css";
 
-const ListaBusca = ({ friendsWith }) => {
+const ListaBusca = () => {
   const { authState } = useContext(AuthContext);
   const [amigos, setAmigos] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [formError, setFormError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [postSearch, setPostSearch] = useState(false);
-  const [friendsWithIds, setFriendsWithIds] = useState([]);
 
-  useEffect(() => {
-    setFriendsWithIds(friendsWith.map((user) => user.idUsuario));
-  }, [friendsWith]);
+  const { authUserFriendlistIds } = useAuthUserFriendlist();
 
   const handleSearchFriends = async (e) => {
     e.preventDefault();
@@ -56,10 +54,10 @@ const ListaBusca = ({ friendsWith }) => {
 
   return (
     <div className="col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-sm-12 people-nearby my-profile-page-content-container-sizing">
-      <h3 className="mb-3 text-center h4 my-blue-1 my-bolder">
+      <h3 className="mb-2 text-center h4 my-blue-1 my-bolder">
         Encontre pessoas
       </h3>
-      <form className="form-inline py-3" onSubmit={handleSearchFriends}>
+      <form className="form-inline py-2" onSubmit={handleSearchFriends}>
         <input
           aria-label="Search"
           className="form-control col-md-10 col-sm-11 p-1"
@@ -94,7 +92,7 @@ const ListaBusca = ({ friendsWith }) => {
               key={amigo.idUsuario}
               userInfo={amigo}
               mode="SEARCH"
-              friendListIds={friendsWithIds}
+              authUserFriendlistIds={authUserFriendlistIds}
             />
           ))}
       </div>
