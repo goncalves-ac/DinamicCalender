@@ -81,6 +81,18 @@ const Routes = () => {
         <Route path="/editarPerfil" exact>
           <EditarPerfil />
         </Route>
+        <Route path="/usuario/:id" exact>
+          <OutroUsuario />
+        </Route>
+        <Route path="/recuperarsenha" exact>
+          <AtualizarSenhaEsquecida />
+        </Route>
+        <Route path="/recuperarsenha/:token" exact>
+          <AtualizarSenhaEsquecida />
+        </Route>
+        <Route path="*">
+          <Page404 />
+        </Route>
       </Switch>
     );
   };
@@ -106,13 +118,6 @@ const Routes = () => {
         <Route path="/editarPerfil" exact>
           <Redirect to="/" />
         </Route>
-      </Switch>
-    );
-  };
-
-  const getCommonRoutes = () => {
-    return (
-      <Switch>
         <Route path="/usuario/:id" exact>
           <OutroUsuario />
         </Route>
@@ -134,7 +139,6 @@ const Routes = () => {
   return (
     <BrowserRouter>
       {(authState.expiresAt && getAuthRoutes()) || getUnauthRoutes()}
-      {getCommonRoutes()}
     </BrowserRouter>
   );
 };
