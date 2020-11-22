@@ -21,3 +21,23 @@ img.profile-photo-lg {
   width: 80px;
   border-radius: 50%;
 }
+
+.my-invites {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.my-invite-section-title {
+  height: 3.6rem;
+  font-size: 1.2rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.1rem;
+}
+
+@media (max-width: 844px) {
+  .my-invites {
+  }
+}

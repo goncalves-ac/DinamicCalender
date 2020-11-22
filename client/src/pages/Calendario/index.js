@@ -9,7 +9,7 @@ import listYear from "@fullcalendar/list"; //listMonth, listWeek, listDay, listY
 import ModalOverlay from "../../components/ModalOverlay";
 import CalenderModal from "../../components/CalenderModal";
 import "./style.css";
-import CreateEditEventModal from "../../components/CreateEditEventModal";
+import CreateEditEventModal from "../../components/CalenderModal/CreateEditEventModal";
 
 export default class Calendario extends React.Component {
   state = {

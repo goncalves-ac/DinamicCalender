@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./Usuario.css";
 
 import PerfilUsuario from "../../components/PerfilUsuario";
@@ -7,8 +7,61 @@ import ListaBusca from "../../components/ListaBusca";
 import Nav from "../../components/Nav";
 import DadosUsuario from "../../components/DadosUsuario";
 import avatarPlaceholder from "../../img/avatar-placeholder.png";
+import ListaConvites from "../../components/ListaConvites";
+import api from "../../api";
+import { useContext } from "react";
+import { AuthContext } from "../../providers/AuthProvider";
 
 export default function Usuario({ userInfo }) {
+  const [otherUserInvites, setOtherUserInvites] = useState([]);
+  const [friends, setFriends] = useState([]);
+  const { authState, setAuthState } = useContext(AuthContext);
+
+  useEffect(() => {
+    const fetchFriends = async () => {
+      try {
+        const { data } = await api.get("/amigos");
+
+        const otherInvites = data.filter(
+          (invite) =>
+            invite.status === "PENDING" &&
+            invite.idUsuario1 !== userInfo.idUsuario
+        );
+        setOtherUserInvites(otherInvites);
+
+        const acceptedFriends = data.filter(
+          (invite) => invite.status === "ACCEPTED"
+        );
+        const acceptedFriendsIdUsuario1List = acceptedFriends.map(
+          (user) => user.idUsuario1
+        );
+        const acceptedFriendsIdUsuario2List = acceptedFriends.map(
+          (user) => user.idUsuario1
+        );
+
+        const friendList = [
+          ...userInfo.amigosRequisitados,
+          ...userInfo.requisicoesAmigos,
+        ].filter(
+          (amigo) =>
+            acceptedFriendsIdUsuario1List.includes(amigo.idUsuario) ||
+            acceptedFriendsIdUsuario2List.includes(amigo.idUsuario)
+        );
+
+        setFriends(friendList);
+        console.log(friendList);
+      } catch (e) {}
+    };
+    fetchFriends();
+  }, [authState]);
+
+  const updateAuthUserStateWhenHasInvites = async () => {
+    if (otherUserInvites.length > 0) {
+      const { data } = await api.get("/usuario");
+      setAuthState(Object.assign({}, authState, { userInfo: data[0] }));
+    }
+  };
+
   return (
     <section>
       <Nav />
@@ -22,7 +75,7 @@ export default function Usuario({ userInfo }) {
         surname={userInfo.sobrenome}
         description={userInfo.descricao}
       />
-      <div className="container my-5">
+      <div className="my-5 w-100">
         <ul
           className="nav nav-tabs font-weight-bold"
           id="main-tab"
@@ -30,11 +83,11 @@ export default function Usuario({ userInfo }) {
         >
           <li className="nav-item" role="presentation">
             <a
-              aria-controls="home"
+              aria-controls="timeline"
               aria-selected="true"
               className="nav-link active"
               data-toggle="tab"
-              href="#home"
+              href="#timeline"
               id="home-tab"
               role="tab"
             >
@@ -44,11 +97,11 @@ export default function Usuario({ userInfo }) {
           </li>
           <li className="nav-item" role="presentation">
             <a
-              aria-controls="profile"
+              aria-controls="friends"
               aria-selected="false"
               className="nav-link"
               data-toggle="tab"
-              href="#profile"
+              href="#friends"
               id="profile-tab"
               role="tab"
             >
@@ -70,24 +123,49 @@ export default function Usuario({ userInfo }) {
               <i className="fas fa-search"></i> Buscar{" "}
             </a>
           </li>
+          <li className="nav-item" role="presentation">
+            <a
+              aria-controls="invites"
+              aria-selected="false"
+              className="nav-link"
+              data-toggle="tab"
+              href="#invites"
+              id="search-tab"
+              role="tab"
+              onClick={updateAuthUserStateWhenHasInvites}
+            >
+              {" "}
+              <i
+                className={`fas fa-envelope ${
+                  (otherUserInvites.length > 0 && "text-danger") || ""
+                }`}
+              ></i>
+              {otherUserInvites.length > 0 && (
+                <span className="badge badge-danger">
+                  {otherUserInvites.length}
+                </span>
+              )}{" "}
+              Convites{" "}
+            </a>
+          </li>
         </ul>
-        <div className="tab-content" id="myTabContent">
+        <div className="tab-content min-vh-50" id="myTabContent">
           <div
-            aria-labelledby="home-tab"
+            aria-labelledby="timeline"
             className="tab-pane fade show active w-100 p-3"
-            id="home"
+            id="timeline"
             role="tabpanel"
           >
             <PerfilUsuario />
           </div>
 
           <div
-            aria-labelledby="profile-tab"
+            aria-labelledby="friends"
             className="tab-pane fade"
-            id="profile"
+            id="friends"
             role="tabpanel"
           >
-            <ListaAmigos />
+            <ListaAmigos friendList={friends} />
           </div>
 
           <div
@@ -96,7 +174,19 @@ export default function Usuario({ userInfo }) {
             id="search"
             role="tabpanel"
           >
-            <ListaBusca />
+            <ListaBusca friendsWith={friends} />
+          </div>
+
+          <div
+            aria-labelledby="invites"
+            className="tab-pane fade"
+            id="invites"
+            role="tabpanel"
+          >
+            <ListaConvites
+              invites={otherUserInvites}
+              otherUsers={userInfo.requisicoesAmigos}
+            />
           </div>
         </div>
       </div>

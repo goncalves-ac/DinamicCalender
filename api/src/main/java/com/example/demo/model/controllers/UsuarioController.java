@@ -114,6 +114,7 @@ public class UsuarioController {
     	Usuario dadosUsuario = usuarioRequestDTO.toUsuario();
 		MultipartFile avatarImg = usuarioRequestDTO.getAvatarImg();
 		OldNewImgFileState state = new OldNewImgFileState();
+
 		if (avatarImg!=null) {
 			try {
 				state = userService.changeUserAvatarImg(idUsuario, avatarImg);
@@ -143,7 +144,7 @@ public class UsuarioController {
     	} catch (Exception e) {;
     		throw e;
     	} finally {
-    		if (!success) {
+    		if (!success && state.getNewImgUri() != null) {
     			FileUploadUtil.rollback(state);
     		}
     	}

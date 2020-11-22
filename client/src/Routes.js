@@ -10,7 +10,7 @@ import { AuthContext } from "./providers/AuthProvider";
 import api from "./api";
 
 const Routes = () => {
-  const { authState, setAuthState } = useContext(AuthContext);
+  const { setAuthState } = useContext(AuthContext);
   const AuthConsumer = AuthContext.Consumer;
   const [loading, setLoading] = useState(true);
 
@@ -21,7 +21,6 @@ const Routes = () => {
       if (expiresAt && Date.parse(expiresAt) > new Date().getTime()) {
         try {
           const { data } = await api.get("/usuario");
-          console.log(data);
           setAuthState({
             userInfo: data[0],
             expiresAt,
@@ -121,7 +120,11 @@ const Routes = () => {
   return (
     <BrowserRouter>
       <Switch>
-        {(authState.expiresAt && getAuthRoutes()) || getUnauthRoutes()}
+        <AuthConsumer>
+          {({ authState }) =>
+            (authState.expiresAt && getAuthRoutes()) || getUnauthRoutes()
+          }
+        </AuthConsumer>
       </Switch>
     </BrowserRouter>
   );

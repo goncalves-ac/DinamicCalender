@@ -1,12 +1,31 @@
-.my-btn-position {
+.my-card-btn {
   position: absolute;
   top: 0rem;
   right: 0.5rem;
+  margin-top: -1rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-@media (max-width: 370px) {
-  .my-btn-position {
+.my-card-btn:last-child {
+  margin-top: 1.1rem;
+}
+
+@media (max-width: 576px) {
+  .my-card-btn {
     position: relative;
+    margin-top: 0;
+  }
+
+  .my-card-btn:last-child {
+    margin-top: 0;
+  }
+
+  .my-card-btn:not(:last-child) {
     margin-left: auto;
+    margin-right: 0.1rem;
   }
 }
