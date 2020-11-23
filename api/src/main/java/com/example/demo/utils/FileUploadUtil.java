@@ -1,4 +1,4 @@
-package com.example.demo.upload.utils;
+package com.example.demo.utils;
 
 import java.io.File;
 import java.io.IOException;

@@ -55,14 +55,20 @@ const ListaAmigos = ({ friendList }) => {
           {(loading && <i className="fas fa-spinner" />) || (
             <>
               {(filteredFriendList.length > 0 &&
-                filteredFriendList.map((friend) => (
-                  <CardAmigo
-                    key={friend.idUsuario}
-                    userInfo={friend}
-                    mode="FRIENDLIST"
-                    authUserFriendlistIds={authUserFriendlistIds}
-                  />
-                ))) ||
+                filteredFriendList
+                  .sort((a, b) =>
+                    `${a.nome} ${a.sobrenome}`.localeCompare(
+                      `${b.nome} ${b.sobrenome}`
+                    )
+                  )
+                  .map((friend) => (
+                    <CardAmigo
+                      key={friend.idUsuario}
+                      userInfo={friend}
+                      mode="FRIENDLIST"
+                      authUserFriendlistIds={authUserFriendlistIds}
+                    />
+                  ))) ||
                 (friendList.length > 0 && (
                   <p className="text-center">Nenhum amigo encontrado</p>
                 ))}

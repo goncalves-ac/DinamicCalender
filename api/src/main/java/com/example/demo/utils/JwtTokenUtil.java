@@ -1,4 +1,4 @@
-package com.example.demo.upload.utils;
+package com.example.demo.utils;
 
 import java.io.Serializable;
 
@@ -19,6 +19,9 @@ private static final long serialVersionUID = -2550185165626007488L;
 
 //1 dia
 public static final long JWT_TOKEN_VALIDITY = 24 * 60 * 60;
+
+//10 minutos
+public static final long RECOVER_EMAIL_TOKEN_VALIDITY = 10 * 60;
 
 @Value("${jwt.secret}")
 private String secret;
@@ -41,7 +44,7 @@ private Claims getAllClaimsFromToken(String token) {
 	return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
 }
 
-private Boolean isTokenExpired(String token) {
+public Boolean isTokenExpired(String token) {
 	final Date expiration = getExpirationDateFromToken(token);
 return expiration.before(new Date());
 }
@@ -49,6 +52,13 @@ return expiration.before(new Date());
 public String generateToken(UserDetails userDetails) {
 	Map<String, Object> claims = new HashMap<>();
 return doGenerateToken(claims, userDetails.getUsername());
+}
+
+public String generateToken(String email) {
+	Map<String, Object> claims = new HashMap<>();
+	return Jwts.builder().setClaims(claims).setSubject(email).setIssuedAt(new Date(System.currentTimeMillis()))
+			.setExpiration(new Date(System.currentTimeMillis() + RECOVER_EMAIL_TOKEN_VALIDITY * 1000))
+			.signWith(SignatureAlgorithm.HS512, secret).compact();
 }
 
 
