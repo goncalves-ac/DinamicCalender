@@ -83,23 +83,27 @@ public class EventService {
         	e.setInicio(dadosEvento.getInicio());
         }
         
-        if (dadosEvento.getInicio() != null && dadosEvento.getFim() != e.getFim()) {
+        if (dadosEvento.getFim() != null && dadosEvento.getFim() != e.getFim()) {
         	e.setFim(dadosEvento.getFim());
         }
         
-        if (dadosEvento.getInicio() != null && dadosEvento.getTitulo() != e.getTitulo()) {
+        if (dadosEvento.getTitulo() != null && dadosEvento.getTitulo() != e.getTitulo()) {
         	e.setTitulo(dadosEvento.getTitulo());
         }
         
-        if (dadosEvento.getInicio() != null && dadosEvento.getDescricao() != e.getDescricao()) {
+        if (dadosEvento.getDescricao() != null && dadosEvento.getDescricao() != e.getDescricao()) {
         	e.setDescricao(dadosEvento.getDescricao());
         }
         
-        if (dadosEvento.getInicio() != null && dadosEvento.getPrivacidade() != e.getPrivacidade()) {
+        if (dadosEvento.getPrivacidade() != null && dadosEvento.getPrivacidade() != e.getPrivacidade()) {
         	e.setPrivacidade(dadosEvento.getPrivacidade());
         }
         
-        if (dadosEvento.getInicio() != null && dadosEvento.getCorDeFundo() != e.getCorDeFundo()) {
+        if (dadosEvento.getLocal() != null && dadosEvento.getLocal() != e.getLocal()) {
+        	e.setLocal(dadosEvento.getLocal());
+        }
+        
+        if (dadosEvento.getCorDeFundo() != null && dadosEvento.getCorDeFundo() != e.getCorDeFundo()) {
         	e.setCorDeFundo(dadosEvento.getCorDeFundo());
         }
         
@@ -108,11 +112,12 @@ public class EventService {
 		if (!constraintViolations.isEmpty()) {
 			throw new BadRequestException(constraintViolations.iterator().next().getMessage());
 		}
-
+		
+		Evento savedEvent = eventRepository.save(e);
+		
         eventInviteService.updateEventInvites(idEvento, dadosEvento.getConvites());
-        em.refresh(e);
         
-        return eventRepository.save(e);
+        return savedEvent;
 	}
 	
 	@Transactional
