@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.EventoRequestDTO;
 import com.example.demo.exceptions.ForbiddenActionException;
+import com.example.demo.model.entities.ConviteEvento;
 import com.example.demo.model.entities.Evento;
+import com.example.demo.services.EventInviteService;
 import com.example.demo.services.EventService;
 
 @CrossOrigin
@@ -30,6 +32,9 @@ public class EventoController {
     
     @Autowired
     private EventService eventService;
+    
+    @Autowired
+    private EventInviteService eventInviteService;
 
     @GetMapping()
     @ResponseBody
@@ -75,6 +80,16 @@ public class EventoController {
     	} catch (Exception e) {
     		throw e;
     	}   
+    }
+    
+    @GetMapping("/convites")
+    @ResponseBody
+    public Set<ConviteEvento> getInvitesByUserId(@RequestParam Integer idUser) throws Exception {
+    	try {
+    		return eventInviteService.getEventInvitesByUser(idUser);
+    	} catch (Exception e) {
+    		throw e;
+    	}
     }
     
     @PostMapping()

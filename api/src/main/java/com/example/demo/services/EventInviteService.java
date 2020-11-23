@@ -37,6 +37,12 @@ public class EventInviteService {
 	}
 	
 	@Transactional
+	public Set<ConviteEvento> getEventInvitesByUser(int idUser) throws Exception {
+		Set<ConviteEvento> invites = conviteRepository.findInvitesByUser(idUser);
+		return invites;
+	}
+	
+	@Transactional
 	public boolean createEventInvites(int idEvento, Set<Integer> idsUsuarios) throws Exception {
 			for (int idUsuario : idsUsuarios) {
 				ConviteEvento c = new ConviteEvento(idEvento, idUsuario);
