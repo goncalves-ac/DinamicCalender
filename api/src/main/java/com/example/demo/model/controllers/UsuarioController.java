@@ -29,18 +29,23 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.dto.NovaSenhaRequestDTO;
+import com.example.demo.dto.RecoverPasswordDTO;
 import com.example.demo.dto.UpdateUserReturnDTO;
 import com.example.demo.dto.UsuarioRequestDTO;
 import com.example.demo.dto.UsuarioResponseDTO;
 import com.example.demo.exceptions.BadRequestException;
 import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.exceptions.UnauthorizedException;
 import com.example.demo.model.entities.Usuario;
 import com.example.demo.services.JwtUserDetailsService;
 import com.example.demo.services.UserService;
-import com.example.demo.upload.utils.FileUploadUtil;
-import com.example.demo.upload.utils.JwtCookieUtil;
-import com.example.demo.upload.utils.JwtTokenUtil;
-import com.example.demo.upload.utils.OldNewImgFileState;
+import com.example.demo.utils.FileUploadUtil;
+import com.example.demo.utils.JwtCookieUtil;
+import com.example.demo.utils.JwtTokenUtil;
+import com.example.demo.utils.OldNewImgFileState;
+
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 
 
 @CrossOrigin(origins = "*")
@@ -106,6 +111,13 @@ public class UsuarioController {
     	}
     }
     
+    @PostMapping("/recover-password")
+    @ResponseStatus(code = HttpStatus.OK)
+    public ResponseEntity<?> generateAuthenticatedLink(@RequestBody RecoverPasswordDTO data) throws Exception {
+    	userService.recoverPassword(data);
+    	return ResponseEntity.noContent().build();
+    }
+    
     @PutMapping(value="/{idUsuario}", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(code = HttpStatus.ACCEPTED)
     @PreAuthorize("#idUsuario == authentication.principal.idUsuario")
@@ -161,7 +173,33 @@ public class UsuarioController {
     		throw e;
     	}
     }
+    
+    @PatchMapping()
+    @ResponseStatus(code = HttpStatus.ACCEPTED)
+    public UsuarioResponseDTO changeUsuarioPasswordWithRecover(@RequestParam String token, @RequestBody NovaSenhaRequestDTO novaSenhaDTO) throws Exception {
+		
+    	try {
+    		jwtTokenUtil.isTokenExpired(token);
+    	} catch (MalformedJwtException e) {
+    		throw new BadRequestException("Esse link não é válido.");
+    	} catch (ExpiredJwtException e) {
+    		throw new UnauthorizedException("Esse link expirou. Por favor, tente gerar um novo.");
+    	} 
+			
+		
+		String userEmail = jwtTokenUtil.getUsernameFromToken(token);
+    	
+    	try {
+    		Usuario u = userService.changeUserPasswordWithRecover(userEmail, novaSenhaDTO)   ;		
+    		return new UsuarioResponseDTO(u);
 
+    	} catch (Exception e) {
+    		throw e;
+    	}
+    
+    }
+    
+    
     @DeleteMapping("/{idUsuario}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     @PreAuthorize("#idUsuario == authentication.principal.idUsuario")
