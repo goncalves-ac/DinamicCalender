@@ -20,7 +20,7 @@ public class EventoRequestDTO extends Evento {
 	public Evento toEvent() {
 		return new Evento(this.getFkIdDono(), this.getTitulo(),
 				this.getDescricao(), this.getInicio(),
-				this.getFim(), this.getCorDeFundo(), this.getPrivacidade());
+				this.getFim(), this.getCorDeFundo(), this.getPrivacidade(), this.getLocal());
 	}
 	
 }

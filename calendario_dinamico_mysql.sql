@@ -77,6 +77,7 @@ CREATE TABLE IF NOT EXISTS `calendario_dinamico`.`evento` (
   `descricao` varchar(240) NULL,
   `inicio` DATETIME NOT NULL,
   `fim` DATETIME NOT NULL,
+  `local` varchar(240) NULL,
   `criado_em` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ultima_edicao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `cor_de_fundo` varchar(7) NOT NULL DEFAULT '#3788d8',
