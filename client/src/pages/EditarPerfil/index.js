@@ -288,6 +288,7 @@ export default function EditarPerfil() {
                         className="my-textarea mt-2"
                         value={descricao}
                         onChange={(e) => setDescricao(e.target.value)}
+                        placeholder="Descrição do seu perfil."
                       />
                     </div>
                     <div className="d-flex mt-2 w-100 file-input-container">
