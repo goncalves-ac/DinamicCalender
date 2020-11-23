@@ -3,7 +3,7 @@ import { useContext } from "react";
 import api from "../api";
 import { AuthContext } from "../providers/AuthProvider";
 
-const useAuthUserFriendlist = () => {
+const useAuthUserEventList = () => {
   const { authState } = useContext(AuthContext);
   const [authUserFriendList, setAuthUserFriendList] = useState([]);
   const [authUserFriendlistIds, setAuthUserFriendlistIds] = useState(["INIT"]);
@@ -43,7 +43,7 @@ const useAuthUserFriendlist = () => {
             acceptedFriendsIdUsuario2List.includes(amigo.idUsuario)
         );
 
-        setAuthUserFriendList(friendList);
+        setAuthUserFriendList(friendlist);
 
         setAuthUserFriendlistIds(friendList.map((friend) => friend.idUsuario));
       } catch (e) {
@@ -64,4 +64,4 @@ const useAuthUserFriendlist = () => {
   };
 };
 
-export default useAuthUserFriendlist;
+export default useAuthUserEventList;
