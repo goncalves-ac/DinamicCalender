@@ -3,11 +3,10 @@ import React, { useEffect, useState } from "react";
 import PerfilUsuario from "../../../components/PerfilUsuario";
 import ListaAmigos from "../../../components/ListaAmigos";
 import Nav from "../../../components/Nav";
-import avatarPlaceholder from "../../../img/avatar-placeholder.png";
 import api from "../../../api";
 import { useContext } from "react";
 import { AuthContext } from "../../../providers/AuthProvider";
-import { Link, Redirect, useParams } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 import DadosUsuario from "../../../components/DadosUsuario";
 import Page404 from "../../Page404";
 import Loading from "../../Loading";
@@ -36,7 +35,7 @@ export default function OutroUsuario() {
     };
 
     fetchUser();
-  }, [routeParams]);
+  }, [routeParams.id]);
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -75,7 +74,7 @@ export default function OutroUsuario() {
       setUserNotFound(false);
       setLoading(false);
     }
-  }, [userInfo]);
+  }, [userInfo, routeParams.id]);
 
   if (
     authState.userInfo &&
