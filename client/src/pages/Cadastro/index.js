@@ -8,7 +8,6 @@ import Cookies from "./Cookies";
 import PoliticaDeDados from "./PoliticaDeDados";
 import TermosDeUso from "./TermosDeUso";
 
-
 export default function Cadastro() {
   const [nome, setNome] = useState("");
   const [sobrenome, setSobrenome] = useState("");
@@ -21,7 +20,9 @@ export default function Cadastro() {
   const [redirectOnSuccess, setRedirectOnSuccess] = useState(false);
   const [useTermsModalVisible, setUseTermsModalVisible] = useState(false);
   const [useCookiesVisible, setUseCookiesVisible] = useState(false);
-  const [usePoliticaDeDadosVisible, setUsePoliticaDeDadosVisible] = useState(false);
+  const [usePoliticaDeDadosVisible, setUsePoliticaDeDadosVisible] = useState(
+    false
+  );
 
   const birthInput = React.createRef();
 
@@ -88,15 +89,15 @@ export default function Cadastro() {
       )}
 
       {useCookiesVisible && (
-          <ModalOverlay handleCloseModal={handleCloseUseCookies}>
-            <Cookies />
-          </ModalOverlay>
+        <ModalOverlay handleCloseModal={handleCloseUseCookies}>
+          <Cookies />
+        </ModalOverlay>
       )}
 
       {usePoliticaDeDadosVisible && (
-          <ModalOverlay handleCloseModal={handleCloseUsePoliticaDeDados}>
-            <PoliticaDeDados />
-          </ModalOverlay>
+        <ModalOverlay handleCloseModal={handleCloseUsePoliticaDeDados}>
+          <PoliticaDeDados />
+        </ModalOverlay>
       )}
 
       <div
@@ -105,8 +106,8 @@ export default function Cadastro() {
       >
         <div className="align-self-center container-md text-center col-lg-5">
           <form className="form-signin" onSubmit={handleFormSubmit}>
-            <img className="mb-4" src={Logo_Black} alt="" width="100" />
-            <h2 className="h3 mb-1 font-weight-normal">Cadastro</h2>
+            <img className="mb-3" src={Logo_Black} alt="" width="80" />
+            <h2 className="h4 mb-1 font-weight-normal">Cadastro</h2>
             <p className="mb-0 text-danger">{formError}</p>
             <div className="row no-gutters">
               <input
@@ -214,7 +215,6 @@ btn-outline-none"
             <button
               type="submit"
               className="btn btn-lg btn-block my-bg-orange-1 my-2 my-color-white"
-              type="submit"
             >
               {(loading && <i className="fas fa-spinner" />) || (
                 <>

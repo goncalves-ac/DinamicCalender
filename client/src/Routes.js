@@ -8,9 +8,13 @@ import EditarPerfil from "./pages/EditarPerfil";
 import CalendarioDinamico from "./pages/CalendarioDinamico";
 import { AuthContext } from "./providers/AuthProvider";
 import api from "./api";
+import OutroUsuario from "./pages/Usuario/OutroUsuario";
+import AtualizarSenhaEsquecida from "./pages/AtualizarSenhaEsquecida";
+import Page404 from "./pages/Page404";
+import Loading from "./pages/Loading";
 
 const Routes = () => {
-  const { setAuthState } = useContext(AuthContext);
+  const { authState, setAuthState } = useContext(AuthContext);
   const AuthConsumer = AuthContext.Consumer;
   const [loading, setLoading] = useState(true);
 
@@ -77,6 +81,18 @@ const Routes = () => {
         <Route path="/editarPerfil" exact>
           <EditarPerfil />
         </Route>
+        <Route path="/usuario/:id" exact>
+          <OutroUsuario />
+        </Route>
+        <Route path="/recuperarsenha" exact>
+          <AtualizarSenhaEsquecida />
+        </Route>
+        <Route path="/recuperarsenha/:token" exact>
+          <AtualizarSenhaEsquecida />
+        </Route>
+        <Route path="*">
+          <Page404 />
+        </Route>
       </Switch>
     );
   };
@@ -102,30 +118,27 @@ const Routes = () => {
         <Route path="/editarPerfil" exact>
           <Redirect to="/" />
         </Route>
+        <Route path="/usuario/:id" exact>
+          <OutroUsuario />
+        </Route>
+        <Route path="/recuperarsenha" exact>
+          <AtualizarSenhaEsquecida />
+        </Route>
+        <Route path="/recuperarsenha/:token" exact>
+          <AtualizarSenhaEsquecida />
+        </Route>
+        <Route path="*">
+          <Page404 />
+        </Route>
       </Switch>
     );
   };
 
-  if (loading) {
-    return (
-      <div className="full-height d-flex flex-column align-items-center justify-content-center">
-        <span style={{ height: "fit-content" }}>
-          <i className="fas fa-spinner my-blue-1 fa-3x" />
-        </span>
-        <h2 className="my-blue-1 fa-2x">Carregando...</h2>
-      </div>
-    );
-  }
+  if (loading) return <Loading />;
 
   return (
     <BrowserRouter>
-      <Switch>
-        <AuthConsumer>
-          {({ authState }) =>
-            (authState.expiresAt && getAuthRoutes()) || getUnauthRoutes()
-          }
-        </AuthConsumer>
-      </Switch>
+      {(authState.expiresAt && getAuthRoutes()) || getUnauthRoutes()}
     </BrowserRouter>
   );
 };

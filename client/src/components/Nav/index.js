@@ -16,7 +16,7 @@ export default function Nav() {
       await api.post("/unauthenticate");
       setAuthState({
         expiresAt: null,
-        userInfo: {},
+        userInfo: null,
       });
       localStorage.removeItem("eat");
     } catch (e) {
@@ -31,20 +31,22 @@ export default function Nav() {
       <Link className="navbar-brand" to="/">
         <img src={Icon} height="60" alt="" loading="lazy" />
       </Link>
-      <Link className="navbar-brand mx-3" to="/usuario">
-        <img
-          src={
-            (authState.userInfo.avatarUrl &&
-              `${process.env.REACT_APP_API_URL}${authState.userInfo.avatarUrl}`) ||
-            avatarPlaceholder
-          }
-          width="50"
-          height="50"
-          className="rounded-circle border border-dark"
-          loading="lazy"
-          alt="Avatar do usuário"
-        />
-      </Link>
+      {authState.userInfo && (
+        <Link className="navbar-brand mx-3" to="/usuario">
+          <img
+            src={
+              (authState.userInfo.avatarUrl &&
+                `${process.env.REACT_APP_API_URL}/${authState.userInfo.avatarUrl}`) ||
+              avatarPlaceholder
+            }
+            width="50"
+            height="50"
+            className="rounded-circle border border-dark"
+            loading="lazy"
+            alt="Avatar do usuário"
+          />
+        </Link>
+      )}
       <button
         className="navbar-toggler"
         type="button"
@@ -56,38 +58,71 @@ export default function Nav() {
       >
         <span className="navbar-toggler-icon"></span>
       </button>
-      <div className="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul className="navbar-nav ml-auto">
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav ml-auto">
-              <li className="nav-item active">
-                <Link className="nav-link" to="/calendario">
-                  <span>
-                    <i className="fas fa-calendar-alt fa-lg"></i>
-                  </span>
-                  Calendário{" "}
-                </Link>
-              </li>
-              <li className="nav-item active">
-                <Link className="nav-link" to="/editarPerfil">
-                  <span>
-                    <i className="fas fa-user-cog fa-lg"></i>
-                  </span>
-                  Editar Perfil{" "}
-                </Link>
-              </li>
-              <li className="nav-item active">
-                <button className="nav-link" onClick={handleLogout}>
-                  <span>
-                    <i className="fas fa-power-off"></i>
-                  </span>{" "}
-                  Sair
-                </button>
-              </li>
-            </ul>
-          </div>
-        </ul>
-      </div>
+      {(authState.userInfo && (
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav ml-auto">
+            <div
+              className="collapse navbar-collapse"
+              id="navbarSupportedContent"
+            >
+              <ul className="navbar-nav ml-auto">
+                <li className="nav-item active">
+                  <Link className="nav-link" to="/calendario">
+                    <span>
+                      <i className="fas fa-calendar-alt fa-lg"></i>
+                    </span>
+                    Calendário{" "}
+                  </Link>
+                </li>
+                <li className="nav-item active">
+                  <Link className="nav-link" to="/editarPerfil">
+                    <span>
+                      <i className="fas fa-user-cog fa-lg"></i>
+                    </span>
+                    Editar Perfil{" "}
+                  </Link>
+                </li>
+                <li className="nav-item active">
+                  <button className="nav-link" onClick={handleLogout}>
+                    <span>
+                      <i className="fas fa-power-off"></i>
+                    </span>{" "}
+                    Sair
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </ul>
+        </div>
+      )) || (
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav ml-auto">
+            <div
+              className="collapse navbar-collapse"
+              id="navbarSupportedContent"
+            >
+              <ul className="navbar-nav ml-auto">
+                <li className="nav-item active">
+                  <Link className="nav-link" to="/cadastro">
+                    <span>
+                      <i className="fas fa-check-circle"></i>
+                    </span>
+                    Cadastrar{" "}
+                  </Link>
+                </li>
+                <li className="nav-item active">
+                  <Link className="nav-link" to="/login">
+                    <span>
+                      <i className="fas fa-chevron-right"></i>
+                    </span>
+                    Entrar{" "}
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </ul>
+        </div>
+      )}
     </nav>
   );
 }

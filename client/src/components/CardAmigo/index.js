@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
+import { Link, useParams } from "react-router-dom";
 import api from "../../api";
+import useAuthUserFriendlist from "../../hooks/useAuthUserFriendlist";
 import AvatarPlaceholder from "../../img/avatar-placeholder.png";
 import { AuthContext } from "../../providers/AuthProvider";
 import ModalOverlay from "../ModalOverlay";
 import "./styles.css";
 
-const CardAmigo = ({ userInfo, mode, friendListIds }) => {
+const CardAmigo = ({ userInfo, mode }) => {
   const { idUsuario, avatarUrl, nome, sobrenome, descricao } = userInfo;
   const { authState, setAuthState } = useContext(AuthContext);
   const [idsOfUsersThatAddedYou, setIdsOfUsersThatAddedYou] = useState([]);
@@ -16,15 +18,22 @@ const CardAmigo = ({ userInfo, mode, friendListIds }) => {
     setConfirmDeleteteFriendModalVisible,
   ] = useState(false);
 
-  useEffect(() => {
-    const { userInfo } = authState;
+  const { id } = useParams();
 
-    setIdsOfUsersThatAddedYou(
-      userInfo.requisicoesAmigos.map((user) => user.idUsuario)
-    );
-    setIdsOfUsersThatYouAdded(
-      userInfo.amigosRequisitados.map((user) => user.idUsuario)
-    );
+  const {
+    authUserFriendlistIds,
+    loadingAuthUserFriendList,
+  } = useAuthUserFriendlist();
+
+  useEffect(() => {
+    if (authState.userInfo && authState.userInfo.idUsuario) {
+      setIdsOfUsersThatAddedYou(
+        authState.userInfo.requisicoesAmigos.map((user) => user.idUsuario)
+      );
+      setIdsOfUsersThatYouAdded(
+        authState.userInfo.amigosRequisitados.map((user) => user.idUsuario)
+      );
+    }
   }, [authState]);
 
   const inviteEndpoint = `/amigos/convites?idUsuarioReq=${idUsuario}`;
@@ -73,7 +82,7 @@ const CardAmigo = ({ userInfo, mode, friendListIds }) => {
 
   const InviteButtons = () => {
     return (
-      <>
+      <div className="invite-buttons-container mt-1">
         <button
           type="button"
           className="btn btn-success btn-height my-card-btn"
@@ -88,14 +97,14 @@ const CardAmigo = ({ userInfo, mode, friendListIds }) => {
         >
           <i className="fas fa-times"></i>
         </button>
-      </>
+      </div>
     );
   };
 
   const SearchButton = () => {
     return (
       <>
-        {(friendListIds.includes(idUsuario) && (
+        {(authUserFriendlistIds.includes(idUsuario) && (
           <p className="ml-auto mb-0 text-success">Já é seu amigo.</p>
         )) || (
           <button
@@ -151,7 +160,8 @@ const CardAmigo = ({ userInfo, mode, friendListIds }) => {
   };
 
   const getSearchCardMessageOrButton = () => {
-    if (friendListIds.includes(idUsuario)) {
+    if (loadingAuthUserFriendList) return null;
+    if (authUserFriendlistIds.includes(idUsuario)) {
       return <p className="ml-auto mb-0 text-success">Já é seu amigo.</p>;
     } else if (idsOfUsersThatAddedYou.includes(idUsuario)) {
       return <InviteButtons />;
@@ -161,6 +171,39 @@ const CardAmigo = ({ userInfo, mode, friendListIds }) => {
       return <SearchButton />;
     }
   };
+
+  const getFriendlistCardMessageOrButton = () => {
+    if (loadingAuthUserFriendList) return null;
+    if (authState.userInfo && idUsuario === authState.userInfo.idUsuario) {
+      return <p className="ml-auto mt-auto mb-0 text-success">Você.</p>;
+    }
+    if (authUserFriendlistIds.includes(idUsuario)) {
+      return <p className="ml-auto mb-0 text-success">Já é seu amigo.</p>;
+    } else if (
+      authUserFriendlistIds.length > 0 &&
+      authUserFriendlistIds[0] !== "INIT" &&
+      idsOfUsersThatAddedYou.includes(idUsuario)
+    ) {
+      return <InviteButtons />;
+    } else if (
+      authUserFriendlistIds.length > 0 &&
+      authUserFriendlistIds[0] !== "INIT" &&
+      idsOfUsersThatYouAdded.includes(idUsuario)
+    ) {
+      return <p className="ml-auto mb-0 text-success">Já adicionado.</p>;
+    } else if (
+      authUserFriendlistIds[0] &&
+      authUserFriendlistIds[0] !== "INIT"
+    ) {
+      return <SearchButton />;
+    } else {
+      return null;
+    }
+  };
+
+  if (mode === "OTHER-PROFILE") {
+    return getFriendlistCardMessageOrButton();
+  }
 
   return (
     <>
@@ -180,16 +223,23 @@ const CardAmigo = ({ userInfo, mode, friendListIds }) => {
           </div>
           <div className="col-lg-7 col-md-7 col-12">
             <h5>
-              <a className="profile-link" href="#">
+              <Link className="profile-link" to={`/usuario/${idUsuario}`}>
                 {nome} {sobrenome}
-              </a>
+              </Link>
             </h5>
             <p>{descricao}</p>
           </div>
 
-          {(mode === "SEARCH" && getSearchCardMessageOrButton()) ||
-            (mode === "FRIENDLIST" && <FriendlistButton />) ||
-            (mode === "INVITES" && <InviteButtons />)}
+          {authState.userInfo && (
+            <>
+              {(mode === "SEARCH" && getSearchCardMessageOrButton()) ||
+                (mode === "FRIENDLIST" && !id && FriendlistButton()) ||
+                (mode === "FRIENDLIST" &&
+                  id !== authState.userInfo.idUsuario &&
+                  getFriendlistCardMessageOrButton()) ||
+                (mode === "INVITES" && <InviteButtons />)}
+            </>
+          )}
         </div>
       </div>
     </>

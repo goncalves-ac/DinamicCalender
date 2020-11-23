@@ -28,7 +28,10 @@ const ListaConvites = ({ invites, otherUsers }) => {
             ))}
           {!loading && invites.length < 1 && (
             <p className="text-center">
-              Você ainda não tem nenhum convite de amizade 😔
+              Você ainda não tem nenhum convite de amizade{" "}
+              <span role="img" aria-label="Emoji Triste">
+                😔
+              </span>
             </p>
           )}
         </div>
@@ -44,7 +47,10 @@ const ListaConvites = ({ invites, otherUsers }) => {
             ))}
           {!loading && invites.length < 1 && (
             <p className="text-center">
-              Você ainda não tem nenhum convite para eventos 😔
+              Você ainda não tem nenhum convite para eventos{" "}
+              <span role="img" aria-label="Emoji Triste">
+                😔
+              </span>
             </p>
           )}
         </div>

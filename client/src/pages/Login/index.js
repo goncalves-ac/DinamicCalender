@@ -55,8 +55,8 @@ export default function Login() {
     <div className="row no-gutters my-bg-orange-0" id="container-base-login">
       <div className="align-self-center container-md text-center col-lg-4 col-md-6 col-sm-12">
         <form className="form-signin" onSubmit={handleLoginSubmit}>
-          <img className="mb-4" src={Logo_Black} alt="" width="100" />
-          <h1 className="h3 mb-3 font-weight-normal">Calendário Dinâmico</h1>
+          <img className="mb-3" src={Logo_Black} alt="" width="80" />
+          <h1 className="h4 mb-2 font-weight-normal">Calendário Dinâmico</h1>
           <p className="mb-0 text-danger">{formError}</p>
           <label htmlFor="inputEmail" className="sr-only">
             <i className="fas fa-at"></i> Email
@@ -107,25 +107,29 @@ export default function Login() {
         >
           <i className="fas fa-user-plus my-color-white"></i> Cadastre-se
         </Link>
+        <Link
+          to="/recuperarsenha"
+          className="btn btn-lg btn-block my-bg-orange-1 my-2 my-color-white"
+        >
+          <i className="fas fa-lock my-color-white"></i> Esqueci minha senha
+        </Link>
         <hr />
-        <a
-          href="#"
+        <button
           onClick={() => {
             AuthSSO(authMethods.GOOGLE);
           }}
           className="btn btn-lg btn-block btn-danger"
         >
           <i className="fab fa-google"></i> Login Google
-        </a>
-        <a
-          href="#"
+        </button>
+        <button
           onClick={() => {
             AuthSSO(authMethods.FACEBOOK);
           }}
           className="btn btn-lg btn-block btn-primary"
         >
           <i className="fab fa-facebook"></i> Login Facebook
-        </a>
+        </button>
       </div>
     </div>
   );
