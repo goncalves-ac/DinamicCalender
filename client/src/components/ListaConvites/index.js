@@ -5,7 +5,6 @@ import "./ListaAmigos.css";
 const ListaConvites = ({ invites, otherUsers }) => {
   const [pendingFriendInvites, setPendingFriendInvites] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const otherUsersInviteIds = invites.map((invite) => invite.idUsuario1);
