@@ -19,8 +19,8 @@ import com.example.demo.model.entities.JwtRequest;
 import com.example.demo.model.entities.JwtResponse;
 import com.example.demo.model.entities.Usuario;
 import com.example.demo.services.JwtUserDetailsService;
-import com.example.demo.upload.utils.JwtCookieUtil;
-import com.example.demo.upload.utils.JwtTokenUtil;
+import com.example.demo.utils.JwtCookieUtil;
+import com.example.demo.utils.JwtTokenUtil;
 
 @RestController
 @CrossOrigin
