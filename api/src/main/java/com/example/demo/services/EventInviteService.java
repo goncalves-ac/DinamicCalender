@@ -4,11 +4,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.model.entities.ConviteEvento;
 import com.example.demo.model.repositories.ConviteEventoRepository;
 
@@ -36,11 +37,30 @@ public class EventInviteService {
 		}
 	}
 	
-	@Transactional
+	@Transactional(readOnly = true)
 	public Set<ConviteEvento> getEventInvitesByUser(int idUser) throws Exception {
 		Set<ConviteEvento> invites = conviteRepository.findInvitesByUser(idUser);
 		return invites;
 	}
+	
+	@Transactional(readOnly = true)
+	public Set<ConviteEvento> getEventInvitesByEvent(int idEvento) throws Exception {
+		Set<ConviteEvento> invites = conviteRepository.findInvitesByEvent(idEvento);
+		return invites;
+	}
+	
+	@Transactional
+	public ConviteEvento acceptRejectInvite(int idEvento, int idUsuario, String status) throws Exception {
+		ConviteEvento invite = conviteRepository.findSpecificInvite(idEvento, idUsuario);
+    	if (invite==null) {
+			throw new ResourceNotFoundException("Convite não existe.");
+    	}
+    	
+    	invite.setStatus(status);
+		return conviteRepository.save(invite);
+	}
+		
+	
 	
 	@Transactional
 	public boolean createEventInvites(int idEvento, Set<Integer> idsUsuarios) throws Exception {

@@ -61,13 +61,18 @@ public class EventService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Evento findEventsByEventId(Integer idEvento) throws Exception {
+	public Evento findEventByEventId(Integer idEvento) throws Exception {
 		return eventRepository.findById(idEvento).get();
 	}
 	
 	@Transactional(readOnly=true)
-	public Set<Evento> findNextRecentEventsByUserId(Integer idUsuario, Integer limit) {
-		return eventRepository.findNextRecentEventsByUserId(idUsuario, limit);
+	public Set<Evento> findNextRecentEventsByUserId(Integer idUsuario, Integer limit, boolean privateMode) {
+		if (privateMode) {
+			return eventRepository.findPublicNextRecentEventsByUserId(idUsuario, limit);
+		} else {
+			return eventRepository.findAllNextRecentEventsByUserId(idUsuario, limit);
+		}
+
 	}
 	
 	@Transactional
