@@ -15,6 +15,7 @@ import Loading from "./pages/Loading";
 
 const Routes = () => {
   const { authState, setAuthState } = useContext(AuthContext);
+  const AuthConsumer = AuthContext.Consumer;
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -59,7 +60,9 @@ const Routes = () => {
     return (
       <Switch>
         <Route path="/" exact>
-          <Usuario userInfo={authState.userInfo} />
+          <AuthConsumer>
+            {({ authState }) => <Usuario userInfo={authState.userInfo} />}
+          </AuthConsumer>
         </Route>
         <Route path="/login" exact>
           <Redirect to="/" />
@@ -68,7 +71,9 @@ const Routes = () => {
           <Redirect to="/" />
         </Route>
         <Route path="/usuario" exact>
-          <Usuario userInfo={authState.userInfo} />
+          <AuthConsumer>
+            {({ authState }) => <Usuario userInfo={authState.userInfo} />}
+          </AuthConsumer>
         </Route>
         <Route path="/calendario" exact>
           <Calendario />
