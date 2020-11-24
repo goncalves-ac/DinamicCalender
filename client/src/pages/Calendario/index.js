@@ -17,6 +17,7 @@ import parseMillisToHours from "../../util/parseMillisToHours";
 import api from "../../api";
 import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
+import MouseHoverTooltip from "../../components/MouseHoverTooltip";
 
 export default function Calendario() {
   const { authState, setAuthState } = useContext(AuthContext);
@@ -32,6 +33,9 @@ export default function Calendario() {
   const [allFriends, setAllFriends] = useState([]);
   const [currentEvents, setCurrentEvents] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [initialCreateState, setInitialCreateState] = useState(null);
+  const [hoverTooltipVisible, setHoverTooltipVisible] = useState(false);
+  const [hoverTooltipInfo, setHoverTooltipInfo] = useState(null);
 
   const updateAuthState = async () => {
     try {
@@ -50,8 +54,6 @@ export default function Calendario() {
   const calendarRef = React.createRef();
 
   const handleDeleteEvent = async () => {
-    console.log(selectedEvent.idEvento);
-
     try {
       setLoading(true);
       await api.delete(`/eventos/${selectedEvent.idEvento}`);
@@ -92,6 +94,20 @@ export default function Calendario() {
     setSelectedEvent(eventInfo);
   };
 
+  const handleDateSelect = (event) => {
+    const eventDTO = {
+      start: event.start,
+      duration: parseMillisToHours(
+        Date.parse(event.end) - Date.parse(event.start)
+      ),
+    };
+    if (!eventDTO.duration.match("24:00")) {
+      setInitialCreateState(eventDTO);
+      setShowCreateEventModal(true);
+      setSelectedDate(event.startStr);
+    }
+  };
+
   const handleDateChange = async (event) => {
     const eventInfo = getEventDTOFromCalendarEvent(event);
     await handleModalFormSubmit(null, { eventInfo, mode: "EDIT" });
@@ -103,19 +119,23 @@ export default function Calendario() {
   };
 
   const handleCloseDetails = () => setSelectedEvent(null);
-  const handleCloseCreation = () => setShowCreateEventModal(false);
+  const handleCloseCreation = () => {
+    setShowCreateEventModal(false);
+    setInitialCreateState(null);
+  };
 
   const handleModalFormSubmit = async (e, { eventInfo, mode }) => {
     if (e) {
       e.preventDefault();
     }
     let eventStartDate;
-    if (mode === "CREATE") {
+    if (mode === "CREATE" && !selectedDate.match("T")) {
       eventStartDate = new Date(`${selectedDate}T${eventInfo.start}:00`);
+    } else if (mode === "CREATE" && selectedDate.match("T")) {
+      eventStartDate = new Date(selectedDate);
     } else if (mode === "EDIT") {
       eventStartDate = eventInfo.dateStart;
     }
-    console.log(eventStartDate);
 
     const eventEndDate = new Date(
       Date.parse(eventStartDate) + parseHoursToMillis(eventInfo.duration)
@@ -135,7 +155,6 @@ export default function Calendario() {
     if (mode === "CREATE") {
       try {
         setLoading(true);
-        console.log(eventDTO);
         await api.post("/eventos", eventDTO);
         await updateAuthState();
         handleCloseDetails();
@@ -145,7 +164,6 @@ export default function Calendario() {
         alert("Houve um erro ao criar o evento. Tente novamente mais tarde.");
       }
     } else if (mode === "EDIT") {
-      console.log(eventInfo);
       try {
         setLoading(true);
         await api.put(`/eventos/${eventInfo.idEvento}`, eventDTO);
@@ -161,6 +179,32 @@ export default function Calendario() {
       }
     }
   };
+
+  const handleEventHover = ({ event }) => {
+    const isoDate = new Date(event._instance.range.start).toISOString();
+    const parsedStart = isoDate.toString().match(/[0-9]{2}:[0-9]{2}/g)[0];
+
+    setHoverTooltipInfo({
+      title: event._def.title,
+      start: parsedStart,
+      duration: parseMillisToHours(
+        Date.parse(event._instance.range.end) -
+          Date.parse(event._instance.range.start)
+      ),
+      backgroundColor: event._def.ui.backgroundColor,
+      place: event._def.extendedProps.place,
+    });
+  };
+
+  const handleEventHoverEnd = () => {
+    setHoverTooltipInfo(null);
+  };
+
+  useEffect(() => {
+    hoverTooltipInfo
+      ? setHoverTooltipVisible(true)
+      : setHoverTooltipVisible(false);
+  }, [hoverTooltipInfo]);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -212,8 +256,33 @@ export default function Calendario() {
     fetchEvents();
   }, [authState]);
 
+  const EventHoverTooltip = () => {
+    return (
+      <div
+        style={{
+          backgroundColor: hoverTooltipInfo.backgroundColor,
+          maxWidth: "180px",
+        }}
+        className="text-white d-flex flex-column p-2 rounded border"
+      >
+        <h3 className="h6 border-bottom text-center mb-1 pb-1">
+          {hoverTooltipInfo.title}
+        </h3>
+        <p className="mt-1 mb-0">Horário: {hoverTooltipInfo.start}h</p>
+        <p className="m-0">Duração: {hoverTooltipInfo.duration}h</p>
+        <p className="m-0">Local: {hoverTooltipInfo.place}</p>
+      </div>
+    );
+  };
+
   return (
     <section>
+      {hoverTooltipInfo && hoverTooltipVisible && (
+        <MouseHoverTooltip>
+          <EventHoverTooltip />
+        </MouseHoverTooltip>
+      )}
+
       {selectedEvent && (
         <ModalOverlay
           children={
@@ -234,7 +303,7 @@ export default function Calendario() {
         <ModalOverlay
           children={
             <CreateEditEventModal
-              eventInfo={{}}
+              eventInfo={initialCreateState || {}}
               handleSubmit={handleModalFormSubmit}
               mode="CREATE"
               allFriends={allFriends}
@@ -270,7 +339,7 @@ export default function Calendario() {
           events={currentEvents}
           selectable={true}
           dateClick={handleDateClick}
-          select={handleDateClick}
+          select={handleDateSelect}
           selectMirror={true}
           dayMaxEvents={true}
           weekends={true}
@@ -284,7 +353,8 @@ export default function Calendario() {
           }}
           eventDrop={handleDateChange}
           eventClick={handleEventClick}
-          //events={this.formatEvents()}
+          eventMouseEnter={handleEventHover}
+          eventMouseLeave={handleEventHoverEnd}
         />
       </div>
     </section>
