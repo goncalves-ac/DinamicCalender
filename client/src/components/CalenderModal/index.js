@@ -17,6 +17,8 @@ const CalenderModal = ({
   const [mode, setMode] = useState("VIEW" || "EDIT" || "CREATE");
   const { authState } = useContext(AuthContext);
   const [eventOwner, setEventOwner] = useState(null);
+  const [eventInvites, setEventInvites] = useState([]);
+  const [invitesMapping, setInvitesMapping] = useState(null);
 
   const parsedDate = () => {
     if (eventInfo.start) {
@@ -35,10 +37,30 @@ const CalenderModal = ({
         setEventOwner("ERROR");
       }
     };
-    if (eventInfo.fkIdDono !== authState.userInfo.idUsuario) {
-      fetchEventOwner();
-    }
-  }, []);
+
+    const fetchEventInvites = async () => {
+      try {
+        const { data } = await api.get(
+          `/eventos/${eventInfo.idEvento}/convites`
+        );
+        setEventInvites(data);
+      } catch (e) {
+        alert("Houve algum erro. Por favor, atualize a página.");
+      }
+    };
+
+    eventInfo.fkIdDono !== authState.userInfo.idUsuario && fetchEventOwner();
+    eventInfo.idEvento && fetchEventInvites();
+  }, [eventInfo]);
+
+  useEffect(() => {
+    setInvitesMapping(
+      eventInvites.reduce((mapping, invite) => {
+        mapping[invite.fkIdUsuario] = invite.status;
+        return mapping;
+      }, {})
+    );
+  }, [eventInvites]);
 
   if (mode !== "VIEW")
     return (
@@ -93,6 +115,7 @@ const CalenderModal = ({
             <FriendsCarousel
               loading={false}
               friends={eventInfo.invitedFriends || []}
+              invitesMapping={invitesMapping}
             />
           </div>
         </div>
