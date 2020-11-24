@@ -110,7 +110,7 @@ export default function Calendario() {
 
   const handleDateChange = async (event) => {
     const eventInfo = getEventDTOFromCalendarEvent(event);
-    await handleModalFormSubmit(null, { eventInfo, mode: "EDIT" });
+    await handleModalFormSubmit(null, { eventInfo, mode: "EDIT", drag: true });
   };
 
   const handleDateClick = (event) => {
@@ -124,16 +124,26 @@ export default function Calendario() {
     setInitialCreateState(null);
   };
 
-  const handleModalFormSubmit = async (e, { eventInfo, mode }) => {
+  const handleModalFormSubmit = async (
+    e,
+    { eventInfo, mode, drag = false }
+  ) => {
     if (e) {
       e.preventDefault();
     }
     let eventStartDate;
+    console.log(eventInfo);
     if (mode === "CREATE" && !selectedDate.match("T")) {
       eventStartDate = new Date(`${selectedDate}T${eventInfo.start}:00`);
     } else if (mode === "CREATE" && selectedDate.match("T")) {
       eventStartDate = new Date(selectedDate);
-    } else if (mode === "EDIT") {
+    } else if (mode === "EDIT" && !drag) {
+      eventStartDate = new Date(
+        `${eventInfo.dateStart.getFullYear()}-${
+          eventInfo.dateStart.getMonth() + 1
+        }-${eventInfo.dateStart.getDate()}T${eventInfo.start}:00`
+      );
+    } else if (mode === "EDIT" && drag) {
       eventStartDate = eventInfo.dateStart;
     }
 
