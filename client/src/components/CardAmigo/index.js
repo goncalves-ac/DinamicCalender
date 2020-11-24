@@ -2,13 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../api";
-import useAuthUserFriendlist from "../../hooks/useAuthUserFriendlist";
 import AvatarPlaceholder from "../../img/avatar-placeholder.png";
 import { AuthContext } from "../../providers/AuthProvider";
 import ModalOverlay from "../ModalOverlay";
 import "./styles.css";
 
-const CardAmigo = ({ userInfo, mode }) => {
+const CardAmigo = ({
+  userInfo,
+  mode,
+  authUserFriendlistIds,
+  loadingAuthUserFriendList,
+}) => {
   const { idUsuario, avatarUrl, nome, sobrenome, descricao } = userInfo;
   const { authState, setAuthState } = useContext(AuthContext);
   const [idsOfUsersThatAddedYou, setIdsOfUsersThatAddedYou] = useState([]);
@@ -19,11 +23,6 @@ const CardAmigo = ({ userInfo, mode }) => {
   ] = useState(false);
 
   const { id } = useParams();
-
-  const {
-    authUserFriendlistIds,
-    loadingAuthUserFriendList,
-  } = useAuthUserFriendlist();
 
   useEffect(() => {
     if (authState.userInfo && authState.userInfo.idUsuario) {

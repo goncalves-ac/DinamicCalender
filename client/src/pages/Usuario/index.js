@@ -11,51 +11,26 @@ import ListaConvites from "../../components/ListaConvites";
 import api from "../../api";
 import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
+import useAuthUserFriendlist from "../../hooks/useAuthUserFriendlist";
 
 export default function Usuario({ userInfo }) {
-  const [otherUserInvites, setOtherUserInvites] = useState([]);
-  const [friends, setFriends] = useState([]);
+  const [eventInvites, setEventInvites] = useState([]);
+  const [totalInvites, setTotalInvites] = useState(null);
   const { authState, setAuthState } = useContext(AuthContext);
 
+  const {
+    authUserFriendList,
+    authUserPendingInvites,
+    authUserFriendlistIds,
+    loadingAuthUserFriendList,
+  } = useAuthUserFriendlist();
+
   useEffect(() => {
-    const fetchFriends = async () => {
-      try {
-        const { data } = await api.get("/amigos");
-
-        const otherInvites = data.filter(
-          (invite) =>
-            invite.status === "PENDING" &&
-            invite.idUsuario1 !== userInfo.idUsuario
-        );
-        setOtherUserInvites(otherInvites);
-
-        const acceptedFriends = data.filter(
-          (invite) => invite.status === "ACCEPTED"
-        );
-        const acceptedFriendsIdUsuario1List = acceptedFriends.map(
-          (user) => user.idUsuario1
-        );
-        const acceptedFriendsIdUsuario2List = acceptedFriends.map(
-          (user) => user.idUsuario2
-        );
-
-        const friendList = [
-          ...userInfo.amigosRequisitados,
-          ...userInfo.requisicoesAmigos,
-        ].filter(
-          (amigo) =>
-            acceptedFriendsIdUsuario1List.includes(amigo.idUsuario) ||
-            acceptedFriendsIdUsuario2List.includes(amigo.idUsuario)
-        );
-
-        setFriends(friendList);
-      } catch (e) {}
-    };
-    fetchFriends();
-  }, [authState]);
+    setTotalInvites(authUserPendingInvites.length + eventInvites.length);
+  }, [authUserPendingInvites, eventInvites]);
 
   const updateAuthUserStateWhenHasInvites = async () => {
-    if (otherUserInvites.length > 0) {
+    if (authUserPendingInvites.length > 0) {
       const { data } = await api.get("/usuario");
       setAuthState(Object.assign({}, authState, { userInfo: data[0] }));
     }
@@ -64,7 +39,10 @@ export default function Usuario({ userInfo }) {
   return (
     <section>
       <Nav />
-      <DadosUsuario userInfo={userInfo} />
+      <DadosUsuario
+        userInfo={userInfo}
+        authUserFriendlistIds={authUserFriendlistIds}
+      />
       <div className="my-5 w-100">
         <ul
           className="nav nav-tabs font-weight-bold"
@@ -124,18 +102,15 @@ export default function Usuario({ userInfo }) {
               role="tab"
               onClick={updateAuthUserStateWhenHasInvites}
             >
-              {" "}
+              {totalInvites > 0 && (
+                <div className="my-invite-badge-number">{totalInvites}</div>
+              )}
               <i
                 className={`fas fa-envelope ${
-                  (otherUserInvites.length > 0 && "text-danger") || ""
+                  (totalInvites && totalInvites > 0 && "text-danger") || ""
                 }`}
               ></i>
-              {otherUserInvites.length > 0 && (
-                <span className="badge badge-danger">
-                  {otherUserInvites.length}
-                </span>
-              )}{" "}
-              Convites{" "}
+              Convites
             </a>
           </li>
         </ul>
@@ -155,7 +130,11 @@ export default function Usuario({ userInfo }) {
             id="friends"
             role="tabpanel"
           >
-            <ListaAmigos friendList={friends} />
+            <ListaAmigos
+              friendList={authUserFriendList}
+              authUserFriendlistIds={authUserFriendlistIds}
+              loadingAuthUserFriendList={loadingAuthUserFriendList}
+            />
           </div>
 
           <div
@@ -164,7 +143,7 @@ export default function Usuario({ userInfo }) {
             id="search"
             role="tabpanel"
           >
-            <ListaBusca />
+            <ListaBusca authUserFriendlistIds={authUserFriendlistIds} />
           </div>
 
           <div
@@ -174,8 +153,10 @@ export default function Usuario({ userInfo }) {
             role="tabpanel"
           >
             <ListaConvites
-              invites={otherUserInvites}
+              invites={authUserPendingInvites}
               otherUsers={userInfo.requisicoesAmigos}
+              authUserFriendlistIds={authUserFriendlistIds}
+              loadingAuthUserFriendList={loadingAuthUserFriendList}
             />
           </div>
         </div>

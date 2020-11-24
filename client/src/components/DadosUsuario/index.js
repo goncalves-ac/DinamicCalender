@@ -2,11 +2,14 @@ import React, { useContext } from "react";
 import CardAmigo from "../CardAmigo";
 import "./styles.css";
 import avatarPlaceholder from "../../img/avatar-placeholder.png";
-import useAuthUserFriendlist from "../../hooks/useAuthUserFriendlist";
 import { AuthContext } from "../../providers/AuthProvider";
 
-const DadosUsuario = ({ userInfo, otherUserProfile }) => {
-  const { authUserFriendlistIds } = useAuthUserFriendlist();
+const DadosUsuario = ({
+  authUserFriendlistIds,
+  loadingAuthUserFriendList,
+  userInfo,
+  otherUserProfile,
+}) => {
   const { authState } = useContext(AuthContext);
 
   return (
@@ -36,6 +39,7 @@ const DadosUsuario = ({ userInfo, otherUserProfile }) => {
                 userInfo={userInfo}
                 mode="OTHER-PROFILE"
                 authUserFriendlistIds={authUserFriendlistIds}
+                loadingAuthUserFriendList={loadingAuthUserFriendList}
               />
             )}
           </>

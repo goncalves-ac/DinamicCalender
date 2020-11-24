@@ -10,6 +10,7 @@ import { Redirect, useParams } from "react-router-dom";
 import DadosUsuario from "../../../components/DadosUsuario";
 import Page404 from "../../Page404";
 import Loading from "../../Loading";
+import useAuthUserFriendlist from "../../../hooks/useAuthUserFriendlist";
 
 export default function OutroUsuario() {
   const [friends, setFriends] = useState([]);
@@ -18,6 +19,11 @@ export default function OutroUsuario() {
   const [userNotFound, setUserNotFound] = useState(true);
   const [loading, setLoading] = useState(true);
   const routeParams = useParams();
+
+  const {
+    authUserFriendlistIds,
+    loadingAuthUserFriendList,
+  } = useAuthUserFriendlist();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -92,7 +98,11 @@ export default function OutroUsuario() {
   return (
     <section>
       <Nav />
-      <DadosUsuario userInfo={userInfo} otherUserProfile={true} />
+      <DadosUsuario
+        userInfo={userInfo}
+        otherUserProfile={true}
+        authUserFriendlistIds={authUserFriendlistIds}
+      />
       <div className="my-5 w-100">
         <ul
           className="nav nav-tabs font-weight-bold"
@@ -144,7 +154,11 @@ export default function OutroUsuario() {
             id="friends"
             role="tabpanel"
           >
-            <ListaAmigos friendList={friends} />
+            <ListaAmigos
+              friendList={friends}
+              authUserFriendlistIds={authUserFriendlistIds}
+              loadingAuthUserFriendList={loadingAuthUserFriendList}
+            />
           </div>
         </div>
       </div>
