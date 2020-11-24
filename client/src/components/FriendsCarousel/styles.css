@@ -94,3 +94,13 @@
   cursor: pointer;
   z-index: 10;
 }
+
+.my-invite-status {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.7rem;
+  font-size: 0.6rem;
+  background-color: rgba(200, 200, 200, 0.8);
+  padding: 0.1rem;
+  border-radius: 5px;
+}
