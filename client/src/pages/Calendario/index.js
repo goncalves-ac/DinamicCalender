@@ -239,7 +239,7 @@ export default function Calendario() {
               place: event.local,
               invitedFriends: event.usuariosConvidados,
               description: event.descricao,
-              allDay: eventDuration === "00:00" ? true : false,
+              allDay: false,
               backgroundColor: event.corDeFundo,
               privacy: event.privacidade,
             };
@@ -355,6 +355,7 @@ export default function Calendario() {
           eventClick={handleEventClick}
           eventMouseEnter={handleEventHover}
           eventMouseLeave={handleEventHoverEnd}
+          defaultTimedEventDuration="00:00"
         />
       </div>
     </section>
