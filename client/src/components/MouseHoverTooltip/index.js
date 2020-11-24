@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import "./styles.css";
 
 const MouseHoverTooltip = ({ children }) => {
   const targetDiv = document.getElementById("hover-tooltip-layer");
@@ -24,12 +25,10 @@ const MouseHoverTooltip = ({ children }) => {
   return createPortal(
     <div
       ref={overlayRef}
-      className="hover-tooltip"
+      className="hover-tooltip anim-fade-in"
       style={{
-        position: "fixed",
         top: `${selfCoordinates.y + 10}px`,
         left: `${selfCoordinates.x + 15}px`,
-        zIndex: "10000",
       }}
     >
       <div className="tooltip-content">{children}</div>
