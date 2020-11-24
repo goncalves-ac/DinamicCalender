@@ -16,8 +16,12 @@ public interface EventoRepository extends CrudRepository<Evento, Integer> {
     Evento findByInicio(Date data);
 
     Set<Evento> findByFkIdDono(@Param("id") Integer id);
+    
     @Query(value="SELECT * FROM Evento e WHERE fk_id_dono = :id"
     		+ " and e.inicio > now() ORDER BY e.inicio LIMIT :limit", nativeQuery=true)
-    Set<Evento> findNextRecentEventsByUserId(@Param("id") Integer id, @Param("limit") Integer limit);
+    Set<Evento> findAllNextRecentEventsByUserId(@Param("id") Integer id, @Param("limit") Integer limit);
 
+    @Query(value="SELECT * FROM Evento e WHERE fk_id_dono = :id"
+    		+ " and privacidade='PUBLIC' and e.inicio > now() ORDER BY e.inicio LIMIT :limit", nativeQuery=true)
+    Set<Evento> findPublicNextRecentEventsByUserId(@Param("id") Integer id, @Param("limit") Integer limit);
 }

@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.dto.NovaSenhaRequestDTO;
+import com.example.demo.dto.PrivateUsuarioResponseDTO;
 import com.example.demo.dto.RecoverPasswordDTO;
 import com.example.demo.dto.UpdateUserReturnDTO;
 import com.example.demo.dto.UsuarioRequestDTO;
@@ -63,17 +64,17 @@ public class UsuarioController {
     private JwtTokenUtil jwtTokenUtil;
     
     @GetMapping("/{id}")
-    public UsuarioResponseDTO getUsuarioById(@PathVariable int id) throws Exception {
+    public PrivateUsuarioResponseDTO getUsuarioById(@PathVariable int id) throws Exception {
     		try {
     			Usuario u = userService.findUserById(id);
-				return new UsuarioResponseDTO(u);
+				return new PrivateUsuarioResponseDTO(u);
     		} catch(Exception e) {
     			throw e;
     		}      
     }
     
     @GetMapping()
-    public Set<UsuarioResponseDTO> getUsuarioByNome(@RequestParam(required=false) String nome, Authentication auth) throws Exception {
+    public ResponseEntity<?> getUsuarioByNome(@RequestParam(required=false) String nome, Authentication auth) throws Exception {
     	
     	if (nome==null) {
     		try {
@@ -81,7 +82,7 @@ public class UsuarioController {
     			Usuario u = userService.findUserById(authUserId);
     			Set<UsuarioResponseDTO> usuarioSet = new HashSet<UsuarioResponseDTO>();
     			usuarioSet.add(new UsuarioResponseDTO(u));
-    			return usuarioSet;
+    			return ResponseEntity.ok(usuarioSet);
     		} catch (Exception e) {
     			throw e;
     		}
@@ -89,9 +90,9 @@ public class UsuarioController {
     	
     	try {
     			Set<Usuario> u = userService.findUsersByNome(nome);
-    			Set<UsuarioResponseDTO> usuariosDTO = u.stream().map
-    					(usuario -> new UsuarioResponseDTO(usuario)).collect(Collectors.toSet());
-				return usuariosDTO;
+    			Set<PrivateUsuarioResponseDTO> usuariosDTO = u.stream().map
+    					(usuario -> new PrivateUsuarioResponseDTO(usuario)).collect(Collectors.toSet());
+				return ResponseEntity.ok(usuariosDTO);
     		} catch(Exception e) {
     			throw e;
     		}      

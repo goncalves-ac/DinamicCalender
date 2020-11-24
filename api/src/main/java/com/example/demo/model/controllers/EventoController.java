@@ -1,6 +1,7 @@
 package com.example.demo.model.controllers;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.EventoRequestDTO;
+import com.example.demo.exceptions.BadRequestException;
 import com.example.demo.exceptions.ForbiddenActionException;
 import com.example.demo.model.entities.ConviteEvento;
 import com.example.demo.model.entities.Evento;
@@ -48,7 +50,7 @@ public class EventoController {
         		if (limit == null) {
         			limit = 3;
         		}
-        		return eventService.findNextRecentEventsByUserId(authUserId, limit);
+        		return eventService.findNextRecentEventsByUserId(authUserId, limit, false);
         	}
     		return eventService.findEventsByUserId(authUserId);
         } catch (Exception e) {
@@ -65,9 +67,12 @@ public class EventoController {
         		if (limit == null) {
         			limit = 3;
         		}
-        		return eventService.findNextRecentEventsByUserId(id, limit);
+        		return eventService.findNextRecentEventsByUserId(id, limit, true);
         	}
-    		return eventService.findEventsByUserId(id);
+    		Set<Evento> allEvents = eventService.findEventsByUserId(id);
+    		Set<Evento> publicEvents = allEvents.stream()
+    				.filter(x -> x.getPrivacidade().equals("PUBLIC")).collect(Collectors.toSet());
+    		return publicEvents;
     	} catch (Exception e) {
     		throw e;
     	}  
@@ -76,7 +81,7 @@ public class EventoController {
     @GetMapping("/{id}")
     public Evento getEventoById(@PathVariable int id) throws Exception {
     	try {
-    		return eventService.findEventsByEventId(id);
+    		return eventService.findEventByEventId(id);
     	} catch (Exception e) {
     		throw e;
     	}   
@@ -87,6 +92,16 @@ public class EventoController {
     public Set<ConviteEvento> getInvitesByUserId(@RequestParam Integer idUser) throws Exception {
     	try {
     		return eventInviteService.getEventInvitesByUser(idUser);
+    	} catch (Exception e) {
+    		throw e;
+    	}
+    }
+    
+    @GetMapping("/{idEvento}/convites")
+    @ResponseBody
+    public Set<ConviteEvento> getInvitesByEventId(@PathVariable Integer idEvento) throws Exception {
+    	try {
+    		return eventInviteService.getEventInvitesByEvent(idEvento);
     	} catch (Exception e) {
     		throw e;
     	}
@@ -131,6 +146,23 @@ public class EventoController {
         	throw e;
         }
     }
+    
+    @PutMapping("/{idEvento}/convites")
+    @ResponseStatus(code = HttpStatus.OK)
+    public ConviteEvento aceitarRejeitarConvite(@PathVariable int idEvento, @RequestParam String status, Authentication auth) throws Exception{
+		Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);
+		
+		if (!status.equals("ACCEPTED") && !status.equals("REJECTED")) {
+			throw new BadRequestException("Parametro status deve ser ACCEPTED ou REJECTED");
+		}
+		
+    	
+    	try {
+        	return eventInviteService.acceptRejectInvite(idEvento, authUserId, status);
+        } catch(Exception e) {
+        	throw e;
+        }
+    }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
@@ -144,5 +176,6 @@ public class EventoController {
     	}
         
     }
+    
 
 }
