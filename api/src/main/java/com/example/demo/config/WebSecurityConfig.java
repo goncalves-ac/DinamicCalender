@@ -89,6 +89,7 @@ httpSecurity.cors().and().csrf().disable()
 .antMatchers(HttpMethod.POST, "/usuario").permitAll()
 .antMatchers(HttpMethod.GET, "/usuario/{\\d+}").permitAll()
 .antMatchers(HttpMethod.GET, "/static/**").permitAll()
+        .antMatchers(HttpMethod.POST, "/sso").permitAll()
 .anyRequest().authenticated().and().
 exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

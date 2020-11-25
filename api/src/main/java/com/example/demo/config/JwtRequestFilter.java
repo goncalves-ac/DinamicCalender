@@ -37,7 +37,7 @@ private JwtTokenUtil jwtTokenUtil;
 
 private final Set<String> pathsToExcludeFromFilter = 
 new HashSet<String>(Arrays.asList(
-		"/authenticate", "/unauthenticate"));
+		"/authenticate", "/unauthenticate", "/sso"));
 
 @Override
 protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)

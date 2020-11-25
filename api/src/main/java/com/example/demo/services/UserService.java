@@ -1,10 +1,15 @@
 package com.example.demo.services;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintViolation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +34,10 @@ public class UserService {
 	
 	@Autowired
 	private UsuarioRepository userRepository;
+
+	public Usuario findByEmail(String email){
+		return userRepository.findByEmail(email);
+	}
 	
 	private final EntityValidator<Usuario> usuarioValidator = new EntityValidator<Usuario>();
 	public UserService() {
