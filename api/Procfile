@@ -1,1 +1,1 @@
-web: java -jar target/CALENDARIO_DINAMICO_API-1.0.jar $PORT
+web: java -Dserver.port=$PORT -jar target/CD_API-1.0-SNAPSHOT.jar
