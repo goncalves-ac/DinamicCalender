@@ -13,6 +13,7 @@ public class JwtCookieUtil {
 				.httpOnly(true)
 				.maxAge(cookieDuration)
 				.path("/")
+				.setSameSite("none")
 				.build();
 		return cookie.toString();
 	}
@@ -23,6 +24,7 @@ public class JwtCookieUtil {
 				.httpOnly(true)
 				.maxAge(0)
 				.path("/")
+				.setSameSite("none")
 				.build();
 		return cookie.toString();
 	}
