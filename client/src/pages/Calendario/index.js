@@ -25,7 +25,7 @@ export default function Calendario() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showCreateEventModal, setShowCreateEventModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(
-    `${new Date().getFullYear}-${
+    `${new Date().getFullYear()}-${
       new Date().getMonth() + 1
     }-${new Date().getDate()}`
   );
@@ -108,9 +108,23 @@ export default function Calendario() {
     }
   };
 
-  const handleDateChange = async (event) => {
-    const eventInfo = getEventDTOFromCalendarEvent(event);
-    await handleModalFormSubmit(null, { eventInfo, mode: "EDIT", drag: true });
+  const handleDateChange = async (dropEvent) => {
+    const idDono = dropEvent.event._def.extendedProps.fkIdDono;
+    if (idDono !== authState.userInfo.idUsuario) {
+      alert("Você não pode modificar um evento que não é seu.");
+      dropEvent.revert();
+      return;
+    }
+    const eventInfo = getEventDTOFromCalendarEvent(dropEvent);
+    try {
+      await handleModalFormSubmit(null, {
+        eventInfo,
+        mode: "EDIT",
+        drag: true,
+      });
+    } catch (e) {
+      dropEvent.revert();
+    }
   };
 
   const handleDateClick = (event) => {
@@ -132,17 +146,18 @@ export default function Calendario() {
       e.preventDefault();
     }
     let eventStartDate;
-    console.log(eventInfo);
     if (mode === "CREATE" && !selectedDate.match("T")) {
       eventStartDate = new Date(`${selectedDate}T${eventInfo.start}:00`);
     } else if (mode === "CREATE" && selectedDate.match("T")) {
       eventStartDate = new Date(selectedDate);
     } else if (mode === "EDIT" && !drag) {
-      eventStartDate = new Date(
-        `${eventInfo.dateStart.getFullYear()}-${
-          eventInfo.dateStart.getMonth() + 1
-        }-${eventInfo.dateStart.getDate()}T${eventInfo.start}:00`
-      );
+      const newDate = eventInfo.dateStart;
+      const startSplit = eventInfo.start.split(":");
+      const hours = parseInt(startSplit[0]);
+      const minutes = parseInt(startSplit[1]);
+      newDate.setHours(hours);
+      newDate.setMinutes(minutes);
+      eventStartDate = newDate;
     } else if (mode === "EDIT" && drag) {
       eventStartDate = eventInfo.dateStart;
     }
