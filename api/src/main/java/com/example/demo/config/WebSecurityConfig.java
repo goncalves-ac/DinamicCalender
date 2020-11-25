@@ -89,7 +89,7 @@ httpSecurity.cors().and().csrf().disable()
 .antMatchers(HttpMethod.POST, "/usuario").permitAll()
 .antMatchers(HttpMethod.PATCH, "/usuario").permitAll()
 .antMatchers(HttpMethod.POST, "/usuario/recover-password").permitAll()
-.antMatchers(HttpMethod.GET, "/usuario/{\\d+}").permitAll()
+.antMatchers(HttpMethod.GET, "/usuario/**").permitAll()
 .antMatchers(HttpMethod.GET, "/amigos/**").permitAll()
 .antMatchers(HttpMethod.GET, "/static/**").permitAll()
 .anyRequest().authenticated().and().

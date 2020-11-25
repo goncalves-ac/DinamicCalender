@@ -16,12 +16,6 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [redirectOnLogin, setRedirect] = useState(false);
 
-  useEffect(() => {
-    if (authState.userInfo && !loading) {
-      setRedirect(true);
-    }
-  }, [authState, loading]);
-
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
@@ -38,6 +32,7 @@ export default function Login() {
       });
       localStorage.setItem("eat", data.expiresAt);
       setLoading(false);
+      setRedirect(true);
     } catch (e) {
       setLoading(false);
       if (e.response) {
