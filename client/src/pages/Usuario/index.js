@@ -15,8 +15,10 @@ import useAuthUserFriendlist from "../../hooks/useAuthUserFriendlist";
 
 export default function Usuario({ userInfo }) {
   const [eventInvites, setEventInvites] = useState([]);
+  const [loadingEventInvites, setLoadingEventInvites] = useState(true);
   const [totalInvites, setTotalInvites] = useState(null);
   const { authState, setAuthState } = useContext(AuthContext);
+  const [authUserNextEvents, setAuthUserNextEvents] = useState(null);
 
   const {
     authUserFriendList,
@@ -25,12 +27,54 @@ export default function Usuario({ userInfo }) {
     loadingAuthUserFriendList,
   } = useAuthUserFriendlist();
 
+  const fetchNextEvents = async () => {
+    try {
+      const { data } = await api.get("/eventos?recent=true&limit=3");
+      setAuthUserNextEvents(data);
+    } catch (e) {
+      alert(
+        "Houve um ao buscar os próximos eventos do usuário. Por favor atualize a página."
+      );
+      setAuthUserNextEvents([]);
+    }
+  };
+
+  const fetchEventInvites = async () => {
+    try {
+      const { data } = await api.get(
+        `/eventos/convites?idUser=${authState.userInfo.idUsuario}&status=PENDING`
+      );
+      const pendingEventInvitesEventIds = data.map(
+        (invite) => invite.fkIdEvento
+      );
+
+      const pendingEventInvitesEventsInfo = authState.userInfo.eventosAlheios.filter(
+        (event) => pendingEventInvitesEventIds.includes(event.id_evento)
+      );
+
+      setEventInvites(pendingEventInvitesEventsInfo);
+      setLoadingEventInvites(false);
+    } catch (e) {
+      alert(
+        "Houve um ao buscar os próximos eventos do usuário. Por favor atualize a página."
+      );
+      setLoadingEventInvites(false);
+    }
+  };
+
   useEffect(() => {
     setTotalInvites(authUserPendingInvites.length + eventInvites.length);
   }, [authUserPendingInvites, eventInvites]);
 
+  useEffect(() => {
+    if (authState.userInfo) {
+      fetchNextEvents();
+      fetchEventInvites();
+    }
+  }, [authState]);
+
   const updateAuthUserStateWhenHasInvites = async () => {
-    if (authUserPendingInvites.length > 0) {
+    if (totalInvites && totalInvites > 0) {
       const { data } = await api.get("/usuario");
       setAuthState(Object.assign({}, authState, { userInfo: data[0] }));
     }
@@ -121,7 +165,7 @@ export default function Usuario({ userInfo }) {
             id="timeline"
             role="tabpanel"
           >
-            <PerfilUsuario />
+            <PerfilUsuario self={true} nextEvents={authUserNextEvents} />
           </div>
 
           <div
@@ -153,10 +197,12 @@ export default function Usuario({ userInfo }) {
             role="tabpanel"
           >
             <ListaConvites
-              invites={authUserPendingInvites}
+              friendInvites={authUserPendingInvites}
               otherUsers={userInfo.requisicoesAmigos}
               authUserFriendlistIds={authUserFriendlistIds}
               loadingAuthUserFriendList={loadingAuthUserFriendList}
+              eventInvites={eventInvites}
+              loadingEventInvites={loadingEventInvites}
             />
           </div>
         </div>
