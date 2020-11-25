@@ -34,15 +34,14 @@ const CardAmigo = ({
         authState.userInfo.amigosRequisitados.map((user) => user.idUsuario)
       );
     }
+    setLoading(false);
   }, [authState]);
 
   const inviteEndpoint = `/amigos/convites?idUsuarioReq=${idUsuario}`;
 
   const updateAuthUserInfo = async () => {
-    if (loading) return;
     const { data } = await api.get(`/usuario`);
     setAuthState(Object.assign({}, authState, { userInfo: data[0] }));
-    setLoading(false);
   };
 
   const handleAddFriend = async () => {
@@ -61,10 +60,12 @@ const CardAmigo = ({
     if (loading) return;
     try {
       setLoading(true);
+      setConfirmDeleteteFriendModalVisible(false);
       await api.delete(inviteEndpoint);
       await updateAuthUserInfo();
     } catch (e) {
       setLoading(false);
+      setConfirmDeleteteFriendModalVisible(false);
       alert("Ocorreu um erro. Atualize a página e tente novamente.");
     }
   };
