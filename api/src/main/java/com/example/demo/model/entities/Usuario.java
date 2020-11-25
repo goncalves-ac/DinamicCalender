@@ -65,7 +65,6 @@ public class Usuario {
     private String genero;
     
     @Column(name="avatar_url")
-    @Size(min=10, message="Essa não parece ser uma URL válida.")
     private String avatarUrl;
     
     @Size(max=240, message="Descrição deve conter no máximo 240 caractéres.")
