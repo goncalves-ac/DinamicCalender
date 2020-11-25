@@ -41,7 +41,7 @@ public class EventoController {
     @ResponseBody
     public Set<Evento> getEventsByAuthenticatedUser(Authentication auth, @RequestParam(required=false) boolean recent, @RequestParam(required=false) Integer limit) throws Exception {
     	Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);
-
+    	System.out.println(authUserId);
     	
     	try {
     		if (recent) {
@@ -49,6 +49,7 @@ public class EventoController {
         			limit = 3;
         		}
         		Set<Evento> e = eventService.findAllEventsByUserId(authUserId, limit);
+        		e.forEach(System.out::println);
         		return e;
         	}
     		return eventService.findAllEventsByUserId(authUserId);
