@@ -14,6 +14,7 @@ public class JwtCookieUtil {
 				.maxAge(cookieDuration)
 				.path("/")
 				.sameSite("none")
+				.secure(true)
 				.build();
 		return cookie.toString();
 	}
@@ -25,6 +26,7 @@ public class JwtCookieUtil {
 				.maxAge(0)
 				.path("/")
 				.sameSite("none")
+				.secure(true)
 				.build();
 		return cookie.toString();
 	}
