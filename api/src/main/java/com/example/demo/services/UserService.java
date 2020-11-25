@@ -39,6 +39,9 @@ public class UserService {
 	
 	@Autowired
 	private MailSenderUtil mailUtil;
+
+	@Value("${app.root.url}")
+	private String appUrl;
 	
 	private final EntityValidator<Usuario> usuarioValidator = new EntityValidator<Usuario>();
 	public UserService() {
@@ -201,7 +204,7 @@ public class UserService {
 		mail.setSubject("Recuperação de Senha - Calendário Dinâmico");
 		mail.setTo(dto.getEmail());
 		mail.setMessage(
-				"Siga esse link para alterar sua senha:\n\n http://localhost:3000/recuperarsenha/"+token+
+				"Siga esse link para alterar sua senha:\n\n "+ appUrl+"/recuperarsenha/"+token+
 				"\n\nSe não foi você que requisitou essa alteração, apenas ignore esse email.");
 		mailUtil.sendMail(mail);
 		
