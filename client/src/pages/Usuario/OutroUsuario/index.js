@@ -104,7 +104,7 @@ export default function OutroUsuario() {
       setUserNotFound(false);
       setLoading(false);
     }
-  }, [userInfo, routeParams.id]);
+  }, [authState, userInfo, routeParams.id]);
 
   if (
     authState.userInfo &&

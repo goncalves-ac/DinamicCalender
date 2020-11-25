@@ -182,17 +182,36 @@ const CardAmigo = ({
       authUserFriendlistIds[0] !== "INIT" &&
       idsOfUsersThatAddedYou.includes(idUsuario)
     ) {
-      return <InviteButtons />;
+      return (
+        <div className="d-flex flex-column">
+          <p
+            className="text-success m-0 p-1"
+            style={{ borderTop: "1px white solid" }}
+          >
+            Quer ser seu amigo
+          </p>
+          <div className="d-flex justify-content-center" style={{ gap: "5px" }}>
+            <InviteButtons />
+          </div>
+        </div>
+      );
     } else if (
       authUserFriendlistIds[0] !== "INIT" &&
       idsOfUsersThatYouAdded.includes(idUsuario)
     ) {
       return <p className="text-success">Já adicionado.</p>;
-    } else if (
-      authUserFriendlistIds[0] &&
-      authUserFriendlistIds[0] !== "INIT"
-    ) {
-      return <SearchButton />;
+    } else if (authUserFriendlistIds[0] !== "INIT") {
+      return (
+        <div className="d-flex flex-column justify-content-center align-items-center">
+          <p
+            className="text-primary m-0 p-1"
+            style={{ borderTop: "1px white solid" }}
+          >
+            Adicionar como amigo?
+          </p>
+          <SearchButton />
+        </div>
+      );
     } else {
       return null;
     }
