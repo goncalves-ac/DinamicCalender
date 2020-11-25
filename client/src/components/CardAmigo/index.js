@@ -81,22 +81,22 @@ const CardAmigo = ({
 
   const InviteButtons = () => {
     return (
-      <div className="invite-buttons-container mt-1">
+      <>
         <button
           type="button"
-          className="btn btn-success btn-height my-card-btn"
+          className="btn btn-success my-card-btn"
           onClick={handleAcceptFriend}
         >
           <i className="fas fa-check"></i>
         </button>
         <button
           type="button"
-          className="btn btn-danger btn-height my-card-btn"
+          className="btn btn-danger my-card-btn"
           onClick={handleDeclineFriend}
         >
-          <i className="fas fa-times"></i>
+          <i className="fas fa-times-circle"></i>
         </button>
-      </div>
+      </>
     );
   };
 
@@ -104,11 +104,11 @@ const CardAmigo = ({
     return (
       <>
         {(authUserFriendlistIds.includes(idUsuario) && (
-          <p className="ml-auto mb-0 text-success">Já é seu amigo.</p>
+          <p className="text-success">Já é seu amigo.</p>
         )) || (
           <button
             type="button"
-            className="btn btn-primary my-bg-orange-1 btn-height my-card-btn mt-0 ml-auto"
+            className="btn btn-primary my-bg-orange-1 my-card-btn"
             onClick={handleAddFriend}
           >
             <i className="fas fa-user-plus"></i>
@@ -122,7 +122,7 @@ const CardAmigo = ({
     return (
       <button
         type="button"
-        className="btn btn-primary btn-danger btn-height my-card-btn mt-0 ml-auto"
+        className="btn btn-primary btn-danger my-card-btn"
         onClick={() => setConfirmDeleteteFriendModalVisible(true)}
       >
         <i className="fas fa-user-alt-slash"></i>
@@ -161,11 +161,11 @@ const CardAmigo = ({
   const getSearchCardMessageOrButton = () => {
     if (loadingAuthUserFriendList) return null;
     if (authUserFriendlistIds.includes(idUsuario)) {
-      return <p className="ml-auto mb-0 text-success">Já é seu amigo.</p>;
+      return <p className="text-success">Já é seu amigo.</p>;
     } else if (idsOfUsersThatAddedYou.includes(idUsuario)) {
       return <InviteButtons />;
     } else if (idsOfUsersThatYouAdded.includes(idUsuario)) {
-      return <p className="ml-auto mb-0 text-success">Já adicionado.</p>;
+      return <p className="text-success">Já adicionado.</p>;
     } else {
       return <SearchButton />;
     }
@@ -174,22 +174,20 @@ const CardAmigo = ({
   const getFriendlistCardMessageOrButton = () => {
     if (loadingAuthUserFriendList) return null;
     if (authState.userInfo && idUsuario === authState.userInfo.idUsuario) {
-      return <p className="ml-auto mt-auto mb-0 text-success">Você.</p>;
+      return <p className="text-success">Você.</p>;
     }
     if (authUserFriendlistIds.includes(idUsuario)) {
-      return <p className="ml-auto mb-0 text-success">Já é seu amigo.</p>;
+      return <p className="text-success">Já é seu amigo.</p>;
     } else if (
-      authUserFriendlistIds.length > 0 &&
       authUserFriendlistIds[0] !== "INIT" &&
       idsOfUsersThatAddedYou.includes(idUsuario)
     ) {
       return <InviteButtons />;
     } else if (
-      authUserFriendlistIds.length > 0 &&
       authUserFriendlistIds[0] !== "INIT" &&
       idsOfUsersThatYouAdded.includes(idUsuario)
     ) {
-      return <p className="ml-auto mb-0 text-success">Já adicionado.</p>;
+      return <p className="text-success">Já adicionado.</p>;
     } else if (
       authUserFriendlistIds[0] &&
       authUserFriendlistIds[0] !== "INIT"
@@ -207,40 +205,46 @@ const CardAmigo = ({
   return (
     <>
       {confirmDeleteFriendModalVisible && <ConfirmDeleteFriendModal />}
-      <div className="nearby-user my-text-align">
-        <div className="row position-relative">
-          <div className="col-lg-3 col-md-3 col-12">
-            <img
-              alt="user"
-              className="profile-photo-lg"
-              src={
-                (avatarUrl &&
-                  `${process.env.REACT_APP_API_URL}/${avatarUrl}`) ||
-                AvatarPlaceholder
-              }
-            />
+      <li className="my-text-align my-friend-card d-flex my-2 mx-auto rounded">
+        <div className="my-friend-info">
+          <div className="row position-relative">
+            <div className="col-lg-3 col-md-3 col-12">
+              <img
+                alt="user"
+                className="profile-photo-lg"
+                src={
+                  (avatarUrl &&
+                    `${process.env.REACT_APP_API_URL}/${avatarUrl}`) ||
+                  AvatarPlaceholder
+                }
+              />
+            </div>
+            <div className="col-lg-7 col-md-7 col-12 mx-auto">
+              <h5>
+                <Link className="profile-link" to={`/usuario/${idUsuario}`}>
+                  {nome} {sobrenome}
+                </Link>
+              </h5>
+              <p>{descricao}</p>
+            </div>
           </div>
-          <div className="col-lg-7 col-md-7 col-12">
-            <h5>
-              <Link className="profile-link" to={`/usuario/${idUsuario}`}>
-                {nome} {sobrenome}
-              </Link>
-            </h5>
-            <p>{descricao}</p>
-          </div>
-
-          {authState.userInfo && (
-            <>
-              {(mode === "SEARCH" && getSearchCardMessageOrButton()) ||
-                (mode === "FRIENDLIST" && !id && FriendlistButton()) ||
-                (mode === "FRIENDLIST" &&
-                  id !== authState.userInfo.idUsuario &&
-                  getFriendlistCardMessageOrButton()) ||
-                (mode === "INVITES" && <InviteButtons />)}
-            </>
-          )}
         </div>
-      </div>
+        {authState.userInfo && (
+          <div className="my-card-controls">
+            {(loadingAuthUserFriendList && (
+              <div className="w-100 text-center">
+                <i className="fas fa-spinner fa-1x" />
+              </div>
+            )) ||
+              (mode === "SEARCH" && getSearchCardMessageOrButton()) ||
+              (mode === "FRIENDLIST" && !id && FriendlistButton()) ||
+              (mode === "FRIENDLIST" &&
+                id !== authState.userInfo.idUsuario &&
+                getFriendlistCardMessageOrButton()) ||
+              (mode === "INVITES" && <InviteButtons />)}
+          </div>
+        )}
+      </li>
     </>
   );
 };
