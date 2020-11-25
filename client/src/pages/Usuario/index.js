@@ -11,51 +11,70 @@ import ListaConvites from "../../components/ListaConvites";
 import api from "../../api";
 import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
+import useAuthUserFriendlist from "../../hooks/useAuthUserFriendlist";
 
 export default function Usuario({ userInfo }) {
-  const [otherUserInvites, setOtherUserInvites] = useState([]);
-  const [friends, setFriends] = useState([]);
+  const [eventInvites, setEventInvites] = useState([]);
+  const [loadingEventInvites, setLoadingEventInvites] = useState(true);
+  const [totalInvites, setTotalInvites] = useState(null);
   const { authState, setAuthState } = useContext(AuthContext);
+  const [authUserNextEvents, setAuthUserNextEvents] = useState(null);
+
+  const {
+    authUserFriendList,
+    authUserPendingInvites,
+    authUserFriendlistIds,
+    loadingAuthUserFriendList,
+  } = useAuthUserFriendlist();
+
+  const fetchNextEvents = async () => {
+    try {
+      const { data } = await api.get("/eventos?recent=true&limit=3");
+      setAuthUserNextEvents(data);
+    } catch (e) {
+      alert(
+        "Houve um ao buscar os próximos eventos do usuário. Por favor atualize a página."
+      );
+      setAuthUserNextEvents([]);
+    }
+  };
+
+  const fetchEventInvites = async () => {
+    try {
+      const { data } = await api.get(
+        `/eventos/convites?idUser=${authState.userInfo.idUsuario}&status=PENDING`
+      );
+      const pendingEventInvitesEventIds = data.map(
+        (invite) => invite.fkIdEvento
+      );
+
+      const pendingEventInvitesEventsInfo = authState.userInfo.eventosAlheios.filter(
+        (event) => pendingEventInvitesEventIds.includes(event.id_evento)
+      );
+
+      setEventInvites(pendingEventInvitesEventsInfo);
+      setLoadingEventInvites(false);
+    } catch (e) {
+      alert(
+        "Houve um ao buscar os próximos eventos do usuário. Por favor atualize a página."
+      );
+      setLoadingEventInvites(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchFriends = async () => {
-      try {
-        const { data } = await api.get("/amigos");
+    setTotalInvites(authUserPendingInvites.length + eventInvites.length);
+  }, [authUserPendingInvites, eventInvites]);
 
-        const otherInvites = data.filter(
-          (invite) =>
-            invite.status === "PENDING" &&
-            invite.idUsuario1 !== userInfo.idUsuario
-        );
-        setOtherUserInvites(otherInvites);
-
-        const acceptedFriends = data.filter(
-          (invite) => invite.status === "ACCEPTED"
-        );
-        const acceptedFriendsIdUsuario1List = acceptedFriends.map(
-          (user) => user.idUsuario1
-        );
-        const acceptedFriendsIdUsuario2List = acceptedFriends.map(
-          (user) => user.idUsuario2
-        );
-
-        const friendList = [
-          ...userInfo.amigosRequisitados,
-          ...userInfo.requisicoesAmigos,
-        ].filter(
-          (amigo) =>
-            acceptedFriendsIdUsuario1List.includes(amigo.idUsuario) ||
-            acceptedFriendsIdUsuario2List.includes(amigo.idUsuario)
-        );
-
-        setFriends(friendList);
-      } catch (e) {}
-    };
-    fetchFriends();
+  useEffect(() => {
+    if (authState.userInfo) {
+      fetchNextEvents();
+      fetchEventInvites();
+    }
   }, [authState]);
 
   const updateAuthUserStateWhenHasInvites = async () => {
-    if (otherUserInvites.length > 0) {
+    if (totalInvites && totalInvites > 0) {
       const { data } = await api.get("/usuario");
       setAuthState(Object.assign({}, authState, { userInfo: data[0] }));
     }
@@ -64,7 +83,10 @@ export default function Usuario({ userInfo }) {
   return (
     <section>
       <Nav />
-      <DadosUsuario userInfo={userInfo} />
+      <DadosUsuario
+        userInfo={userInfo}
+        authUserFriendlistIds={authUserFriendlistIds}
+      />
       <div className="my-5 w-100">
         <ul
           className="nav nav-tabs font-weight-bold"
@@ -124,18 +146,15 @@ export default function Usuario({ userInfo }) {
               role="tab"
               onClick={updateAuthUserStateWhenHasInvites}
             >
-              {" "}
+              {totalInvites > 0 && (
+                <div className="my-invite-badge-number">{totalInvites}</div>
+              )}
               <i
                 className={`fas fa-envelope ${
-                  (otherUserInvites.length > 0 && "text-danger") || ""
+                  (totalInvites && totalInvites > 0 && "text-danger") || ""
                 }`}
               ></i>
-              {otherUserInvites.length > 0 && (
-                <span className="badge badge-danger">
-                  {otherUserInvites.length}
-                </span>
-              )}{" "}
-              Convites{" "}
+              Convites
             </a>
           </li>
         </ul>
@@ -146,7 +165,7 @@ export default function Usuario({ userInfo }) {
             id="timeline"
             role="tabpanel"
           >
-            <PerfilUsuario />
+            <PerfilUsuario self={true} nextEvents={authUserNextEvents} />
           </div>
 
           <div
@@ -155,7 +174,11 @@ export default function Usuario({ userInfo }) {
             id="friends"
             role="tabpanel"
           >
-            <ListaAmigos friendList={friends} />
+            <ListaAmigos
+              friendList={authUserFriendList}
+              authUserFriendlistIds={authUserFriendlistIds}
+              loadingAuthUserFriendList={loadingAuthUserFriendList}
+            />
           </div>
 
           <div
@@ -164,7 +187,7 @@ export default function Usuario({ userInfo }) {
             id="search"
             role="tabpanel"
           >
-            <ListaBusca />
+            <ListaBusca authUserFriendlistIds={authUserFriendlistIds} />
           </div>
 
           <div
@@ -174,8 +197,12 @@ export default function Usuario({ userInfo }) {
             role="tabpanel"
           >
             <ListaConvites
-              invites={otherUserInvites}
+              friendInvites={authUserPendingInvites}
               otherUsers={userInfo.requisicoesAmigos}
+              authUserFriendlistIds={authUserFriendlistIds}
+              loadingAuthUserFriendList={loadingAuthUserFriendList}
+              eventInvites={eventInvites}
+              loadingEventInvites={loadingEventInvites}
             />
           </div>
         </div>

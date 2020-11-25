@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AuthSSO, { authMethods } from "../../components/AuthSSO";
 import { Link, Redirect } from "react-router-dom";
 import Logo_Black from "./../../img/logo-black.png";
@@ -8,13 +8,19 @@ import { AuthContext } from "../../providers/AuthProvider";
 import api from "../../api";
 
 export default function Login() {
-  const { setAuthState } = useContext(AuthContext);
+  const { authState, setAuthState } = useContext(AuthContext);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [redirectOnLogin, setRedirect] = useState(false);
+
+  useEffect(() => {
+    if (authState.userInfo && !loading) {
+      setRedirect(true);
+    }
+  }, [authState, loading]);
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
@@ -31,9 +37,7 @@ export default function Login() {
         expiresAt: data.expiresAt,
       });
       localStorage.setItem("eat", data.expiresAt);
-      setTimeout(() => {
-        setRedirect(true);
-      }, 1000);
+      setLoading(false);
     } catch (e) {
       setLoading(false);
       if (e.response) {

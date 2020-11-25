@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useContext } from "react";
 import { useParams } from "react-router-dom";
-import api from "../../api";
-import useAuthUserFriendlist from "../../hooks/useAuthUserFriendlist";
-import { AuthContext } from "../../providers/AuthProvider";
 import CardAmigo from "../CardAmigo";
 import "./ListaAmigos.css";
 
-const ListaAmigos = ({ friendList }) => {
-  const [loading, setLoading] = useState(false);
+const ListaAmigos = ({
+  friendList,
+  authUserFriendlistIds,
+  loadingAuthUserFriendList,
+}) => {
   const [filteredFriendList, setFilteredFriendList] = useState([]);
   const [filterQuery, setFilterQuery] = useState([]);
   const { id } = useParams();
-
-  const { authUserFriendlistIds } = useAuthUserFriendlist();
 
   useEffect(() => {
     if (filterQuery !== "") {
@@ -52,7 +49,7 @@ const ListaAmigos = ({ friendList }) => {
         )}
 
         <div className="people-nearby pt-0 overflow-auto h-75">
-          {(loading && <i className="fas fa-spinner" />) || (
+          {(loadingAuthUserFriendList && <i className="fas fa-spinner" />) || (
             <>
               {(filteredFriendList.length > 0 &&
                 filteredFriendList
@@ -67,6 +64,7 @@ const ListaAmigos = ({ friendList }) => {
                       userInfo={friend}
                       mode="FRIENDLIST"
                       authUserFriendlistIds={authUserFriendlistIds}
+                      loadingAuthUserFriendList={loadingAuthUserFriendList}
                     />
                   ))) ||
                 (friendList.length > 0 && (
@@ -74,7 +72,7 @@ const ListaAmigos = ({ friendList }) => {
                 ))}
             </>
           )}
-          {!loading && friendList.length < 1 && (
+          {!loadingAuthUserFriendList && friendList.length < 1 && (
             <>
               {(id && (
                 <p className="text-center">

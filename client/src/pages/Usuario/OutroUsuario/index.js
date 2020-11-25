@@ -3,79 +3,108 @@ import React, { useEffect, useState } from "react";
 import PerfilUsuario from "../../../components/PerfilUsuario";
 import ListaAmigos from "../../../components/ListaAmigos";
 import Nav from "../../../components/Nav";
-import avatarPlaceholder from "../../../img/avatar-placeholder.png";
 import api from "../../../api";
 import { useContext } from "react";
 import { AuthContext } from "../../../providers/AuthProvider";
-import { Link, Redirect, useParams } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 import DadosUsuario from "../../../components/DadosUsuario";
 import Page404 from "../../Page404";
 import Loading from "../../Loading";
+import useAuthUserFriendlist from "../../../hooks/useAuthUserFriendlist";
 
 export default function OutroUsuario() {
   const [friends, setFriends] = useState([]);
   const { authState } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState({});
+  const [userNextEvents, setUserNextEvents] = useState(null);
   const [userNotFound, setUserNotFound] = useState(true);
   const [loading, setLoading] = useState(true);
   const routeParams = useParams();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const { data } = await api.get(`/usuario/${routeParams.id}`);
-        setUserInfo(data);
-        setLoading(false);
-      } catch (e) {
-        if (e.response.data.status === 404) {
-        } else {
-          alert("Ocorreu algum erro. Por favor atualize a página.");
-        }
-        setLoading(false);
+  const {
+    authUserFriendlistIds,
+    loadingAuthUserFriendList,
+  } = useAuthUserFriendlist();
+
+  const fetchNextEvents = async () => {
+    try {
+      const { data } = await api.get(
+        `/usuario/${routeParams.id}/eventos?recent=true&limit=3`
+      );
+      setUserNextEvents(data);
+      setLoading(false);
+    } catch (e) {
+      alert(
+        "Houve um ao buscar os próximos eventos do usuário. Por favor atualize a página."
+      );
+      setUserNextEvents([]);
+      setLoading(false);
+    }
+  };
+
+  const fetchUser = async () => {
+    try {
+      const { data } = await api.get(`/usuario/${routeParams.id}`);
+      setUserInfo(data);
+      setLoading(false);
+    } catch (e) {
+      if (e.response.data.status === 404) {
+      } else {
+        alert("Ocorreu algum erro. Por favor atualize a página.");
       }
-    };
+      setLoading(false);
+    }
+  };
 
-    fetchUser();
-  }, [routeParams]);
+  const fetchFriends = async () => {
+    try {
+      const { data } = await api.get(`/amigos?idUsuario=${routeParams.id}`);
+
+      const acceptedFriends = data.filter(
+        (invite) => invite.status === "ACCEPTED"
+      );
+      const acceptedFriendsIdUsuario1List = acceptedFriends.map(
+        (user) => user.idUsuario1
+      );
+      const acceptedFriendsIdUsuario2List = acceptedFriends.map(
+        (user) => user.idUsuario2
+      );
+
+      const friendList = [
+        ...userInfo.amigosRequisitados,
+        ...userInfo.requisicoesAmigos,
+      ].filter(
+        (amigo) =>
+          acceptedFriendsIdUsuario1List.includes(amigo.idUsuario) ||
+          acceptedFriendsIdUsuario2List.includes(amigo.idUsuario)
+      );
+
+      setFriends(friendList);
+      window.scrollTo(0, 0);
+      setUserNotFound(false);
+      setLoading(false);
+    } catch (e) {
+      alert(
+        "Houve algum erro buscando os amigos do usuário. Por favor, atualize a página."
+      );
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchFriends = async () => {
-      try {
-        const { data } = await api.get(`/amigos?idUsuario=${routeParams.id}`);
+    if (routeParams.id) {
+      fetchUser();
+    }
+  }, [routeParams.id]);
 
-        const acceptedFriends = data.filter(
-          (invite) => invite.status === "ACCEPTED"
-        );
-        const acceptedFriendsIdUsuario1List = acceptedFriends.map(
-          (user) => user.idUsuario1
-        );
-        const acceptedFriendsIdUsuario2List = acceptedFriends.map(
-          (user) => user.idUsuario2
-        );
-
-        const friendList = [
-          ...userInfo.amigosRequisitados,
-          ...userInfo.requisicoesAmigos,
-        ].filter(
-          (amigo) =>
-            acceptedFriendsIdUsuario1List.includes(amigo.idUsuario) ||
-            acceptedFriendsIdUsuario2List.includes(amigo.idUsuario)
-        );
-
-        setFriends(friendList);
-        window.scrollTo(0, 0);
-        setUserNotFound(false);
-        setLoading(false);
-      } catch (e) {
-        setLoading(false);
-      }
-    };
+  useEffect(() => {
     if (userInfo.idUsuario) {
+      fetchNextEvents();
       fetchFriends();
       setUserNotFound(false);
       setLoading(false);
     }
-  }, [userInfo]);
+  }, [userInfo, routeParams.id]);
 
   if (
     authState.userInfo &&
@@ -93,7 +122,12 @@ export default function OutroUsuario() {
   return (
     <section>
       <Nav />
-      <DadosUsuario userInfo={userInfo} otherUserProfile={true} />
+      <DadosUsuario
+        userInfo={userInfo}
+        otherUserProfile={true}
+        authUserFriendlistIds={authUserFriendlistIds}
+        loadingAuthUserFriendList={loadingAuthUserFriendList}
+      />
       <div className="my-5 w-100">
         <ul
           className="nav nav-tabs font-weight-bold"
@@ -136,7 +170,7 @@ export default function OutroUsuario() {
             id="timeline"
             role="tabpanel"
           >
-            <PerfilUsuario />
+            <PerfilUsuario nextEvents={userNextEvents} />
           </div>
 
           <div
@@ -145,7 +179,11 @@ export default function OutroUsuario() {
             id="friends"
             role="tabpanel"
           >
-            <ListaAmigos friendList={friends} />
+            <ListaAmigos
+              friendList={friends}
+              authUserFriendlistIds={authUserFriendlistIds}
+              loadingAuthUserFriendList={loadingAuthUserFriendList}
+            />
           </div>
         </div>
       </div>

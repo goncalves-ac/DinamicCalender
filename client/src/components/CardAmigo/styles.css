@@ -1,29 +1,23 @@
-.invite-buttons-container {
-  position: absolute;
-  top: 0rem;
-  right: 0.5rem;
-  margin-top: -1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.1rem;
-  width: fit-content;
-  flex-wrap: wrap;
+.my-friend-card {
+  list-style: none;
+  min-height: 86px;
+  border: 1px white solid;
 }
 
-.my-card-btn {
-  width: 2rem;
-  height: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.my-friend-info {
+  width: 80%;
+  padding: 0.5rem;
+  border-right: 1px white solid;
 }
 
 @media (max-width: 576px) {
-  .invite-buttons-container {
-    position: relative;
-    flex-direction: row;
+  .my-friend-card {
+    flex-direction: column;
+  }
+
+  .my-friend-info {
+    border-bottom: 1px white solid;
+    border-right: none;
     width: 100%;
-    justify-content: flex-end;
   }
 }

@@ -1,15 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CreateEditEventModal from "./CreateEditEventModal";
 import FriendsCarousel from "../FriendsCarousel";
 import "./styles.css";
+import { useContext } from "react";
+import { AuthContext } from "../../providers/AuthProvider";
+import api from "../../api";
+import FriendCard from "../FriendsCarousel/FriendCard";
 
 const CalenderModal = ({
   eventInfo,
   handleSubmit,
   allFriends,
-  setCalendarState,
+  loading,
+  handleDeleteEvent,
 }) => {
   const [mode, setMode] = useState("VIEW" || "EDIT" || "CREATE");
+  const { authState } = useContext(AuthContext);
+  const [eventOwner, setEventOwner] = useState(null);
+  const [eventInvites, setEventInvites] = useState([]);
+  const [invitesMapping, setInvitesMapping] = useState(null);
 
   const parsedDate = () => {
     if (eventInfo.start) {
@@ -19,6 +28,40 @@ const CalenderModal = ({
     return null;
   };
 
+  useEffect(() => {
+    const fetchEventOwner = async () => {
+      try {
+        const { data } = await api.get(`/usuario/${eventInfo.fkIdDono}`);
+        setEventOwner(data);
+      } catch (e) {
+        setEventOwner("ERROR");
+      }
+    };
+
+    const fetchEventInvites = async () => {
+      try {
+        const { data } = await api.get(
+          `/eventos/${eventInfo.idEvento}/convites`
+        );
+        setEventInvites(data);
+      } catch (e) {
+        alert("Houve algum erro. Por favor, atualize a página.");
+      }
+    };
+
+    eventInfo.fkIdDono !== authState.userInfo.idUsuario && fetchEventOwner();
+    eventInfo.idEvento && fetchEventInvites();
+  }, [eventInfo]);
+
+  useEffect(() => {
+    setInvitesMapping(
+      eventInvites.reduce((mapping, invite) => {
+        mapping[invite.fkIdUsuario] = invite.status;
+        return mapping;
+      }, {})
+    );
+  }, [eventInvites]);
+
   if (mode !== "VIEW")
     return (
       <CreateEditEventModal
@@ -27,7 +70,8 @@ const CalenderModal = ({
         setMode={setMode}
         handleSubmit={handleSubmit}
         allFriends={allFriends}
-        setCalendarState={setCalendarState}
+        loading={loading}
+        handleDeleteEvent={handleDeleteEvent}
       />
     );
 
@@ -71,6 +115,7 @@ const CalenderModal = ({
             <FriendsCarousel
               loading={false}
               friends={eventInfo.invitedFriends || []}
+              invitesMapping={invitesMapping}
             />
           </div>
         </div>
@@ -81,13 +126,22 @@ const CalenderModal = ({
             {eventInfo.description || "Sem descrição"}
           </p>
         </div>
-
-        <button
-          className="calender-modal-edit-event-button"
-          onClick={() => setMode("EDIT")}
-        >
-          Editar <i className="fas fa-edit" />
-        </button>
+        {(authState.userInfo.idUsuario === eventInfo.fkIdDono && (
+          <button
+            className="calender-modal-edit-event-button"
+            onClick={() => {
+              setMode("EDIT");
+            }}
+          >
+            Editar <i className="fas fa-edit" />
+          </button>
+        )) ||
+          (eventOwner && (
+            <div className="event-field">
+              <h2>Dono do Evento:</h2>
+              <FriendCard friend={eventOwner} />
+            </div>
+          ))}
       </div>
     </div>
   );

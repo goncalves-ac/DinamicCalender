@@ -1,19 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import api from "../../api";
-import useAuthUserFriendlist from "../../hooks/useAuthUserFriendlist";
 import { AuthContext } from "../../providers/AuthProvider";
 import CardAmigo from "../CardAmigo";
 import "./ListaBusca.css";
 
-const ListaBusca = () => {
+const ListaBusca = ({ authUserFriendlistIds, loadingAuthUserFriendList }) => {
   const { authState } = useContext(AuthContext);
   const [amigos, setAmigos] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [formError, setFormError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [postSearch, setPostSearch] = useState(false);
-
-  const { authUserFriendlistIds } = useAuthUserFriendlist();
 
   const handleSearchFriends = async (e) => {
     e.preventDefault();
@@ -93,6 +90,7 @@ const ListaBusca = () => {
               userInfo={amigo}
               mode="SEARCH"
               authUserFriendlistIds={authUserFriendlistIds}
+              loadingAuthUserFriendList={loadingAuthUserFriendList}
             />
           ))}
       </div>
