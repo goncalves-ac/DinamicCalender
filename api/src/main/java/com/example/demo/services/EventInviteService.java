@@ -44,6 +44,12 @@ public class EventInviteService {
 	}
 	
 	@Transactional(readOnly = true)
+	public Set<ConviteEvento> getEventInvitesByUserAndStatus(int idUser, String status) throws Exception {
+		Set<ConviteEvento> invites = conviteRepository.findInvitesByUserAndStatus(idUser, status);
+		return invites;
+	}
+	
+	@Transactional(readOnly = true)
 	public Set<ConviteEvento> getEventInvitesByEvent(int idEvento) throws Exception {
 		Set<ConviteEvento> invites = conviteRepository.findInvitesByEvent(idEvento);
 		return invites;

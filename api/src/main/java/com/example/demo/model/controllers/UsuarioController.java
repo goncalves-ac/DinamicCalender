@@ -37,7 +37,9 @@ import com.example.demo.dto.UsuarioResponseDTO;
 import com.example.demo.exceptions.BadRequestException;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.exceptions.UnauthorizedException;
+import com.example.demo.model.entities.Evento;
 import com.example.demo.model.entities.Usuario;
+import com.example.demo.services.EventService;
 import com.example.demo.services.JwtUserDetailsService;
 import com.example.demo.services.UserService;
 import com.example.demo.utils.FileUploadUtil;
@@ -58,6 +60,9 @@ public class UsuarioController {
     private UserService userService;
     
     @Autowired
+    private EventService eventService;
+    
+    @Autowired
     private JwtUserDetailsService userDetailsService;
     
     @Autowired
@@ -68,6 +73,21 @@ public class UsuarioController {
     		try {
     			Usuario u = userService.findUserById(id);
 				return new PrivateUsuarioResponseDTO(u);
+    		} catch(Exception e) {
+    			throw e;
+    		}      
+    }
+    
+    @GetMapping("/{id}/eventos")
+    public Set<Evento> getUserPublicEventsByUserId(@PathVariable int id, @RequestParam(required=false) boolean recent, @RequestParam(required=false) Integer limit) throws Exception {
+    		try {
+    			if (recent) {
+            		if (limit == null) {
+            			limit = 3;
+            		}
+            		return eventService.findPublicEventsByUserId(id, limit);
+            	}
+        		return eventService.findPublicEventsByUserId(id);
     		} catch(Exception e) {
     			throw e;
     		}      

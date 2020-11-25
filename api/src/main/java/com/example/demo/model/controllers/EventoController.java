@@ -1,7 +1,6 @@
 package com.example.demo.model.controllers;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,9 +39,8 @@ public class EventoController {
 
     @GetMapping()
     @ResponseBody
-    public Set<Evento> getEventosByAuthenticatedUser(Authentication auth, @RequestParam(required=false) boolean recent, @RequestParam(required=false) Integer limit) throws Exception {
+    public Set<Evento> getEventsByAuthenticatedUser(Authentication auth, @RequestParam(required=false) boolean recent, @RequestParam(required=false) Integer limit) throws Exception {
     	Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);
-    	System.out.println(recent);
 
     	
     	try {
@@ -50,9 +48,10 @@ public class EventoController {
         		if (limit == null) {
         			limit = 3;
         		}
-        		return eventService.findNextRecentEventsByUserId(authUserId, limit, false);
+        		Set<Evento> e = eventService.findAllEventsByUserId(authUserId, limit);
+        		return e;
         	}
-    		return eventService.findEventsByUserId(authUserId);
+    		return eventService.findAllEventsByUserId(authUserId);
         } catch (Exception e) {
         	throw e;
         }
@@ -61,25 +60,22 @@ public class EventoController {
     
     @GetMapping("/dono")
     @ResponseBody
-    public Set<Evento> getEventosByDono(@RequestParam int id, @RequestParam(required=false) boolean recent, @RequestParam(required=false) Integer limit) throws Exception{
+    public Set<Evento> getPublicEventsByOwner(@RequestParam int id, @RequestParam(required=false) boolean recent, @RequestParam(required=false) Integer limit) throws Exception{
     	try {
     		if (recent) {
         		if (limit == null) {
         			limit = 3;
         		}
-        		return eventService.findNextRecentEventsByUserId(id, limit, true);
+        		return eventService.findPublicEventsByOwner(id, limit);
         	}
-    		Set<Evento> allEvents = eventService.findEventsByUserId(id);
-    		Set<Evento> publicEvents = allEvents.stream()
-    				.filter(x -> x.getPrivacidade().equals("PUBLIC")).collect(Collectors.toSet());
-    		return publicEvents;
+    		return eventService.findPublicEventsByOwner(id);
     	} catch (Exception e) {
     		throw e;
     	}  
     }
 
     @GetMapping("/{id}")
-    public Evento getEventoById(@PathVariable int id) throws Exception {
+    public Evento getEventById(@PathVariable int id) throws Exception {
     	try {
     		return eventService.findEventByEventId(id);
     	} catch (Exception e) {
@@ -89,12 +85,28 @@ public class EventoController {
     
     @GetMapping("/convites")
     @ResponseBody
-    public Set<ConviteEvento> getInvitesByUserId(@RequestParam Integer idUser) throws Exception {
+    public Set<ConviteEvento> getInvitesByUserIdAndStatus(@RequestParam Integer idUser, @RequestParam(required=false) String status, Authentication auth) throws Exception {
+    	Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);
+    	
+    	if (idUser != authUserId) {
+    		throw new ForbiddenActionException("Usuário não tem permissão para acessar esse recurso.");
+    	}
     	try {
-    		return eventInviteService.getEventInvitesByUser(idUser);
+    		if (status!=null) {
+        		if (!status.equals("PENDING") && !status.equals("ACCEPTED") && !status.equals("REJECTED")) {
+            		throw new BadRequestException("Parâmetro status deve ser 'PENDING', 'ACCEPTED' ou 'REJECTED'");
+            	}
+            	
+            		return eventInviteService.getEventInvitesByUserAndStatus(idUser, status);
+    	}
+    		else {
+            		return eventInviteService.getEventInvitesByUser(idUser);
+
+        	}
     	} catch (Exception e) {
     		throw e;
     	}
+    	
     }
     
     @GetMapping("/{idEvento}/convites")

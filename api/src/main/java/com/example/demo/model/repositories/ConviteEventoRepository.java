@@ -19,5 +19,8 @@ public interface ConviteEventoRepository extends CrudRepository<ConviteEvento, I
 	
 	@Query(value = "Select c from ConviteEvento c where fk_id_usuario = :fkIdUsuario")
 	Set<ConviteEvento> findInvitesByUser(@Param("fkIdUsuario") int fkIdUsuario);
+	
+	@Query(value = "Select c from ConviteEvento c where fk_id_usuario = :fkIdUsuario and status = :status")
+	Set<ConviteEvento> findInvitesByUserAndStatus(@Param("fkIdUsuario") int idUser, @Param("status") String status);
 
 }
