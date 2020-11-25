@@ -21,6 +21,7 @@ const CardAmigo = ({
     confirmDeleteFriendModalVisible,
     setConfirmDeleteteFriendModalVisible,
   ] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { id } = useParams();
 
@@ -38,48 +39,71 @@ const CardAmigo = ({
   const inviteEndpoint = `/amigos/convites?idUsuarioReq=${idUsuario}`;
 
   const updateAuthUserInfo = async () => {
+    if (loading) return;
     const { data } = await api.get(`/usuario`);
     setAuthState(Object.assign({}, authState, { userInfo: data[0] }));
+    setLoading(false);
   };
 
   const handleAddFriend = async () => {
+    if (loading) return;
     try {
+      setLoading(true);
       await api.post(inviteEndpoint);
       await updateAuthUserInfo();
     } catch (e) {
+      setLoading(false);
       alert("Ocorreu um erro. Atualize a página e tente novamente.");
     }
   };
 
   const handleDeleteFriend = async () => {
+    if (loading) return;
     try {
+      setLoading(true);
       await api.delete(inviteEndpoint);
       await updateAuthUserInfo();
     } catch (e) {
+      setLoading(false);
       alert("Ocorreu um erro. Atualize a página e tente novamente.");
     }
   };
 
   const handleAcceptFriend = async () => {
+    if (loading) return;
     try {
+      setLoading(true);
       await api.patch(inviteEndpoint);
       await updateAuthUserInfo();
     } catch (e) {
+      setLoading(false);
       alert("Ocorreu um erro. Atualize a página e tente novamente.");
     }
   };
 
   const handleDeclineFriend = async () => {
+    if (loading) return;
     try {
+      setLoading(true);
       await api.delete(inviteEndpoint);
       await updateAuthUserInfo();
       handleCloseConfirmDeleteFriendModal();
     } catch (e) {
+      setLoading(false);
       alert("Ocorreu um erro. Atualize a página e tente novamente.");
     }
   };
 
+  const CardSpinner = () => {
+    return (
+      <div className="w-100 text-center text-white">
+        <i className="fas fa-spinner fa-2x" />
+      </div>
+    );
+  };
+
   const InviteButtons = () => {
+    if (loading) return <CardSpinner />;
     return (
       <>
         <button
@@ -101,6 +125,7 @@ const CardAmigo = ({
   };
 
   const SearchButton = () => {
+    if (loading) return <CardSpinner />;
     return (
       <>
         {(authUserFriendlistIds.includes(idUsuario) && (
@@ -119,6 +144,7 @@ const CardAmigo = ({
   };
 
   const FriendlistButton = () => {
+    if (loading) return <CardSpinner />;
     return (
       <button
         type="button"
@@ -250,11 +276,7 @@ const CardAmigo = ({
         </div>
         {authState.userInfo && (
           <div className="my-card-controls">
-            {(loadingAuthUserFriendList && (
-              <div className="w-100 text-center">
-                <i className="fas fa-spinner fa-1x" />
-              </div>
-            )) ||
+            {(loadingAuthUserFriendList && <CardSpinner />) ||
               (mode === "SEARCH" && getSearchCardMessageOrButton()) ||
               (mode === "FRIENDLIST" && !id && FriendlistButton()) ||
               (mode === "FRIENDLIST" &&

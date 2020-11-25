@@ -67,7 +67,7 @@ const ListaBusca = ({ authUserFriendlistIds, loadingAuthUserFriendList }) => {
           className="btn col-md-2 col-sm-1 p-1 my-bg-orange-1"
           type="submit"
         >
-          {(loading && <i className="fas fa-spinner"></i>) || (
+          {(loading && <i className="fas fa-spinner my-color-white"></i>) || (
             <i className="fas fa-search fa-lg my-color-white"></i>
           )}
         </button>
