@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -205,7 +206,8 @@ public class UserService {
 		mail.setTo(dto.getEmail());
 		mail.setMessage(
 				"Siga esse link para alterar sua senha:\n\n "+ appUrl+"/recuperarsenha/"+token+
-				"\n\nSe não foi você que requisitou essa alteração, apenas ignore esse email.");
+				"\n\nSe não foi você que requisitou essa alteração, apenas ignore esse email.\n\n"
+				+"Calendário Dinâmico");
 		mailUtil.sendMail(mail);
 		
 	}
