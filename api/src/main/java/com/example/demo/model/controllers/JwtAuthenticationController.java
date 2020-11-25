@@ -42,7 +42,6 @@ public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authR
 			.loadUserByUsername(authRequest.getUsername());
 	final String token = jwtTokenUtil.generateToken(userDetails);
 	final Usuario userInfo = userDetailsService.loadUserByUserDetail(userDetails);
-	System.out.println(userInfo.getEmail());
 return ResponseEntity.ok()
 		.header(HttpHeaders.SET_COOKIE, JwtCookieUtil.getCookieForToken(token))
 		.body(new JwtResponse(new UsuarioResponseDTO(userInfo),
