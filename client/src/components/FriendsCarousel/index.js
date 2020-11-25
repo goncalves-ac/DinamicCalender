@@ -26,7 +26,13 @@ const NextArrow = ({ onClick }) => {
   );
 };
 
-const FriendsCarousel = ({ friends, loading }) => {
+const FriendsCarousel = ({
+  friends,
+  loading,
+  mode,
+  uninviteCallback,
+  invitesMapping,
+}) => {
   const sliderRef = React.createRef();
 
   const next = () => {
@@ -52,7 +58,13 @@ const FriendsCarousel = ({ friends, loading }) => {
     <>
       <Slider ref={sliderRef} {...settings}>
         {friends.map((friend) => (
-          <FriendCard key={friend.id} friend={friend} />
+          <FriendCard
+            key={friend.idUsuario}
+            friend={friend}
+            mode={mode}
+            uninviteCallback={uninviteCallback}
+            status={invitesMapping && invitesMapping[friend.idUsuario]}
+          />
         ))}
       </Slider>
       {friends.length >= 4 && (

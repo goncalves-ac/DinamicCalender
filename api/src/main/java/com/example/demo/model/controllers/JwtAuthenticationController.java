@@ -19,8 +19,8 @@ import com.example.demo.model.entities.JwtRequest;
 import com.example.demo.model.entities.JwtResponse;
 import com.example.demo.model.entities.Usuario;
 import com.example.demo.services.JwtUserDetailsService;
-import com.example.demo.upload.utils.JwtCookieUtil;
-import com.example.demo.upload.utils.JwtTokenUtil;
+import com.example.demo.utils.JwtCookieUtil;
+import com.example.demo.utils.JwtTokenUtil;
 
 @RestController
 @CrossOrigin
@@ -42,7 +42,6 @@ public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authR
 			.loadUserByUsername(authRequest.getUsername());
 	final String token = jwtTokenUtil.generateToken(userDetails);
 	final Usuario userInfo = userDetailsService.loadUserByUserDetail(userDetails);
-	System.out.println(userInfo.getEmail());
 return ResponseEntity.ok()
 		.header(HttpHeaders.SET_COOKIE, JwtCookieUtil.getCookieForToken(token))
 		.body(new JwtResponse(new UsuarioResponseDTO(userInfo),

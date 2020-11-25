@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useCallback } from "react";
-import FriendsCarousel from "../FriendsCarousel";
-import FriendCard from "../FriendsCarousel/FriendCard";
+import FriendsCarousel from "../../FriendsCarousel";
+import FriendCard from "../../FriendsCarousel/FriendCard";
 import "./styles.css";
 
 const CreateEditEventModal = ({
@@ -10,7 +10,8 @@ const CreateEditEventModal = ({
   setMode,
   handleSubmit,
   allFriends,
-  setCalendarState,
+  loading,
+  handleDeleteEvent,
 }) => {
   const parsedDate = () => {
     if (eventInfo.start) {
@@ -20,13 +21,16 @@ const CreateEditEventModal = ({
     return null;
   };
 
+  const [idEvento, setIdEvento] = useState(eventInfo.idEvento);
+
   const [title, setTitle] = useState(eventInfo.title || "");
 
   const [backgroundColor, setBackgroundColor] = useState(
-    eventInfo.backgroundColor || ""
+    eventInfo.backgroundColor || "#3788d8"
   );
 
   const [start, setStart] = useState(parsedDate() || "--:--");
+  const [dateStart, setDateStart] = useState(eventInfo.dateStart);
   const [duration, setDuration] = useState(eventInfo.duration || "--:--");
   const [description, setDescription] = useState(eventInfo.description || "");
   const [invitedFriends, setInvitedFriends] = useState(
@@ -34,13 +38,16 @@ const CreateEditEventModal = ({
   );
 
   const [place, setPlace] = useState(eventInfo.place || "");
+  const [privacy, setPrivacy] = useState(eventInfo.privacy || "PUBLIC");
   const [data, setData] = useState(eventInfo);
   const [addFriendsVisible, setAddFriendsVisible] = useState(false);
 
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
   const findNotInvitedFriends = useCallback(() => {
-    const invitedFriendsIds = invitedFriends.map((friend) => friend.id);
+    const invitedFriendsIds = invitedFriends.map((friend) => friend.idUsuario);
     return allFriends.filter(
-      (friend) => !invitedFriendsIds.includes(friend.id)
+      (friend) => !invitedFriendsIds.includes(friend.idUsuario)
     );
   }, [invitedFriends, allFriends]);
 
@@ -50,6 +57,7 @@ const CreateEditEventModal = ({
 
   useEffect(() => {
     setData({
+      idEvento,
       title,
       backgroundColor,
       start,
@@ -57,8 +65,11 @@ const CreateEditEventModal = ({
       description,
       invitedFriends,
       place,
+      privacy,
+      dateStart,
     });
   }, [
+    idEvento,
     title,
     backgroundColor,
     start,
@@ -66,6 +77,8 @@ const CreateEditEventModal = ({
     description,
     invitedFriends,
     place,
+    privacy,
+    dateStart,
   ]);
 
   const setNotInvitedFriendsCallback = useCallback(() => {
@@ -76,9 +89,14 @@ const CreateEditEventModal = ({
     setNotInvitedFriendsCallback();
   }, [invitedFriends, setNotInvitedFriendsCallback]);
 
-  const handleInviteFriend = (e, friend) => {
-    e.stopPropagation();
+  const handleInviteFriend = (friend) => {
     setInvitedFriends([...invitedFriends, friend]);
+  };
+
+  const handleUninviteFriend = (friend) => {
+    setInvitedFriends(
+      invitedFriends.filter((f) => f.idUsuario !== friend.idUsuario)
+    );
   };
 
   const handleDateDurationChange = (e, target) => {
@@ -102,6 +120,13 @@ const CreateEditEventModal = ({
     );
   };
 
+  const onDeleteEvent = async () => {
+    if (loading) return;
+    if (!confirmDelete) return;
+
+    await handleDeleteEvent();
+  };
+
   return (
     <div className="create-edit-modal-container">
       <form
@@ -110,7 +135,7 @@ const CreateEditEventModal = ({
       >
         <div
           className="calender-modal-background"
-          style={{ backgroundColor: eventInfo.backgroundColor || "#3788d8" }}
+          style={{ backgroundColor: backgroundColor || "#3788d8" }}
         />
         <div className="calender-modal-styling" />
 
@@ -121,6 +146,7 @@ const CreateEditEventModal = ({
             type="text"
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Nome do Evento"
+            required
           ></input>
 
           <div className="event-field">
@@ -129,22 +155,39 @@ const CreateEditEventModal = ({
               className="form-modal-start calender-modal-field-value"
               value={start}
               type="text"
-              pattern="(--:--)|([0-9]{2}:[0-9]{2})"
+              pattern="(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])"
               onChange={(e) => setStart(handleDateDurationChange(e, start))}
+              required
             />
           </div>
 
           <div className="event-field">
-            <h2>Duração: </h2>
-            <input
-              className="form-modal-start calender-modal-field-value"
-              value={duration}
-              type="text"
-              pattern="(--:--)|([0-9]{2}:[0-9]{2})"
-              onChange={(e) =>
-                setDuration(handleDateDurationChange(e, duration))
-              }
-            />
+            <>
+              <h2>Duração: </h2>
+              <input
+                className="form-modal-start calender-modal-field-value"
+                value={duration}
+                type="text"
+                pattern="(--:--)|([0-9]{2}:[0-9]{2})"
+                onChange={(e) =>
+                  setDuration(handleDateDurationChange(e, duration))
+                }
+                required
+              />
+            </>
+            {(mode === "CREATE" || mode === "EDIT") && (
+              <div className="event-field">
+                <h2>Privacidade: </h2>
+                <select
+                  className="form-control my-form-control-select"
+                  value={privacy}
+                  onChange={(e) => setPrivacy(e.target.value)}
+                >
+                  <option value="PUBLIC">Público</option>
+                  <option value="PRIVATE">Privado</option>
+                </select>
+              </div>
+            )}
           </div>
 
           <div className="event-field">
@@ -155,6 +198,7 @@ const CreateEditEventModal = ({
               type="text"
               onChange={(e) => setPlace(e.target.value)}
               placeholder="Local do Evento"
+              required
             />
           </div>
 
@@ -171,7 +215,12 @@ const CreateEditEventModal = ({
               </button>
             </div>
             <div className="carousel-container">
-              <FriendsCarousel loading={false} friends={invitedFriends || []} />
+              <FriendsCarousel
+                loading={false}
+                friends={invitedFriends || []}
+                mode={"CREATE"}
+                uninviteCallback={handleUninviteFriend}
+              />
             </div>
           </div>
 
@@ -196,29 +245,54 @@ const CreateEditEventModal = ({
             />
           </div>
 
-          <div className="modal-controls">
+          <div className="modal-controls justify-content-between">
             {mode === "EDIT" && (
               <>
                 <button
                   className="calender-modal-control"
                   onClick={() => setMode("VIEW")}
+                  type="button"
                 >
                   Cancelar
                 </button>
+                {(!confirmDelete && (
+                  <button
+                    className="calender-modal-control"
+                    onClick={() => {
+                      if (loading) return;
+                      setConfirmDelete(true);
+                    }}
+                    type="button"
+                  >
+                    {(loading && <i className="fas fa-spinner" />) || (
+                      <>Deletar</>
+                    )}
+                  </button>
+                )) || (
+                  <button
+                    className="calender-modal-control"
+                    onClick={onDeleteEvent}
+                    type="button"
+                  >
+                    {(loading && <i className="fas fa-spinner" />) || (
+                      <>Clique Novamente para Deletar</>
+                    )}
+                  </button>
+                )}
 
-                <button
-                  className="calender-modal-control"
-                  type="submit"
-                  onClick={() => console.log(data)}
-                >
-                  Salvar Edição
+                <button className="calender-modal-control" type="submit">
+                  {(loading && <i className="fas fa-spinner" />) || (
+                    <>Salvar Edição</>
+                  )}
                 </button>
               </>
             )}
 
             {mode === "CREATE" && (
-              <button className="calender-modal-control" type="submit">
-                Criar Evento
+              <button className="calender-modal-control ml-auto" type="submit">
+                {(loading && <i className="fas fa-spinner" />) || (
+                  <> Criar Evento</>
+                )}
               </button>
             )}
           </div>
@@ -236,20 +310,29 @@ const CreateEditEventModal = ({
             <i className="fas fa-times" />
           </span>
           <h3>Amigos</h3>
-          {(notInvitedFriends.length > 1 &&
-            notInvitedFriends.map((friend) => {
-              return (
-                <div className="not-invited-friend-card" key={friend.id}>
-                  <span
-                    className="add-friend-button"
-                    onClick={(e) => handleInviteFriend(e, friend)}
+          {(notInvitedFriends.length > 0 &&
+            notInvitedFriends
+              .sort((a, b) =>
+                `${a.nome} ${a.sobrenome}`.localeCompare(
+                  `${b.nome} ${b.sobrenome}`
+                )
+              )
+              .map((friend) => {
+                return (
+                  <div
+                    className="not-invited-friend-card"
+                    key={friend.idUsuario}
                   >
-                    <i className="fas fa-user-plus" />
-                  </span>
-                  <FriendCard friend={friend} />
-                </div>
-              );
-            })) || <p>Não há amigos para convidar</p>}
+                    <span
+                      className="add-friend-button"
+                      onClick={() => handleInviteFriend(friend)}
+                    >
+                      <i className="fas fa-user-plus" />
+                    </span>
+                    <FriendCard friend={friend} />
+                  </div>
+                );
+              })) || <p>Não há amigos para convidar</p>}
         </div>
       )}
     </div>

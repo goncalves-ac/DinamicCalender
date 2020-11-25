@@ -41,20 +41,21 @@ public class Evento {
     @Size(max=240, message="Descrição deve conter no máximo 240 caractéres.")
     private String descricao;
     
-    @NotEmpty(message="O evento deve ter um início.")
+    @Size(max=240, message="Local deve conter no máximo 240 caractéres.")
+    private String local;
+    
     private Date inicio;
     
-    @NotEmpty(message="O evento deve ter um fim.")
     private Date fim;
     
     private Date criado_em = java.sql.Date.valueOf(LocalDate.now());
     private Date ultima_edicao = java.sql.Date.valueOf(LocalDate.now());
     
-    @Pattern(regexp="#[A-Za-z]{6}", message="A cor de fundo deve estar no formato hexadecimal #CCCCCC")
+    @Pattern(regexp="#[A-Za-z0-9]{6}", message="A cor de fundo deve estar no formato hexadecimal #CCCCCC")
     private String corDeFundo;
     
     @NotEmpty(message="A privacidade do evento deve ser PUBLIC ou PRIVATE")
-    @Pattern(regexp="[PUBLIC|PRIVATE]", message="Privacidade deve ser PUBLIC ou PRIVATE")
+    @Pattern(regexp="PUBLIC|PRIVATE", message="Privacidade deve ser PUBLIC ou PRIVATE")
     private String privacidade = "PRIVATE";
     
     @ManyToMany
@@ -69,7 +70,7 @@ public class Evento {
 
 	public Evento() { }
 
-    public Evento(int id_dono, String titulo, String descricao, Date inicio, Date fim, String corDeFundo, String privacidade) {
+    public Evento(int id_dono, String titulo, String descricao, Date inicio, Date fim, String corDeFundo, String privacidade, String local) {
     	this.fkIdDono = id_dono;
         this.titulo = titulo;
         this.descricao = descricao;
@@ -77,6 +78,7 @@ public class Evento {
         this.fim = fim;
         this.corDeFundo=corDeFundo;
         this.privacidade=privacidade;
+        this.local=local;
     }
 
 }

@@ -19,6 +19,9 @@
   padding: 2rem;
   color: white;
   margin: 15px;
+
+  max-width: 1000px;
+  max-height: 600px;
 }
 
 .use-terms-modal > p {

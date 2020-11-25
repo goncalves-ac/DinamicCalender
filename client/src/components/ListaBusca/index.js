@@ -4,7 +4,7 @@ import { AuthContext } from "../../providers/AuthProvider";
 import CardAmigo from "../CardAmigo";
 import "./ListaBusca.css";
 
-const ListaAmigos = () => {
+const ListaBusca = ({ authUserFriendlistIds, loadingAuthUserFriendList }) => {
   const { authState } = useContext(AuthContext);
   const [amigos, setAmigos] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -50,8 +50,11 @@ const ListaAmigos = () => {
   }, [amigos, postSearch]);
 
   return (
-    <div className="col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-sm-12">
-      <form className="form-inline py-3" onSubmit={handleSearchFriends}>
+    <div className="col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-sm-12 people-nearby my-profile-page-content-container-sizing">
+      <h3 className="mb-2 text-center h4 my-blue-1 my-bolder">
+        Encontre pessoas
+      </h3>
+      <form className="form-inline py-2" onSubmit={handleSearchFriends}>
         <input
           aria-label="Search"
           className="form-control col-md-10 col-sm-11 p-1"
@@ -73,20 +76,26 @@ const ListaAmigos = () => {
         <p className="text-info">Pesquise pessoas por nome acima</p>
       )}
       {postSearch && (
-        <>
-          {(formError && <p className="text-danger">{formError}</p>) || (
-            <h4 className="my-text-align anim-fade-in">Pessoas encontradas</h4>
-          )}
-        </>
+        <>{formError && <p className="text-danger">{formError}</p>}</>
       )}
 
-      <div className="people-nearby pt-0">
-        {amigos.map((amigo) => (
-          <CardAmigo key={amigo.idUsuario} userInfo={amigo} search={true} />
-        ))}
+      <div className="people-nearby pt-0 overflow-auto h-75">
+        {amigos
+          .sort((a, b) =>
+            `${a.nome} ${a.sobrenome}`.localeCompare(`${b.nome} ${b.sobrenome}`)
+          )
+          .map((amigo) => (
+            <CardAmigo
+              key={amigo.idUsuario}
+              userInfo={amigo}
+              mode="SEARCH"
+              authUserFriendlistIds={authUserFriendlistIds}
+              loadingAuthUserFriendList={loadingAuthUserFriendList}
+            />
+          ))}
       </div>
     </div>
   );
 };
 
-export default ListaAmigos;
+export default ListaBusca;

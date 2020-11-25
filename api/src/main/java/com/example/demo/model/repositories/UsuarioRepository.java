@@ -12,7 +12,7 @@ import javax.transaction.Transactional;
 
 public interface UsuarioRepository extends CrudRepository<Usuario, Integer> {
 	
-	@Query(value = "SELECT u from Usuario u where LOWER(nome) like :nome%")
+	@Query(value = "SELECT u from Usuario u where LOWER(nome) like %:nome% or LOWER(sobrenome) like %:nome%")
 	Set<Usuario> findByNome(String nome);
 
 	Usuario findByEmail(String email);

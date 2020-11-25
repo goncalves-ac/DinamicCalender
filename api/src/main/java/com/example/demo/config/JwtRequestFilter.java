@@ -22,7 +22,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
 
 import com.example.demo.services.JwtUserDetailsService;
-import com.example.demo.upload.utils.JwtTokenUtil;
+import com.example.demo.utils.JwtTokenUtil;
 
 import io.jsonwebtoken.ExpiredJwtException;
 

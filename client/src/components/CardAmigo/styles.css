@@ -1,12 +1,23 @@
-.my-btn-position {
-  position: absolute;
-  top: 0rem;
-  right: 0.5rem;
+.my-friend-card {
+  list-style: none;
+  min-height: 86px;
+  border: 1px white solid;
 }
 
-@media (max-width: 370px) {
-  .my-btn-position {
-    position: relative;
-    margin-left: auto;
+.my-friend-info {
+  width: 80%;
+  padding: 0.5rem;
+  border-right: 1px white solid;
+}
+
+@media (max-width: 576px) {
+  .my-friend-card {
+    flex-direction: column;
+  }
+
+  .my-friend-info {
+    border-bottom: 1px white solid;
+    border-right: none;
+    width: 100%;
   }
 }

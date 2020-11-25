@@ -115,7 +115,7 @@ export default function EditarPerfil() {
       setLoading(false);
       if (e.response) {
         const errorData = e.response.data;
-        if (errorData.status === 400) {
+        if (e.response.data.status >= 400 && e.response.data.status < 500) {
           setProfileFormError(errorData.message);
         } else {
           setProfileFormError("Ocorreu um erro. Por favor, tente novamente.");
@@ -150,7 +150,10 @@ export default function EditarPerfil() {
       setPasswordSubmitSuccess(false);
       if (e.response.data.status === 401) {
         setPasswordFormError("Senha atual incorreta.");
-      } else if (e.response.data.status === 400) {
+      } else if (
+        e.response.data.status >= 400 &&
+        e.response.data.status < 500
+      ) {
         setPasswordFormError(e.response.data.message);
       } else {
         setPasswordFormError("Ocorreu um erro. Por favor, tente novamente.");
@@ -285,6 +288,7 @@ export default function EditarPerfil() {
                         className="my-textarea mt-2"
                         value={descricao}
                         onChange={(e) => setDescricao(e.target.value)}
+                        placeholder="Descrição do seu perfil."
                       />
                     </div>
                     <div className="d-flex mt-2 w-100 file-input-container">

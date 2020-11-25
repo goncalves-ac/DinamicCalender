@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./Usuario.css";
 
 import PerfilUsuario from "../../components/PerfilUsuario";
@@ -6,23 +6,88 @@ import ListaAmigos from "../../components/ListaAmigos";
 import ListaBusca from "../../components/ListaBusca";
 import Nav from "../../components/Nav";
 import DadosUsuario from "../../components/DadosUsuario";
-import avatarPlaceholder from "../../img/avatar-placeholder.png";
+
+import ListaConvites from "../../components/ListaConvites";
+import api from "../../api";
+import { useContext } from "react";
+import { AuthContext } from "../../providers/AuthProvider";
+import useAuthUserFriendlist from "../../hooks/useAuthUserFriendlist";
 
 export default function Usuario({ userInfo }) {
+  const [eventInvites, setEventInvites] = useState([]);
+  const [loadingEventInvites, setLoadingEventInvites] = useState(true);
+  const [totalInvites, setTotalInvites] = useState(null);
+  const { authState, setAuthState } = useContext(AuthContext);
+  const [authUserNextEvents, setAuthUserNextEvents] = useState(null);
+
+  const {
+    authUserFriendList,
+    authUserPendingInvites,
+    authUserFriendlistIds,
+    loadingAuthUserFriendList,
+  } = useAuthUserFriendlist();
+
+  const fetchNextEvents = async () => {
+    try {
+      const { data } = await api.get("/eventos?recent=true&limit=3");
+      setAuthUserNextEvents(data);
+    } catch (e) {
+      alert(
+        "Houve um ao buscar os próximos eventos do usuário. Por favor atualize a página."
+      );
+      setAuthUserNextEvents([]);
+    }
+  };
+
+  const fetchEventInvites = async () => {
+    try {
+      const { data } = await api.get(
+        `/eventos/convites?idUser=${authState.userInfo.idUsuario}&status=PENDING`
+      );
+      const pendingEventInvitesEventIds = data.map(
+        (invite) => invite.fkIdEvento
+      );
+
+      const pendingEventInvitesEventsInfo = authState.userInfo.eventosAlheios.filter(
+        (event) => pendingEventInvitesEventIds.includes(event.id_evento)
+      );
+
+      setEventInvites(pendingEventInvitesEventsInfo);
+      setLoadingEventInvites(false);
+    } catch (e) {
+      alert(
+        "Houve um ao buscar os próximos eventos do usuário. Por favor atualize a página."
+      );
+      setLoadingEventInvites(false);
+    }
+  };
+
+  useEffect(() => {
+    setTotalInvites(authUserPendingInvites.length + eventInvites.length);
+  }, [authUserPendingInvites, eventInvites]);
+
+  useEffect(() => {
+    if (authState.userInfo) {
+      fetchNextEvents();
+      fetchEventInvites();
+    }
+  }, [authState]);
+
+  const updateAuthUserStateWhenHasInvites = async () => {
+    if (totalInvites && totalInvites > 0) {
+      const { data } = await api.get("/usuario");
+      setAuthState(Object.assign({}, authState, { userInfo: data[0] }));
+    }
+  };
+
   return (
     <section>
       <Nav />
       <DadosUsuario
-        avatarUrl={
-          (userInfo.avatarUrl &&
-            `${process.env.REACT_APP_API_URL}${userInfo.avatarUrl}`) ||
-          avatarPlaceholder
-        }
-        name={userInfo.nome}
-        surname={userInfo.sobrenome}
-        description={userInfo.descricao}
+        userInfo={userInfo}
+        authUserFriendlistIds={authUserFriendlistIds}
       />
-      <div className="container my-5">
+      <div className="my-5 w-100">
         <ul
           className="nav nav-tabs font-weight-bold"
           id="main-tab"
@@ -30,11 +95,11 @@ export default function Usuario({ userInfo }) {
         >
           <li className="nav-item" role="presentation">
             <a
-              aria-controls="home"
+              aria-controls="timeline"
               aria-selected="true"
               className="nav-link active"
               data-toggle="tab"
-              href="#home"
+              href="#timeline"
               id="home-tab"
               role="tab"
             >
@@ -44,11 +109,11 @@ export default function Usuario({ userInfo }) {
           </li>
           <li className="nav-item" role="presentation">
             <a
-              aria-controls="profile"
+              aria-controls="friends"
               aria-selected="false"
               className="nav-link"
               data-toggle="tab"
-              href="#profile"
+              href="#friends"
               id="profile-tab"
               role="tab"
             >
@@ -70,24 +135,50 @@ export default function Usuario({ userInfo }) {
               <i className="fas fa-search"></i> Buscar{" "}
             </a>
           </li>
+          <li className="nav-item" role="presentation">
+            <a
+              aria-controls="invites"
+              aria-selected="false"
+              className="nav-link"
+              data-toggle="tab"
+              href="#invites"
+              id="search-tab"
+              role="tab"
+              onClick={updateAuthUserStateWhenHasInvites}
+            >
+              {totalInvites > 0 && (
+                <div className="my-invite-badge-number">{totalInvites}</div>
+              )}
+              <i
+                className={`fas fa-envelope ${
+                  (totalInvites && totalInvites > 0 && "text-danger") || ""
+                }`}
+              ></i>
+              Convites
+            </a>
+          </li>
         </ul>
-        <div className="tab-content" id="myTabContent">
+        <div className="tab-content min-vh-50" id="myTabContent">
           <div
-            aria-labelledby="home-tab"
+            aria-labelledby="timeline"
             className="tab-pane fade show active w-100 p-3"
-            id="home"
+            id="timeline"
             role="tabpanel"
           >
-            <PerfilUsuario />
+            <PerfilUsuario self={true} nextEvents={authUserNextEvents} />
           </div>
 
           <div
-            aria-labelledby="profile-tab"
+            aria-labelledby="friends"
             className="tab-pane fade"
-            id="profile"
+            id="friends"
             role="tabpanel"
           >
-            <ListaAmigos />
+            <ListaAmigos
+              friendList={authUserFriendList}
+              authUserFriendlistIds={authUserFriendlistIds}
+              loadingAuthUserFriendList={loadingAuthUserFriendList}
+            />
           </div>
 
           <div
@@ -96,7 +187,23 @@ export default function Usuario({ userInfo }) {
             id="search"
             role="tabpanel"
           >
-            <ListaBusca />
+            <ListaBusca authUserFriendlistIds={authUserFriendlistIds} />
+          </div>
+
+          <div
+            aria-labelledby="invites"
+            className="tab-pane fade"
+            id="invites"
+            role="tabpanel"
+          >
+            <ListaConvites
+              friendInvites={authUserPendingInvites}
+              otherUsers={userInfo.requisicoesAmigos}
+              authUserFriendlistIds={authUserFriendlistIds}
+              loadingAuthUserFriendList={loadingAuthUserFriendList}
+              eventInvites={eventInvites}
+              loadingEventInvites={loadingEventInvites}
+            />
           </div>
         </div>
       </div>

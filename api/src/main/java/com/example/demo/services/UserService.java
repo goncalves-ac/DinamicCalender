@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.dto.NovaSenhaRequestDTO;
+import com.example.demo.dto.RecoverPasswordDTO;
 import com.example.demo.dto.UpdateUserReturnDTO;
 import com.example.demo.exceptions.BadRequestException;
 import com.example.demo.exceptions.DuplicateEntryException;
@@ -23,8 +24,11 @@ import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.exceptions.UnauthorizedException;
 import com.example.demo.model.entities.Usuario;
 import com.example.demo.model.repositories.UsuarioRepository;
-import com.example.demo.upload.utils.FileUploadUtil;
-import com.example.demo.upload.utils.OldNewImgFileState;
+import com.example.demo.utils.FileUploadUtil;
+import com.example.demo.utils.JwtTokenUtil;
+import com.example.demo.utils.Mail;
+import com.example.demo.utils.MailSenderUtil;
+import com.example.demo.utils.OldNewImgFileState;
 import com.example.demo.validation.EntityValidator;
 
 @Service
@@ -38,6 +42,12 @@ public class UserService {
 	public Usuario findByEmail(String email){
 		return userRepository.findByEmail(email);
 	}
+	
+	@Autowired
+	private JwtTokenUtil tokenUtil;
+	
+	@Autowired
+	private MailSenderUtil mailUtil;
 	
 	private final EntityValidator<Usuario> usuarioValidator = new EntityValidator<Usuario>();
 	public UserService() {
@@ -158,11 +168,55 @@ public class UserService {
 		
 	}
 	
+	@Transactional
+	public Usuario changeUserPasswordWithRecover(String email, NovaSenhaRequestDTO novaSenhaDTO) throws Exception {
+		
+		Usuario u = userRepository.findByEmail(email);
+		
+		if (u==null) {
+			throw new ResourceNotFoundException("Usuário não pode ser encontrado");
+		}
+		
+		
+		if (novaSenhaDTO.getNovaSenha().length() < 8 || novaSenhaDTO.getNovaSenha()==null) {
+			throw new BadRequestException("A nova senha deve conter pelo menos 8 caractéres");
+		}
+		
+		
+			String senha = passwordEncoder.encode(novaSenhaDTO.getNovaSenha());
+			u.setSenha(senha);
+			
+			userRepository.save(u);
+			return u;
+		
+	}
+	
 	@Transactional 
 	public void deleteUserById(int id) throws Exception {
 		userRepository.deleteById(id);
 	}
 	
+	@Transactional
+	public void recoverPassword(RecoverPasswordDTO dto) throws Exception {
+		Usuario u = userRepository.findByEmail(dto.getEmail());
+		
+		if (u==null) {
+			throw new ResourceNotFoundException("Usuário não cadastrado.");
+		}
+		
+		String token = tokenUtil.generateToken(dto.getEmail());
+		Mail mail = new Mail();
+		
+		mail.setSubject("Recuperação de Senha - Calendário Dinâmico");
+		mail.setTo(dto.getEmail());
+		mail.setMessage(
+				"Siga esse link para alterar sua senha:\n\n http://localhost:3000/recuperarsenha/"+token+
+				"\n\nSe não foi você que requisitou essa alteração, apenas ignore esse email.");
+		mailUtil.sendMail(mail);
+		
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
 	public OldNewImgFileState changeUserAvatarImg(int id, MultipartFile avatarImg) throws Exception {
 		Usuario u = userRepository.findById(id).get();
 		

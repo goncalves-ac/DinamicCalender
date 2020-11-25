@@ -20,7 +20,7 @@ public class FriendshipService {
     private AmizadeRepository amizadeRepository;
     
     @Transactional(readOnly = true)
-    public Set<Amizade> findSelfFriendships(int id) throws Exception{
+    public Set<Amizade> findInvites(int id) throws Exception{
     	Set<Amizade> selfInvites = amizadeRepository.findInviteByUser1(id);
     	Set<Amizade> otherInvites = amizadeRepository.findInviteByUser2(id);
     	selfInvites.addAll(otherInvites);
