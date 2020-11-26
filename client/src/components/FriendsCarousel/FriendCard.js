@@ -30,11 +30,7 @@ const FriendCard = ({ friend, mode, uninviteCallback, status }) => {
       <div className="inner-card-container">
         <img
           className="carousel-card-avatar"
-          src={
-            (friend.avatarUrl &&
-              `${process.env.REACT_APP_API_URL}/${friend.avatarUrl}`) ||
-            AvatarPlaceholder
-          }
+          src={friend.avatarUrl || AvatarPlaceholder}
           alt={`Avatar do Usuário`}
         />
         <h3 className="carousel-card-user-name">{friend.nome}</h3>

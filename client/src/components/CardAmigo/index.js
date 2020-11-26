@@ -258,11 +258,7 @@ const CardAmigo = ({
               <img
                 alt="user"
                 className="profile-photo-lg"
-                src={
-                  (avatarUrl &&
-                    `${process.env.REACT_APP_API_URL}/${avatarUrl}`) ||
-                  AvatarPlaceholder
-                }
+                src={avatarUrl || AvatarPlaceholder}
               />
             </div>
             <div className="col-lg-7 col-md-7 col-12 mx-auto">
