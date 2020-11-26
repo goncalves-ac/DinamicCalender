@@ -26,10 +26,6 @@ const CardAmigo = ({
   const { id } = useParams();
 
   useEffect(() => {
-    setLoading(false);
-  }, [idsOfUsersThatAddedYou, idsOfUsersThatYouAdded]);
-
-  useEffect(() => {
     if (authState.userInfo && authState.userInfo.idUsuario) {
       setIdsOfUsersThatAddedYou(
         authState.userInfo.requisicoesAmigos.map((user) => user.idUsuario)
