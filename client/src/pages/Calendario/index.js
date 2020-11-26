@@ -42,6 +42,7 @@ export default function Calendario() {
       const { data } = await api.get("/usuario");
       setAuthState(Object.assign({}, authState, { userInfo: data[0] }));
       setLoading(false);
+      setHoverTooltipInfo(null);
     } catch (e) {
       alert("Houve algum erro. Por favor, atualize a página.");
     }
