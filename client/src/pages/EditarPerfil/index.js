@@ -103,7 +103,6 @@ export default function EditarPerfil() {
         const currentAvatarFileName = getFileNameFromFirebaseUrl(
           authState.userInfo.avatarUrl
         );
-        console.log(currentAvatarFileName);
         if (currentAvatarFileName) {
           await storageService.clean({ imageName: currentAvatarFileName });
         }

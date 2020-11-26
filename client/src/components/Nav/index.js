@@ -14,13 +14,13 @@ export default function Nav() {
   const handleLogout = async () => {
     try {
       await api.post("/unauthenticate");
+    } catch (e) {
+    } finally {
       setAuthState({
         expiresAt: null,
         userInfo: null,
       });
       localStorage.removeItem("eat");
-    } catch (e) {
-      console.log(e);
     }
   };
   return (
