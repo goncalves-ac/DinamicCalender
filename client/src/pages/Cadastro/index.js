@@ -35,7 +35,6 @@ export default function Cadastro() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log(nascimento);
     try {
       setFormError(null);
       setLoading(true);

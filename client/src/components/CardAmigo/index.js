@@ -21,6 +21,7 @@ const CardAmigo = ({
     confirmDeleteFriendModalVisible,
     setConfirmDeleteteFriendModalVisible,
   ] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { id } = useParams();
 
@@ -33,6 +34,7 @@ const CardAmigo = ({
         authState.userInfo.amigosRequisitados.map((user) => user.idUsuario)
       );
     }
+    setLoading(false);
   }, [authState]);
 
   const inviteEndpoint = `/amigos/convites?idUsuarioReq=${idUsuario}`;
@@ -43,43 +45,66 @@ const CardAmigo = ({
   };
 
   const handleAddFriend = async () => {
+    if (loading) return;
     try {
+      setLoading(true);
       await api.post(inviteEndpoint);
       await updateAuthUserInfo();
     } catch (e) {
+      setLoading(false);
       alert("Ocorreu um erro. Atualize a página e tente novamente.");
     }
   };
 
   const handleDeleteFriend = async () => {
+    if (loading) return;
     try {
+      setLoading(true);
+      setConfirmDeleteteFriendModalVisible(false);
       await api.delete(inviteEndpoint);
       await updateAuthUserInfo();
     } catch (e) {
+      setLoading(false);
+      setConfirmDeleteteFriendModalVisible(false);
       alert("Ocorreu um erro. Atualize a página e tente novamente.");
     }
   };
 
   const handleAcceptFriend = async () => {
+    if (loading) return;
     try {
+      setLoading(true);
       await api.patch(inviteEndpoint);
       await updateAuthUserInfo();
     } catch (e) {
+      setLoading(false);
       alert("Ocorreu um erro. Atualize a página e tente novamente.");
     }
   };
 
   const handleDeclineFriend = async () => {
+    if (loading) return;
     try {
+      setLoading(true);
       await api.delete(inviteEndpoint);
       await updateAuthUserInfo();
       handleCloseConfirmDeleteFriendModal();
     } catch (e) {
+      setLoading(false);
       alert("Ocorreu um erro. Atualize a página e tente novamente.");
     }
   };
 
+  const CardSpinner = () => {
+    return (
+      <div className="w-100 text-center text-white">
+        <i className="fas fa-spinner fa-2x" />
+      </div>
+    );
+  };
+
   const InviteButtons = () => {
+    if (loading) return <CardSpinner />;
     return (
       <>
         <button
@@ -101,6 +126,7 @@ const CardAmigo = ({
   };
 
   const SearchButton = () => {
+    if (loading) return <CardSpinner />;
     return (
       <>
         {(authUserFriendlistIds.includes(idUsuario) && (
@@ -119,6 +145,7 @@ const CardAmigo = ({
   };
 
   const FriendlistButton = () => {
+    if (loading) return <CardSpinner />;
     return (
       <button
         type="button"
@@ -231,11 +258,7 @@ const CardAmigo = ({
               <img
                 alt="user"
                 className="profile-photo-lg"
-                src={
-                  (avatarUrl &&
-                    `${process.env.REACT_APP_API_URL}/${avatarUrl}`) ||
-                  AvatarPlaceholder
-                }
+                src={avatarUrl || AvatarPlaceholder}
               />
             </div>
             <div className="col-lg-7 col-md-7 col-12 mx-auto">
@@ -250,11 +273,7 @@ const CardAmigo = ({
         </div>
         {authState.userInfo && (
           <div className="my-card-controls">
-            {(loadingAuthUserFriendList && (
-              <div className="w-100 text-center">
-                <i className="fas fa-spinner fa-1x" />
-              </div>
-            )) ||
+            {(loadingAuthUserFriendList && <CardSpinner />) ||
               (mode === "SEARCH" && getSearchCardMessageOrButton()) ||
               (mode === "FRIENDLIST" && !id && FriendlistButton()) ||
               (mode === "FRIENDLIST" &&

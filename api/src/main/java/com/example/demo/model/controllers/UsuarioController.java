@@ -8,7 +8,6 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -16,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.dto.NovaSenhaRequestDTO;
 import com.example.demo.dto.PrivateUsuarioResponseDTO;
@@ -42,10 +39,8 @@ import com.example.demo.model.entities.Usuario;
 import com.example.demo.services.EventService;
 import com.example.demo.services.JwtUserDetailsService;
 import com.example.demo.services.UserService;
-import com.example.demo.utils.FileUploadUtil;
 import com.example.demo.utils.JwtCookieUtil;
 import com.example.demo.utils.JwtTokenUtil;
-import com.example.demo.utils.OldNewImgFileState;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -139,29 +134,27 @@ public class UsuarioController {
     	return ResponseEntity.noContent().build();
     }
     
-    @PutMapping(value="/{idUsuario}", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value="/{idUsuario}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
     @PreAuthorize("#idUsuario == authentication.principal.idUsuario")
-    public ResponseEntity<?> updateUsuario(@PathVariable int idUsuario, @ModelAttribute UsuarioRequestDTO usuarioRequestDTO) throws Exception{       
-    	boolean success = false;
-    	Usuario dadosUsuario = usuarioRequestDTO.toUsuario();
-		MultipartFile avatarImg = usuarioRequestDTO.getAvatarImg();
-		OldNewImgFileState state = new OldNewImgFileState();
+    public ResponseEntity<?> updateUsuario(@PathVariable int idUsuario, @RequestBody Usuario dadosUsuario) throws Exception{       
 
-		if (avatarImg!=null) {
-			try {
-				state = userService.changeUserAvatarImg(idUsuario, avatarImg);
-				dadosUsuario.setAvatarUrl(state.getNewImgUri());
-			} catch (Exception e) {
-				throw e;
-			}
-		}
+		// MultipartFile avatarImg = usuarioRequestDTO.getAvatarImg();
+		// OldNewImgFileState state = new OldNewImgFileState();
+
+		// if (avatarImg!=null) {
+		// 	try {
+		// 		state = userService.changeUserAvatarImg(idUsuario, avatarImg);
+		// 		dadosUsuario.setAvatarUrl(state.getNewImgUri());
+		// 	} catch (Exception e) {
+		// 		throw e;
+		// 	}
+		// }
 		
 
     	try {
     		UpdateUserReturnDTO dto = userService.updateUser(idUsuario, dadosUsuario);
     		Usuario u = dto.getUsuario();
-    		success = true;
     		if (dto.isHasChangedEmail()) {
     			final UserDetails userDetails = userDetailsService
     					.loadUserByUsername(u.getEmail());
@@ -176,11 +169,12 @@ public class UsuarioController {
     		throw new BadRequestException(e.getMessage());
     	} catch (Exception e) {;
     		throw e;
-    	} finally {
-    		if (!success && state.getNewImgUri() != null) {
-    			FileUploadUtil.rollback(state);
-    		}
-    	}
+    	} 
+			// finally {
+    	// 	if (!success && state.getNewImgUri() != null) {
+    	// 		FileUploadUtil.rollback(state);
+    	// 	}
+    	// }
     }
     
     @PatchMapping("/{idUsuario}")
