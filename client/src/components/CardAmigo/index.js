@@ -26,6 +26,10 @@ const CardAmigo = ({
   const { id } = useParams();
 
   useEffect(() => {
+    setLoading(false);
+  }, [idsOfUsersThatAddedYou, idsOfUsersThatYouAdded]);
+
+  useEffect(() => {
     if (authState.userInfo && authState.userInfo.idUsuario) {
       setIdsOfUsersThatAddedYou(
         authState.userInfo.requisicoesAmigos.map((user) => user.idUsuario)
@@ -33,8 +37,10 @@ const CardAmigo = ({
       setIdsOfUsersThatYouAdded(
         authState.userInfo.amigosRequisitados.map((user) => user.idUsuario)
       );
+    } else {
+      setIdsOfUsersThatAddedYou([]);
+      setIdsOfUsersThatYouAdded([]);
     }
-    setLoading(false);
   }, [authState]);
 
   const inviteEndpoint = `/amigos/convites?idUsuarioReq=${idUsuario}`;
