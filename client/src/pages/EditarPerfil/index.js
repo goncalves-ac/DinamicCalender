@@ -4,6 +4,7 @@ import "./EditarPerfil.css";
 import AvatarPlaceholder from "../../img/avatar-placeholder.png";
 import { AuthContext } from "../../providers/AuthProvider";
 import api from "../../api";
+import FirebaseStorageService from "../../services/FirebaseStorageService";
 
 export default function EditarPerfil() {
   const parseNascimento = (nascimento) => {
@@ -16,6 +17,13 @@ export default function EditarPerfil() {
     } else {
       return nascimento;
     }
+  };
+
+  const storageService = new FirebaseStorageService();
+
+  const getFileNameFromFirebaseUrl = (url) => {
+    if (!url) return null;
+    return url.split("images%2F")[1].split("?")[0];
   };
 
   const { authState, setAuthState } = useContext(AuthContext);
@@ -31,9 +39,7 @@ export default function EditarPerfil() {
     authState.userInfo.descricao || ""
   );
   const [avatarUrl, setAvatarUrl] = useState(
-    (authState.userInfo.avatarUrl &&
-      `${process.env.REACT_APP_API_URL}/${authState.userInfo.avatarUrl}`) ||
-      AvatarPlaceholder
+    authState.userInfo.avatarUrl || AvatarPlaceholder
   );
   const [profileFormError, setProfileFormError] = useState(null);
   const [profileFormSubmitSuccess, setProfileFormSubmitSuccess] = useState(
@@ -87,25 +93,38 @@ export default function EditarPerfil() {
   const handleEditProfileSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
-    const formData = new FormData();
-    formData.append("nome", nome);
-    formData.append("sobrenome", sobrenome);
-    formData.append("email", email);
-    formData.append("nascimento", parseNascimento(nascimento));
-    formData.append("genero", genero);
-    formData.append("descricao", descricao);
-    if (file !== null) {
-      formData.append("avatarImg", file);
-    }
+    setLoading(true);
     try {
-      setLoading(true);
       setProfileFormError(null);
       setProfileFormSubmitSuccess(false);
+
+      let avatarUrl = authState.userInfo.avatarUrl || null;
+      if (file !== null) {
+        const currentAvatarFileName = getFileNameFromFirebaseUrl(
+          authState.userInfo.avatarUrl
+        );
+        console.log(currentAvatarFileName);
+        if (currentAvatarFileName) {
+          await storageService.clean({ imageName: currentAvatarFileName });
+        }
+        avatarUrl = await storageService.upload({ image: file });
+      }
+
+      const formData = {
+        nome,
+        sobrenome,
+        email,
+        genero,
+        descricao,
+        nascimento: parseNascimento(nascimento),
+        avatarUrl,
+      };
+
       const { data } = await api.put(
         `/usuario/${authState.userInfo.idUsuario}`,
         formData
       );
-      console.log(data);
+
       setAuthState(Object.assign(authState, { userInfo: data }));
 
       setProfileFormSubmitSuccess(true);
@@ -219,7 +238,6 @@ export default function EditarPerfil() {
                   <form
                     className="form-signin no-gutters w-100"
                     onSubmit={handleEditProfileSubmit}
-                    encType="multipart/form-data"
                   >
                     {(profileFormSubmitSuccess && (
                       <p className="text-success">
