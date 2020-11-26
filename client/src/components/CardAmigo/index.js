@@ -110,7 +110,7 @@ const CardAmigo = ({
   };
 
   const InviteButtons = () => {
-    if (loading) return <CardSpinner />;
+    if (loading || loadingAuthUserFriendList) return <CardSpinner />;
     return (
       <>
         <button
@@ -132,7 +132,7 @@ const CardAmigo = ({
   };
 
   const SearchButton = () => {
-    if (loading) return <CardSpinner />;
+    if (loading || loadingAuthUserFriendList) return <CardSpinner />;
     return (
       <>
         {(authUserFriendlistIds.includes(idUsuario) && (
@@ -151,7 +151,7 @@ const CardAmigo = ({
   };
 
   const FriendlistButton = () => {
-    if (loading) return <CardSpinner />;
+    if (loading || loadingAuthUserFriendList) return <CardSpinner />;
     return (
       <button
         type="button"
