@@ -118,6 +118,7 @@ export default function Calendario() {
     if (idDono !== authState.userInfo.idUsuario) {
       notifyError("Você não pode modificar um evento que não é seu.");
       dropEvent.revert();
+      setHoverTooltipInfo(null);
       return;
     }
     const eventInfo = getEventDTOFromCalendarEvent(dropEvent);
@@ -128,6 +129,7 @@ export default function Calendario() {
         drag: true,
       });
     } catch (e) {
+      setHoverTooltipInfo(null);
       dropEvent.revert();
     }
   };
