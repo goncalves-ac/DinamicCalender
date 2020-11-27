@@ -1,71 +1,96 @@
-# EM PRODUÇÃO
-# DinamicCalender
+ <p align="center">
+  <img height="auto" src="./.gitassets/LOGO.png" alt="Logo Calendário Dinâmico"> 
+ </p>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Índice
 
-## Available Scripts
+- [Santander Coders Java by Digital House](#santander-coders-by-digital-house)
+- [Calendário Dinâmico](#calendario-dinamico)
+- [Screenshots](#screenshots)
+- [Techs](#techs)
+  - [Frontend](#front-end)
+  - [Backend](#back-end)
+  - [Deploy](#deploy)
+- [Como rodar](#como-rodar)
+- [Contato](#contato)
 
-In the project directory, you can run:
+## Santander Coders Java by Digital House
 
-### `yarn start`
+Projeto integrador desenvolvido durante o curso de Desenvolvimento Web Full Stack Java oferecido pela [Digital House](https://www.digitalhouse.com/br/) em parceria com o Santander.
+<br>
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Calendário Dinâmico
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+O projeto é uma aplicação web com duas funcionalidades principais: marcar eventos e convidar amigos para esses eventos. É possível marcar eventos como públicos ou privados, além editar e apagar eventos já criados.
 
-### `yarn test`
+## Screenshots
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<p align="center">
+  <img width="350"src="./.gitassets/PAGINA_INICIAL.png" alt="Landing Page"> 
+  <img width="350" src="./.gitassets/TELA_PERFIL_TIMELINE.png" alt="Timeline">
+  <img width="350" src="./.gitassets/TELA_PERFIL_AMIGOS.png" alt="Amigos">
+  <img width="350" src="./.gitassets/CALENDARIO.png" alt="Calendário">
+  <img width="350" src="./.gitassets/EVENTO.png" alt="Visualização de um evento no calendário">
+<p>
 
-### `yarn build`
+## Techs
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+As seguintes ferramentas foram utilizadas durante o desenvolvimento do projeto:
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+### Front end
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **[HTML](https://developer.mozilla.org/pt-BR/docs/Web/HTML)**
+- **[CSS](https://developer.mozilla.org/pt-BR/docs/Web/CSS)**
+- **[JS](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript)**
+- **[jQuery](https://jquery.com/)**
+- **[Bootstrap](https://getbootstrap.com/)**
+- **[React](https://pt-br.reactjs.org/)**
+- **[React Slick](https://react-slick.neostack.com/)**
 
-### `yarn eject`
+### Back end
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- **[Java](https://www.java.com/pt_BR/)**
+- **[MySQL](https://www.mysql.com/)**
+- **[Spring Boot](https://spring.io/projects/spring-boot)**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Deploy
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- **[Heroku](https://heroku.com)**
+- **[Firebase](https://firebase.google.com)**
+- **[Free MySQL Hosting](freemysqlhosting.net)**
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Como rodar
 
-## Learn More
+```bash
+## Clonar o repositório
+git clone https://github.com/carloscastrodev/DinamicCalender
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Acessar o diretório novo criado
+cd DinamicCalender
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Para rodar o backend, utilize a sua IDE java preferida. (EX: Eclipse)
+## Com a sua IDE aberta, importe um projeto Maven existente e selecione a pasta "api"
+## É necessário configurar as seguintes variáveis de ambiente
+- FREE_MYSQL -> URL de conexão com o banco de dados MySQL
+- JWT_SECRET -> Segredo de assinatura do JWT
+- APP_URL -> URL do front-end da aplicação (http://localhost:3000 para projeto React rodando localmente)
+- MAIL_ADDRESS -> Email GMAIL que enviará mensagens de recuperação de senha
+- MAIL_PASS -> Senha do email
+- MAIL_NAME -> Nome que aparecerá no email
 
-### Code Splitting
+## Para rodar o frontend, navegue para a pasta "client" pelo terminal e instale as dependências:
+yarn
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+## Depois de instalado, para executar a aplicação:
+yarn start
+```
 
-### Analyzing the Bundle Size
+## Contato
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+- Ana Caroline Gonçalves - [goncalves-ac](https://github.com/goncalves-ac) -
 
-### Making a Progressive Web App
+- Carlos Castro - [carloscastrodev](http://github.com/carloscastrodev) - contato-carloscastro@hotmail.com
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+- Luan Fernandes - [souluanf](https://github.com/souluanf) - souluan@live.com
 
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+- Matheus Emanoel Rodrigues de Albuquerque - [mts-emanoel](https://github.com/mts-emanoel) -
