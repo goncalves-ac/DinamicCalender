@@ -33,8 +33,10 @@ const CardAmigo = ({
       setIdsOfUsersThatYouAdded(
         authState.userInfo.amigosRequisitados.map((user) => user.idUsuario)
       );
+    } else {
+      setIdsOfUsersThatAddedYou([]);
+      setIdsOfUsersThatYouAdded([]);
     }
-    setLoading(false);
   }, [authState]);
 
   const inviteEndpoint = `/amigos/convites?idUsuarioReq=${idUsuario}`;
@@ -104,7 +106,7 @@ const CardAmigo = ({
   };
 
   const InviteButtons = () => {
-    if (loading) return <CardSpinner />;
+    if (loading || loadingAuthUserFriendList) return <CardSpinner />;
     return (
       <>
         <button
@@ -126,7 +128,7 @@ const CardAmigo = ({
   };
 
   const SearchButton = () => {
-    if (loading) return <CardSpinner />;
+    if (loading || loadingAuthUserFriendList) return <CardSpinner />;
     return (
       <>
         {(authUserFriendlistIds.includes(idUsuario) && (
@@ -145,7 +147,7 @@ const CardAmigo = ({
   };
 
   const FriendlistButton = () => {
-    if (loading) return <CardSpinner />;
+    if (loading || loadingAuthUserFriendList) return <CardSpinner />;
     return (
       <button
         type="button"
@@ -258,11 +260,7 @@ const CardAmigo = ({
               <img
                 alt="user"
                 className="profile-photo-lg"
-                src={
-                  (avatarUrl &&
-                    `${process.env.REACT_APP_API_URL}/${avatarUrl}`) ||
-                  AvatarPlaceholder
-                }
+                src={avatarUrl || AvatarPlaceholder}
               />
             </div>
             <div className="col-lg-7 col-md-7 col-12 mx-auto">

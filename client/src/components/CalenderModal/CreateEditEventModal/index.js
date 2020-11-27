@@ -301,7 +301,7 @@ const CreateEditEventModal = ({
       {addFriendsVisible && (
         <div
           className="not-invited-friends-container"
-          style={{ backgroundColor: eventInfo.backgroundColor || "#3788d8" }}
+          style={{ backgroundColor: backgroundColor || "#3788d8" }}
         >
           <span
             className="close-friend-list"

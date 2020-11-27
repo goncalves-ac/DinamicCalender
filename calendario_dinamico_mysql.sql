@@ -5,14 +5,12 @@
 -- -----------------------------------------------------
 -- Schema calendario_dinamico
 -- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `calendario_dinamico`;
-CREATE SCHEMA IF NOT EXISTS `calendario_dinamico` DEFAULT CHARACTER SET utf8mb4;
-USE `calendario_dinamico` ;
+USE `sql3378458` ;
 
 -- -----------------------------------------------------
 -- Table `calendario_dinamico`.`usuario`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `calendario_dinamico`.`usuario` (
+CREATE TABLE IF NOT EXISTS `sql3378458`.`usuario` (
   `id_usuario` int NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(150) NOT NULL,
   `avatar_url` TEXT NULL,
@@ -29,7 +27,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `calendario_dinamico`.`sso`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `calendario_dinamico`.`sso` (
+CREATE TABLE IF NOT EXISTS `sql3378458`.`sso` (
   `id_sso` int NOT NULL AUTO_INCREMENT,
   `uuid_externo` TEXT NOT NULL,
   `fk_id_usuario` int NOT NULL,
@@ -37,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `calendario_dinamico`.`sso` (
   INDEX `fk_sso_usuario_idx` (`fk_id_usuario` ASC),
   CONSTRAINT `fk_sso_usuario`
     FOREIGN KEY (`fk_id_usuario`)
-    REFERENCES `calendario_dinamico`.`usuario` (`id_usuario`)
+    REFERENCES `sql3378458`.`usuario` (`id_usuario`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
@@ -46,7 +44,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `calendario_dinamico`.`amigo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `calendario_dinamico`.`amigo` (
+CREATE TABLE IF NOT EXISTS `sql3378458`.`amigo` (
   `id_amizade` INT NOT NULL AUTO_INCREMENT,
   `id_usuario_1` int NOT NULL,
   `id_usuario_2` int NOT NULL,
@@ -56,12 +54,12 @@ CREATE TABLE IF NOT EXISTS `calendario_dinamico`.`amigo` (
   INDEX `fk_id_usuario_1` (`id_usuario_1` ASC),
   CONSTRAINT `fk_usuario_has_usuario_usuario1`
     FOREIGN KEY (`id_usuario_1`)
-    REFERENCES `calendario_dinamico`.`usuario` (`id_usuario`)
+    REFERENCES `sql3378458`.`usuario` (`id_usuario`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_usuario_has_usuario_usuario2`
     FOREIGN KEY (`id_usuario_2`)
-    REFERENCES `calendario_dinamico`.`usuario` (`id_usuario`)
+    REFERENCES `sql3378458`.`usuario` (`id_usuario`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
@@ -70,7 +68,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `calendario_dinamico`.`evento`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `calendario_dinamico`.`evento` (
+CREATE TABLE IF NOT EXISTS `sql3378458`.`evento` (
   `id_evento` int NOT NULL AUTO_INCREMENT,
   `fk_id_dono` int NOT NULL,
   `titulo` varchar(150) NOT NULL,
@@ -78,8 +76,8 @@ CREATE TABLE IF NOT EXISTS `calendario_dinamico`.`evento` (
   `inicio` DATETIME NOT NULL,
   `fim` DATETIME NOT NULL,
   `local` varchar(240) NULL,
-  `criado_em` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ultima_edicao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `criado_em` DATETIME NULL,
+  `ultima_edicao` DATETIME NULL,
   `cor_de_fundo` varchar(7) NOT NULL DEFAULT '#3788d8',
   `privacidade` varchar(7) NOT NULL DEFAULT "PUBLIC",
   PRIMARY KEY (`id_evento`),
@@ -91,7 +89,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `calendario_dinamico`.`usuario_evento`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `calendario_dinamico`.`usuario_evento` (
+CREATE TABLE IF NOT EXISTS `sql3378458`.`usuario_evento` (
   `id_usuario_evento` int NOT NULL AUTO_INCREMENT,
   `fk_id_usuario` int NOT NULL,
   `fk_id_evento` int NOT NULL,
@@ -101,12 +99,12 @@ CREATE TABLE IF NOT EXISTS `calendario_dinamico`.`usuario_evento` (
   INDEX `fk_usuario_has_evento_usuario1_idx` (`fk_id_usuario` ASC),
   CONSTRAINT `usuario_existe`
     FOREIGN KEY (`fk_id_usuario`)
-    REFERENCES `calendario_dinamico`.`usuario` (`id_usuario`)
+    REFERENCES `sql3378458`.`usuario` (`id_usuario`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `evento_existe`
     FOREIGN KEY (`fk_id_evento`)
-    REFERENCES `calendario_dinamico`.`evento` (`id_evento`)
+    REFERENCES `sql3378458`.`evento` (`id_evento`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
