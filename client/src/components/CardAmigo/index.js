@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { Link, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import api from "../../api";
 import AvatarPlaceholder from "../../img/avatar-placeholder.png";
 import { AuthContext } from "../../providers/AuthProvider";
@@ -22,6 +23,8 @@ const CardAmigo = ({
     setConfirmDeleteteFriendModalVisible,
   ] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const notifyError = (msg) => toast.error(msg);
 
   const { id } = useParams();
 
@@ -54,7 +57,7 @@ const CardAmigo = ({
       await updateAuthUserInfo();
     } catch (e) {
       setLoading(false);
-      alert("Ocorreu um erro. Atualize a página e tente novamente.");
+      notifyError("Ocorreu um erro. Atualize a página e tente novamente.");
     }
   };
 
@@ -68,7 +71,7 @@ const CardAmigo = ({
     } catch (e) {
       setLoading(false);
       setConfirmDeleteteFriendModalVisible(false);
-      alert("Ocorreu um erro. Atualize a página e tente novamente.");
+      notifyError("Ocorreu um erro. Atualize a página e tente novamente.");
     }
   };
 
@@ -80,7 +83,7 @@ const CardAmigo = ({
       await updateAuthUserInfo();
     } catch (e) {
       setLoading(false);
-      alert("Ocorreu um erro. Atualize a página e tente novamente.");
+      notifyError("Ocorreu um erro. Atualize a página e tente novamente.");
     }
   };
 
@@ -93,7 +96,7 @@ const CardAmigo = ({
       handleCloseConfirmDeleteFriendModal();
     } catch (e) {
       setLoading(false);
-      alert("Ocorreu um erro. Atualize a página e tente novamente.");
+      notifyError("Ocorreu um erro. Atualize a página e tente novamente.");
     }
   };
 

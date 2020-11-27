@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import api from "../../api";
 import FriendCard from "../FriendsCarousel/FriendCard";
+import { toast } from "react-toastify";
 
 const CalenderModal = ({
   eventInfo,
@@ -19,6 +20,8 @@ const CalenderModal = ({
   const [eventOwner, setEventOwner] = useState(null);
   const [eventInvites, setEventInvites] = useState([]);
   const [invitesMapping, setInvitesMapping] = useState(null);
+
+  const notifyError = (msg) => toast.error(msg);
 
   const parsedDate = () => {
     if (eventInfo.start) {
@@ -45,7 +48,7 @@ const CalenderModal = ({
         );
         setEventInvites(data);
       } catch (e) {
-        alert("Houve algum erro. Por favor, atualize a página.");
+        notifyError("Houve algum erro. Por favor, atualize a página.");
       }
     };
 

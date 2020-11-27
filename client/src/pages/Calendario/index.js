@@ -18,9 +18,14 @@ import api from "../../api";
 import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import MouseHoverTooltip from "../../components/MouseHoverTooltip";
+import { toast } from "react-toastify";
 
 export default function Calendario() {
   const { authState, setAuthState } = useContext(AuthContext);
+
+  const notifyError = (msg) => toast.error(msg);
+
+  const notifySuccess = (msg) => toast.success(msg);
 
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showCreateEventModal, setShowCreateEventModal] = useState(false);
@@ -43,7 +48,7 @@ export default function Calendario() {
       setAuthState(Object.assign({}, authState, { userInfo: data[0] }));
       setLoading(false);
     } catch (e) {
-      alert("Houve algum erro. Por favor, atualize a página.");
+      notifyError("Houve algum erro. Por favor, atualize a página.");
     }
   };
 
@@ -63,9 +68,9 @@ export default function Calendario() {
     } catch (e) {
       setLoading(false);
       if (e.response) {
-        alert(`${e.response.data.message}`);
+        notifyError(`${e.response.data.message}`);
       } else {
-        alert("Houve um erro. Por favor, atualize a página.");
+        notifyError("Houve um erro. Por favor, atualize a página.");
       }
     }
   };
@@ -111,7 +116,7 @@ export default function Calendario() {
   const handleDateChange = async (dropEvent) => {
     const idDono = dropEvent.event._def.extendedProps.fkIdDono;
     if (idDono !== authState.userInfo.idUsuario) {
-      alert("Você não pode modificar um evento que não é seu.");
+      notifyError("Você não pode modificar um evento que não é seu.");
       dropEvent.revert();
       return;
     }
@@ -186,7 +191,9 @@ export default function Calendario() {
         handleCloseCreation();
       } catch (e) {
         setLoading(false);
-        alert("Houve um erro ao criar o evento. Tente novamente mais tarde.");
+        notifyError(
+          "Houve um erro ao criar o evento. Tente novamente mais tarde."
+        );
       }
     } else if (mode === "EDIT") {
       try {
@@ -198,7 +205,7 @@ export default function Calendario() {
         handleCloseCreation();
       } catch (e) {
         setLoading(false);
-        alert(
+        notifyError(
           "Houve um erro ao atualizar o evento. Tente novamente mais tarde."
         );
       }
@@ -276,7 +283,7 @@ export default function Calendario() {
         setCurrentEvents(allEventsToDisplay);
         setLoading(false);
       } catch (e) {
-        alert(
+        notifyError(
           "Houve um problema ao buscar os eventos. Tente atualizar a página."
         );
       }

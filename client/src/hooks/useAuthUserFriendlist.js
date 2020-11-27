@@ -12,6 +12,8 @@ const useAuthUserFriendlist = () => {
     true
   );
 
+  const notifyError = (msg) => toast.error(msg);
+
   useEffect(() => {
     setLoadingAuthUserFriendList(false);
   }, [authUserFriendlistIds]);
@@ -51,7 +53,7 @@ const useAuthUserFriendlist = () => {
 
       setAuthUserFriendlistIds(friendList.map((friend) => friend.idUsuario));
     } catch (e) {
-      alert("Houve um erro. Por favor atualize a página.");
+      notifyError("Houve um erro. Por favor atualize a página.");
       setAuthUserFriendlistIds([]);
     }
   };
