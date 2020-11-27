@@ -41,7 +41,6 @@ public class EventoController {
     @ResponseBody
     public Set<Evento> getEventsByAuthenticatedUser(Authentication auth, @RequestParam(required=false) boolean recent, @RequestParam(required=false) Integer limit) throws Exception {
     	Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);
-
     	
     	try {
     		if (recent) {

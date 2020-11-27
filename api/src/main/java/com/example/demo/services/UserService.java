@@ -1,7 +1,5 @@
 package com.example.demo.services;
 
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -9,7 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintViolation;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,13 +40,16 @@ public class UserService {
 	public Usuario findByEmail(String email){
 		return userRepository.findByEmail(email);
 	}
-	
+
 	@Autowired
 	private JwtTokenUtil tokenUtil;
 	
 	@Autowired
 	private MailSenderUtil mailUtil;
-	
+
+	@Value("${app.root.url}")
+	private String appUrl;
+
 	private final EntityValidator<Usuario> usuarioValidator = new EntityValidator<Usuario>();
 	public UserService() {
 	}
@@ -210,8 +211,9 @@ public class UserService {
 		mail.setSubject("Recuperação de Senha - Calendário Dinâmico");
 		mail.setTo(dto.getEmail());
 		mail.setMessage(
-				"Siga esse link para alterar sua senha:\n\n http://localhost:3000/recuperarsenha/"+token+
-				"\n\nSe não foi você que requisitou essa alteração, apenas ignore esse email.");
+				"Siga esse link para alterar sua senha:\n\n "+ appUrl+"/recuperarsenha/"+token+
+				"\n\nSe não foi você que requisitou essa alteração, apenas ignore esse email.\n\n"
+				+"Calendário Dinâmico");
 		mailUtil.sendMail(mail);
 		
 	}

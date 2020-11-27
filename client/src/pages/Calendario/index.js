@@ -226,6 +226,9 @@ export default function Calendario() {
   };
 
   useEffect(() => {
+    setHoverTooltipInfo(null);
+  }, [currentEvents]);
+  useEffect(() => {
     hoverTooltipInfo
       ? setHoverTooltipVisible(true)
       : setHoverTooltipVisible(false);

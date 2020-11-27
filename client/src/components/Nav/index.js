@@ -14,13 +14,13 @@ export default function Nav() {
   const handleLogout = async () => {
     try {
       await api.post("/unauthenticate");
+    } catch (e) {
+    } finally {
       setAuthState({
         expiresAt: null,
         userInfo: null,
       });
       localStorage.removeItem("eat");
-    } catch (e) {
-      console.log(e);
     }
   };
   return (
@@ -34,11 +34,7 @@ export default function Nav() {
       {authState.userInfo && (
         <Link className="navbar-brand mx-3" to="/usuario">
           <img
-            src={
-              (authState.userInfo.avatarUrl &&
-                `${process.env.REACT_APP_API_URL}/${authState.userInfo.avatarUrl}`) ||
-              avatarPlaceholder
-            }
+            src={authState.userInfo.avatarUrl || avatarPlaceholder}
             width="50"
             height="50"
             className="rounded-circle border border-dark"
