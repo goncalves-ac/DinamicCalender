@@ -26,11 +26,11 @@ O projeto é uma aplicação web com duas funcionalidades principais: marcar eve
 ## Screenshots
 
 <p align="center">
-  <img width="350"src="./.gitassets/PAGINA_INICIAL.png" alt="Landing Page"> 
-  <img width="350" src="./.gitassets/TELA_PERFIL_TIMELINE.png" alt="Timeline">
-  <img width="350" src="./.gitassets/TELA_PERFIL_AMIGOS.png" alt="Amigos">
-  <img width="350" src="./.gitassets/CALENDARIO.png" alt="Calendário">
-  <img width="350" src="./.gitassets/EVENTO.png" alt="Visualização de um evento no calendário">
+  <img height="400"src="./.gitassets/PAGINA_INICIAL.png" alt="Landing Page"> 
+  <img height="400" src="./.gitassets/TELA_PERFIL_TIMELINE.png" alt="Timeline">
+  <img height="400" src="./.gitassets/TELA_PERFIL_AMIGOS.png" alt="Amigos">
+  <img height="400" src="./.gitassets/CALENDARIO.png" alt="Calendário">
+  <img height="400" src="./.gitassets/EVENTO.png" alt="Visualização de um evento no calendário">
 <p>
 
 ## Techs
