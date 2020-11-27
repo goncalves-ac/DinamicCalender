@@ -20,13 +20,13 @@ const AtualizarSenhaEsquecida = () => {
     const logout = async () => {
       try {
         await api.post("/unauthenticate");
+      } catch (e) {
+      } finally {
         setAuthState({
           expiresAt: null,
           userInfo: null,
         });
         localStorage.removeItem("eat");
-      } catch (e) {
-        console.log(e);
       }
     };
     logout();

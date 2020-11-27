@@ -19,11 +19,7 @@ const DadosUsuario = ({
           <div>
             <img
               className="fotoPerfil"
-              src={
-                (userInfo.avatarUrl &&
-                  `${process.env.REACT_APP_API_URL}/${userInfo.avatarUrl}`) ||
-                avatarPlaceholder
-              }
+              src={userInfo.avatarUrl || avatarPlaceholder}
               alt={`Avatar de ${userInfo.nome}`}
             />
           </div>
