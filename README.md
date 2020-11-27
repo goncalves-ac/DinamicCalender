@@ -63,7 +63,7 @@ As seguintes ferramentas foram utilizadas durante o desenvolvimento do projeto:
 
 ```bash
 ## Clonar o repositório
-git clone https://github.com/carloscastrodev/DinamicCalender
+git clone https://github.com/goncalves-ac/DinamicCalender
 
 ## Acessar o diretório novo criado
 cd DinamicCalender
