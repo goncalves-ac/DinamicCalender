@@ -87,7 +87,7 @@ yarn start
 
 ## Contato
 
-- Ana Caroline Gonçalves - [goncalves-ac](https://github.com/goncalves-ac) -
+- Ana Caroline Gonçalves - [goncalves-ac](https://github.com/goncalves-ac) - goncalves.ac@outlook.com
 
 - Carlos Castro - [carloscastrodev](http://github.com/carloscastrodev) - contato-carloscastro@hotmail.com
 
