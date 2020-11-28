@@ -92,7 +92,7 @@ export default function Login() {
   };
 
   if(redirectSso !== false){
-    //return <Redirect to={{pathname:"/cadastro",ssoData:redirectSso}} />;
+    return <Redirect to={{pathname:"/cadastro",state:{ ssoData:{email:"teste@gmail.com",nome:"Teste Teste AA"} } }} />;
   }
 
   if (redirectOnLogin) return <Redirect to="/" />;
