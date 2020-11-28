@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.exceptions.BadRequestException;
 import com.example.demo.model.entities.Amizade;
 import com.example.demo.services.FriendshipService;
 
@@ -28,8 +29,11 @@ public class AmizadeController {
 	
     @GetMapping()
     public Set<Amizade> getConvites(@RequestParam(required=false) Integer idUsuario, Authentication auth) throws Exception {
-    	
-    	
+		if (auth == null && idUsuario == null) {
+			throw new BadRequestException(
+					"O parâmetro idUsuario deve existir, ou você deve estar autenticado");
+		}
+		
     	if (idUsuario==null) {
         	try {
         		Integer authUserId = Integer.parseInt(auth.getPrincipal().toString().split(" ")[1]);

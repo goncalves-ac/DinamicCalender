@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useContext } from "react";
+import { toast } from "react-toastify";
 import api from "../api";
 import { AuthContext } from "../providers/AuthProvider";
 
@@ -11,6 +12,8 @@ const useAuthUserFriendlist = () => {
   const [loadingAuthUserFriendList, setLoadingAuthUserFriendList] = useState(
     true
   );
+
+  const notifyError = (msg) => toast.error(msg);
 
   useEffect(() => {
     setLoadingAuthUserFriendList(false);
@@ -51,7 +54,7 @@ const useAuthUserFriendlist = () => {
 
       setAuthUserFriendlistIds(friendList.map((friend) => friend.idUsuario));
     } catch (e) {
-      alert("Houve um erro. Por favor atualize a página.");
+      notifyError("Houve um erro. Por favor atualize a página.");
       setAuthUserFriendlistIds([]);
     }
   };

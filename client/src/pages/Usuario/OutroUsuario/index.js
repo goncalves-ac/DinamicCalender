@@ -11,6 +11,7 @@ import DadosUsuario from "../../../components/DadosUsuario";
 import Page404 from "../../Page404";
 import Loading from "../../Loading";
 import useAuthUserFriendlist from "../../../hooks/useAuthUserFriendlist";
+import { toast } from "react-toastify";
 
 export default function OutroUsuario() {
   const [friends, setFriends] = useState([]);
@@ -26,6 +27,8 @@ export default function OutroUsuario() {
     loadingAuthUserFriendList,
   } = useAuthUserFriendlist();
 
+  const notifyError = (msg) => toast.error(msg);
+
   const fetchNextEvents = async () => {
     try {
       const { data } = await api.get(
@@ -34,7 +37,7 @@ export default function OutroUsuario() {
       setUserNextEvents(data);
       setLoading(false);
     } catch (e) {
-      alert(
+      notifyError(
         "Houve um ao buscar os próximos eventos do usuário. Por favor atualize a página."
       );
       setUserNextEvents([]);
@@ -50,7 +53,7 @@ export default function OutroUsuario() {
     } catch (e) {
       if (e.response.data.status === 404) {
       } else {
-        alert("Ocorreu algum erro. Por favor atualize a página.");
+        notifyError("Ocorreu algum erro. Por favor atualize a página.");
       }
       setLoading(false);
     }
@@ -84,7 +87,7 @@ export default function OutroUsuario() {
       setUserNotFound(false);
       setLoading(false);
     } catch (e) {
-      alert(
+      notifyError(
         "Houve algum erro buscando os amigos do usuário. Por favor, atualize a página."
       );
       setLoading(false);

@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import api from "../../api";
 import { AuthContext } from "../../providers/AuthProvider";
 import parseEventStardEnd from "../../util/parseEventStartEnd";
@@ -19,6 +20,8 @@ const CardConviteEvento = ({ eventInfo }) => {
   const { authState, setAuthState } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
 
+  const notifyError = (msg) => toast.error(msg);
+
   const updateAuthUserInfo = async () => {
     const { data } = await api.get(`/usuario`);
     setAuthState(Object.assign({}, authState, { userInfo: data[0] }));
@@ -32,7 +35,7 @@ const CardConviteEvento = ({ eventInfo }) => {
       await updateAuthUserInfo();
       setLoading(false);
     } catch (e) {
-      alert(
+      notifyError(
         "Houve um problema ao aceitar o evento. Tente novamente mais tarde."
       );
       setLoading(false);
@@ -47,7 +50,7 @@ const CardConviteEvento = ({ eventInfo }) => {
       await updateAuthUserInfo();
       setLoading(false);
     } catch (e) {
-      alert(
+      notifyError(
         "Houve um problema ao recusar o evento. Tente novamente mais tarde."
       );
       setLoading(false);
@@ -69,8 +72,8 @@ const CardConviteEvento = ({ eventInfo }) => {
       {
         <div className="my-card-controls">
           {(loading && (
-            <div className="w-100 text-center">
-              <i className="fas fa-spinner fa-1x" />
+            <div className="w-100 text-center text-white">
+              <i className="fas fa-spinner fa-2x" />
             </div>
           )) || (
             <>

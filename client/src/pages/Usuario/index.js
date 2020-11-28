@@ -12,6 +12,7 @@ import api from "../../api";
 import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import useAuthUserFriendlist from "../../hooks/useAuthUserFriendlist";
+import { toast } from "react-toastify";
 
 export default function Usuario({ userInfo }) {
   const [eventInvites, setEventInvites] = useState([]);
@@ -27,12 +28,14 @@ export default function Usuario({ userInfo }) {
     loadingAuthUserFriendList,
   } = useAuthUserFriendlist();
 
+  const notifyError = (msg) => toast.msg(msg);
+
   const fetchNextEvents = async () => {
     try {
       const { data } = await api.get("/eventos?recent=true&limit=3");
       setAuthUserNextEvents(data);
     } catch (e) {
-      alert(
+      notifyError(
         "Houve um ao buscar os próximos eventos do usuário. Por favor atualize a página."
       );
       setAuthUserNextEvents([]);
@@ -55,7 +58,7 @@ export default function Usuario({ userInfo }) {
       setEventInvites(pendingEventInvitesEventsInfo);
       setLoadingEventInvites(false);
     } catch (e) {
-      alert(
+      notifyError(
         "Houve um ao buscar os próximos eventos do usuário. Por favor atualize a página."
       );
       setLoadingEventInvites(false);
