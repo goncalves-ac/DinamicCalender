@@ -33,7 +33,7 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id_usuario")
-    private int idUsuario;
+    private Integer idUsuario;
     
     @NotEmpty(message="Nome é obrigatório.")
     @Size(min=2, max=150, message="Nome deve ter entre 2 e 150 caractéres.")

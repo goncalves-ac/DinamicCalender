@@ -2,6 +2,8 @@ package com.example.demo.services;
 
 import java.util.Set;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintViolation;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +36,11 @@ public class UserService {
 	
 	@Autowired
 	private UsuarioRepository userRepository;
-	
+
+	public Usuario findByEmail(String email){
+		return userRepository.findByEmail(email);
+	}
+
 	@Autowired
 	private JwtTokenUtil tokenUtil;
 	
@@ -43,7 +49,7 @@ public class UserService {
 
 	@Value("${app.root.url}")
 	private String appUrl;
-	
+
 	private final EntityValidator<Usuario> usuarioValidator = new EntityValidator<Usuario>();
 	public UserService() {
 	}
