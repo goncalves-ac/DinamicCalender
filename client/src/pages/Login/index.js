@@ -76,6 +76,7 @@ export default function Login() {
                   }else{
                     console.log(r.data);
                     setFormError("Cadastre-se.");
+                    setRedirectSso(r.data);
                   }
                 });
 
@@ -90,8 +91,8 @@ export default function Login() {
     }
   };
 
-  if(redirectSso){
-    return <Redirect to={{pathname:"/cadastro",ssoData:redirectSso}} />;
+  if(redirectSso !== false){
+    //return <Redirect to={{pathname:"/cadastro",ssoData:redirectSso}} />;
   }
 
   if (redirectOnLogin) return <Redirect to="/" />;

@@ -8,13 +8,11 @@ import Cookies from "./Cookies";
 import PoliticaDeDados from "./PoliticaDeDados";
 import TermosDeUso from "./TermosDeUso";
 
-export default function Cadastro({props})
-{
-  var ssoData = props.location.ssoData;
-  const [nome, setNome] = useState(ssoData.nome || "");
+export default function Cadastro() {
+  const [nome, setNome] = useState("");
   const [sobrenome, setSobrenome] = useState("");
   const [nascimento, setNascimento] = useState("");
-  const [email, setEmail] = useState(ssoData.email || "");
+  const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [genero, setGenero] = useState("");
   const [formError, setFormError] = useState(null);
