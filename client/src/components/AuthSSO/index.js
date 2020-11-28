@@ -1,11 +1,12 @@
 import firebase from "firebase";
+import api from "../../api";
 
 export const authMethods = {
   GOOGLE: "google",
   FACEBOOK: "facebook",
 };
 
-const providerObject = (provider) => {
+export const providerObject = (provider) => {
   switch (provider) {
     case authMethods.GOOGLE:
       return new firebase.auth.GoogleAuthProvider();
@@ -16,26 +17,6 @@ const providerObject = (provider) => {
   }
 };
 
-export default function AuthSSO(provider) {
-  let user = {
-    uid: null,
-    nome: null,
-    email: null,
-    fotoPerfil: null,
-  };
-
-  firebase
-    .auth()
-    .signInWithPopup(providerObject(provider))
-    .then((result) => {
-      console.log("Sucesso");
-      user.uid = result.user.uid;
-      user.nome = result.user.displayName;
-      user.email = result.user.email;
-      user.fotoPerfil = result.user.photoURL;
-      console.log(user);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+export default function AuthSSO() {
+    return firebase;
 }
