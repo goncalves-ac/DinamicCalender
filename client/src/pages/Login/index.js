@@ -56,17 +56,17 @@ export default function Login() {
           .auth()
           .signInWithPopup(providerObject(method))
           .then((result) => {
-            let user = {
+            console.log(result);
+            var user = {
               uuid: result.user.uid,
               nome: result.user.displayName,
-              email: result.user.email,
+              email: (result.user.email != null ) ? result.user.email : result.additionalUserInfo.profile.email,
               fotoPerfil: result.user.photoURL,
             };
 
             const data = api.post("/sso", user)
                 .then((r) => {
                   if(r.data.infoUsuario){
-                    console.log(r.data);
                     setAuthState({
                       userInfo: r.data.infoUsuario,
                       expiresAt: r.data.expiresAt,
@@ -74,9 +74,10 @@ export default function Login() {
                     localStorage.setItem("eat", r.data.expiresAt);
                     setRedirect(true);
                   }else{
-                    console.log(r.data);
                     setFormError("Cadastre-se.");
-                    setRedirectSso(r.data);
+                    user.sobrenome = user.nome.split(' ').slice(1).join(' ');
+                    user.nome = user.nome.split(' ').slice(0, 1).join(' ');
+                    setRedirectSso(user);
                   }
                 });
 
@@ -92,7 +93,7 @@ export default function Login() {
   };
 
   if(redirectSso !== false){
-    return <Redirect to={{pathname:"/cadastro",state:{ ssoData:{email:"teste@gmail.com",nome:"Teste Teste AA"} } }} />;
+    return <Redirect to={{pathname:"/cadastro",state:{ ssoData:redirectSso } }} />;
   }
 
   if (redirectOnLogin) return <Redirect to="/" />;

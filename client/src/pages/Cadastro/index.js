@@ -12,13 +12,21 @@ import TermosDeUso from "./TermosDeUso";
 
 export default function Cadastro(props) {
 
-  console.log(props);
-  var ssoData = props.location.state.ssoData;
+  var user = {
+    nome: "",
+    sobrenome: "",
+    email: ""
+  }
+  try{
+    user.nome = props.location.state.ssoData.nome;
+    user.sobrenome = props.location.state.ssoData.sobrenome;
+    user.email = props.location.state.ssoData.email;
+  }catch (e) { }
 
-  const [nome, setNome] = useState(ssoData.nome || "");
-  const [sobrenome, setSobrenome] = useState("");
+  const [nome, setNome] = useState(user.nome);
+  const [sobrenome, setSobrenome] = useState( user.sobrenome);
   const [nascimento, setNascimento] = useState("");
-  const [email, setEmail] = useState(ssoData.email || "");
+  const [email, setEmail] = useState( user.email);
   const [senha, setSenha] = useState("");
   const [genero, setGenero] = useState("");
   const [formError, setFormError] = useState(null);
@@ -116,6 +124,7 @@ export default function Cadastro(props) {
             <p className="mb-0 text-danger">{formError}</p>
             <div className="row no-gutters">
               <input
+                autoComplete="off"
                 name="nome"
                 type="text"
                 className="col-md-6 col-sm-12 form-control p-2"
@@ -125,6 +134,7 @@ export default function Cadastro(props) {
                 required
               />
               <input
+                autoComplete="off"
                 name="sobrenome"
                 type="text"
                 className="col-md-6 col-sm-12 form-control p-2"
@@ -136,6 +146,7 @@ export default function Cadastro(props) {
             </div>
 
             <input
+              autoComplete="off"
               name="email"
               type="email"
               className="form-control my-1 p-2"
@@ -145,6 +156,7 @@ export default function Cadastro(props) {
               required
             />
             <input
+              autoComplete="off"
               name="senha"
               type="password"
               className="form-control my-1 p-2"
