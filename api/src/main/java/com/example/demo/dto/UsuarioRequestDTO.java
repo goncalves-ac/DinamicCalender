@@ -20,7 +20,7 @@ public class UsuarioRequestDTO extends Usuario {
 	private MultipartFile avatarImg;
 	
 	public Usuario toUsuario() {
-		return new Usuario(
+		Usuario u = new Usuario(
 				this.getNome(),
 				this.getSobrenome(),
 				this.getNascimento(),
@@ -29,6 +29,10 @@ public class UsuarioRequestDTO extends Usuario {
 				this.getSenha(),
 				this.getDescricao()
 				);
+		if (this.getAvatarUrl() != null) {
+			u.setAvatarUrl(this.getAvatarUrl());
+		}
+		return u;
 	}
 	
 }
