@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import AuthSSO, { authMethods } from "../../components/AuthSSO";
 import { Link, Redirect } from "react-router-dom";
 import Logo_Black from "./../../img/logo-black.png";
@@ -8,7 +8,7 @@ import { AuthContext } from "../../providers/AuthProvider";
 import api from "../../api";
 
 export default function Login() {
-  const { authState, setAuthState } = useContext(AuthContext);
+  const { setAuthState } = useContext(AuthContext);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

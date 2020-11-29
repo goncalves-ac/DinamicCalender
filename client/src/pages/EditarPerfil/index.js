@@ -52,7 +52,7 @@ export default function EditarPerfil() {
   const [passwordFormError, setPasswordFormError] = useState(null);
   const [passwordSubmitSuccess, setPasswordSubmitSuccess] = useState(false);
 
-  const [fileExceedsSize, setFileExceedsSize] = useState(false);
+  const [, setFileExceedsSize] = useState(false);
 
   const [file, setFile] = useState(null);
 
