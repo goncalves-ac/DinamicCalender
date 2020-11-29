@@ -106,8 +106,7 @@ const Routes = () => {
         <Route path="/login" exact>
           <Login />
         </Route>
-        <Route path="/cadastro" exact>
-          <Cadastro />
+        <Route path="/cadastro" render={(props) => <Cadastro {...props}/>} exact>
         </Route>
         <Route path="/usuario" exact>
           <Redirect to="/" />
