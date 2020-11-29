@@ -1,5 +1,4 @@
 import firebase from "firebase";
-import api from "../../api";
 
 export const authMethods = {
   GOOGLE: "google",
@@ -18,5 +17,5 @@ export const providerObject = (provider) => {
 };
 
 export default function AuthSSO() {
-    return firebase;
+  return firebase;
 }
