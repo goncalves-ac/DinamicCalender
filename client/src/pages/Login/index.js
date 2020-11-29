@@ -87,6 +87,7 @@ export default function Login() {
         })
         .catch((err) => {
           console.error(err);
+          setLoading(false);
         });
     } catch (e) {
       setLoading(false);
