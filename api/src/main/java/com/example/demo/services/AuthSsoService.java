@@ -32,7 +32,7 @@ public class AuthSsoService {
     }
 
     public AuthSSO bindUsuario(Usuario usuario, AuthSsoDTO authSsoDTO){
-        AuthSSO authSSO = new AuthSSO(null, usuario, authSsoDTO.getUuid());
+        AuthSSO authSSO = new AuthSSO(usuario, authSsoDTO.getUuid());
 
         AuthSSO insertedAuthSSO = authSsoRepository.save(authSSO);
 

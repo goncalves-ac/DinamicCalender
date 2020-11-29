@@ -16,8 +16,8 @@ import lombok.Setter;
 public class AuthSSO {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id_sso;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id_sso;
 
     @OneToOne
     @JoinColumn(name = "id_usuario")
@@ -25,11 +25,13 @@ public class AuthSSO {
     private Usuario usuario;
     private String uuid_externo;
 
+    private int fk_id_usuario;
+
     public AuthSSO() { }
 
-    public AuthSSO(UUID id_sso, Usuario usuario, String uuid_externo) {
-        this.id_sso = id_sso;
+    public AuthSSO(Usuario usuario, String uuid_externo) {
         this.usuario = usuario;
         this.uuid_externo = uuid_externo;
+        this.fk_id_usuario = usuario.getIdUsuario();
     }
 }
