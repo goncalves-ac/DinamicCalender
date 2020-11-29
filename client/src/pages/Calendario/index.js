@@ -25,8 +25,6 @@ export default function Calendario() {
 
   const notifyError = (msg) => toast.error(msg);
 
-  const notifySuccess = (msg) => toast.success(msg);
-
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showCreateEventModal, setShowCreateEventModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(

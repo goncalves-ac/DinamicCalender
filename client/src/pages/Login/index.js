@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
-import AuthSSO, {authMethods, providerObject} from "../../components/AuthSSO";
+import React, { useState } from "react";
+import { authMethods, providerObject } from "../../components/AuthSSO";
+
 import { Link, Redirect } from "react-router-dom";
 import Logo_Black from "./../../img/logo-black.png";
 import "./style.css";
@@ -9,7 +10,7 @@ import api from "../../api";
 import firebase from "firebase";
 
 export default function Login() {
-  const { authState, setAuthState } = useContext(AuthContext);
+  const { setAuthState } = useContext(AuthContext);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -51,49 +52,57 @@ export default function Login() {
   };
 
   const authAux = (method) => {
+    if (loading) return;
+    setLoading(true);
     try {
       firebase
-          .auth()
-          .signInWithPopup(providerObject(method))
-          .then((result) => {
-            console.log(result);
-            var user = {
-              uuid: result.user.uid,
-              nome: result.user.displayName,
-              email: (result.user.email != null ) ? result.user.email : result.additionalUserInfo.profile.email,
-              fotoPerfil: result.user.photoURL,
-            };
+        .auth()
+        .signInWithPopup(providerObject(method))
+        .then((result) => {
+          console.log(result);
+          var user = {
+            uuid: result.user.uid,
+            nome: result.user.displayName,
+            email:
+              result.user.email != null
+                ? result.user.email
+                : result.additionalUserInfo.profile.email,
+            avatarUrl: result.user.photoURL,
+          };
 
-            const data = api.post("/sso", user)
-                .then((r) => {
-                  if(r.data.infoUsuario){
-                    setAuthState({
-                      userInfo: r.data.infoUsuario,
-                      expiresAt: r.data.expiresAt,
-                    });
-                    localStorage.setItem("eat", r.data.expiresAt);
-                    setRedirect(true);
-                  }else{
-                    setFormError("Cadastre-se.");
-                    user.sobrenome = user.nome.split(' ').slice(1).join(' ');
-                    user.nome = user.nome.split(' ').slice(0, 1).join(' ');
-                    setRedirectSso(user);
-                  }
-                });
-
-          })
-          .catch((err) => {
-            console.error(err);
+          api.post("/sso", user).then((r) => {
+            if (r.data.infoUsuario) {
+              setAuthState({
+                userInfo: r.data.infoUsuario,
+                expiresAt: r.data.expiresAt,
+              });
+              localStorage.setItem("eat", r.data.expiresAt);
+              setRedirect(true);
+            } else {
+              user.sobrenome = user.nome.split(" ").slice(1).join(" ");
+              user.nome = user.nome.split(" ").slice(0, 1).join(" ");
+              setRedirectSso(user);
+            }
           });
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     } catch (e) {
       setLoading(false);
       console.log(e);
-      setFormError("Não foi possível fazer login com esta conta externa. Tente utilizar Email e Senha, ou Cadastre-se.");
+      setFormError(
+        "Não foi possível fazer login com esta conta externa. Tente utilizar Email e Senha, ou Cadastre-se."
+      );
     }
   };
 
-  if(redirectSso !== false){
-    return <Redirect to={{pathname:"/cadastro",state:{ ssoData:redirectSso } }} />;
+  if (redirectSso !== false) {
+    return (
+      <Redirect
+        to={{ pathname: "/cadastro", state: { ssoData: redirectSso } }}
+      />
+    );
   }
 
   if (redirectOnLogin) return <Redirect to="/" />;
@@ -168,7 +177,11 @@ export default function Login() {
           }}
           className="btn btn-lg btn-block btn-danger"
         >
-          <i className="fab fa-google"></i> Login Google
+          {(loading && <i className="fas fa-spinner" />) || (
+            <>
+              <i className="fab fa-google"></i> Login Google
+            </>
+          )}
         </a>
         <a
           href="#"
@@ -177,7 +190,11 @@ export default function Login() {
           }}
           className="btn btn-lg btn-block btn-primary"
         >
-          <i className="fab fa-facebook"></i> Login Facebook
+          {(loading && <i className="fas fa-spinner" />) || (
+            <>
+              <i className="fab fa-facebook"></i> Login Facebook
+            </>
+          )}
         </a>
       </div>
     </div>

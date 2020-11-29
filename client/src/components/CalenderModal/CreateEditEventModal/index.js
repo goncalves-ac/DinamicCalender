@@ -21,7 +21,7 @@ const CreateEditEventModal = ({
     return null;
   };
 
-  const [idEvento, setIdEvento] = useState(eventInfo.idEvento);
+  const [idEvento] = useState(eventInfo.idEvento);
 
   const [title, setTitle] = useState(eventInfo.title || "");
 
@@ -30,7 +30,7 @@ const CreateEditEventModal = ({
   );
 
   const [start, setStart] = useState(parsedDate() || "--:--");
-  const [dateStart, setDateStart] = useState(eventInfo.dateStart);
+  const [dateStart] = useState(eventInfo.dateStart);
   const [duration, setDuration] = useState(eventInfo.duration || "--:--");
   const [description, setDescription] = useState(eventInfo.description || "");
   const [invitedFriends, setInvitedFriends] = useState(

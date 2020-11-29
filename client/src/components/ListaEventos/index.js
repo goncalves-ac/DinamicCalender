@@ -1,5 +1,4 @@
 import React from "react";
-import Loading from "../../pages/Loading";
 import CardEvento from "../CardEvento";
 import "./ListaEvento.css";
 

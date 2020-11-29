@@ -3,7 +3,7 @@ import "./AtualizarSenhaEsquecida.css";
 import Logo from "../../img/logo-default.png";
 import api from "../../api";
 import { AuthContext } from "../../providers/AuthProvider";
-import { Link, Redirect, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect } from "react";
 
 const AtualizarSenhaEsquecida = () => {
@@ -89,7 +89,12 @@ const AtualizarSenhaEsquecida = () => {
   if (!token) {
     return (
       <section className="my-center">
-        <img src={Logo} width="150" className="mb-3" />
+        <img
+          src={Logo}
+          width="150"
+          className="mb-3"
+          alt="Logo Calendário Dinâmico"
+        />
         <div className="my-input-new-password">
           {(formSubmitSuccess && (
             <p className="text-success">
@@ -133,7 +138,12 @@ const AtualizarSenhaEsquecida = () => {
   } else {
     return (
       <section className="my-center">
-        <img src={Logo} width="150" className="mb-3" />
+        <img
+          src={Logo}
+          width="150"
+          className="mb-3"
+          alt="Logo Calendário Dinâmico"
+        />
         <div className="my-input-new-password">
           {(formSubmitSuccess && (
             <p className="text-success">Senha alterada com sucesso.</p>
