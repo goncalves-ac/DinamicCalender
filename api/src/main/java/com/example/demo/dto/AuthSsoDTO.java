@@ -14,6 +14,7 @@ public class AuthSsoDTO {
     private String email;
     private String nome;
     private String uuid;
+    private String avatarUrl;
 
     public String getEmail() {
         return email;
@@ -37,5 +38,13 @@ public class AuthSsoDTO {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 }
