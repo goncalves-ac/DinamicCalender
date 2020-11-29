@@ -26,11 +26,11 @@ O projeto é uma aplicação web com duas funcionalidades principais: marcar eve
 ## Screenshots
 
 <p align="center">
-  <img width="350"src="./.gitassets/PAGINA_INICIAL.png" alt="Landing Page"> 
-  <img width="350" src="./.gitassets/TELA_PERFIL_TIMELINE.png" alt="Timeline">
-  <img width="350" src="./.gitassets/TELA_PERFIL_AMIGOS.png" alt="Amigos">
-  <img width="350" src="./.gitassets/CALENDARIO.png" alt="Calendário">
-  <img width="350" src="./.gitassets/EVENTO.png" alt="Visualização de um evento no calendário">
+  <img height="400"src="./.gitassets/PAGINA_INICIAL.png" alt="Landing Page"> 
+  <img height="400" src="./.gitassets/TELA_PERFIL_TIMELINE.png" alt="Timeline">
+  <img height="400" src="./.gitassets/TELA_PERFIL_AMIGOS.png" alt="Amigos">
+  <img height="400" src="./.gitassets/CALENDARIO.png" alt="Calendário">
+  <img height="400" src="./.gitassets/EVENTO.png" alt="Visualização de um evento no calendário">
 <p>
 
 ## Techs
@@ -63,7 +63,7 @@ As seguintes ferramentas foram utilizadas durante o desenvolvimento do projeto:
 
 ```bash
 ## Clonar o repositório
-git clone https://github.com/carloscastrodev/DinamicCalender
+git clone https://github.com/goncalves-ac/DinamicCalender
 
 ## Acessar o diretório novo criado
 cd DinamicCalender
@@ -87,7 +87,7 @@ yarn start
 
 ## Contato
 
-- Ana Caroline Gonçalves - [goncalves-ac](https://github.com/goncalves-ac) -
+- Ana Caroline Gonçalves - [goncalves-ac](https://github.com/goncalves-ac) - goncalves.ac@outlook.com
 
 - Carlos Castro - [carloscastrodev](http://github.com/carloscastrodev) - contato-carloscastro@hotmail.com
 
