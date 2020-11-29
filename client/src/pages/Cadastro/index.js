@@ -8,25 +8,24 @@ import Cookies from "./Cookies";
 import PoliticaDeDados from "./PoliticaDeDados";
 import TermosDeUso from "./TermosDeUso";
 
-
-
 export default function Cadastro(props) {
-
   var user = {
     nome: "",
     sobrenome: "",
-    email: ""
-  }
-  try{
+    email: "",
+  };
+  try {
     user.nome = props.location.state.ssoData.nome;
     user.sobrenome = props.location.state.ssoData.sobrenome;
     user.email = props.location.state.ssoData.email;
-  }catch (e) { }
+  } catch (e) {}
+
+  const externalAvatarUrl = props.location.state.ssoData.avatarUrl;
 
   const [nome, setNome] = useState(user.nome);
-  const [sobrenome, setSobrenome] = useState( user.sobrenome);
+  const [sobrenome, setSobrenome] = useState(user.sobrenome);
   const [nascimento, setNascimento] = useState("");
-  const [email, setEmail] = useState( user.email);
+  const [email, setEmail] = useState(user.email);
   const [senha, setSenha] = useState("");
   const [genero, setGenero] = useState("");
   const [formError, setFormError] = useState(null);
@@ -59,6 +58,7 @@ export default function Cadastro(props) {
         email,
         senha,
         genero,
+        avatarUrl: externalAvatarUrl || null,
       });
       setTimeout(() => {
         setLoading(false);
