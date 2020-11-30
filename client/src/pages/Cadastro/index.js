@@ -118,7 +118,7 @@ export default function Cadastro(props) {
         id="container-base-cadastro"
       >
         <div className="align-self-center container-md text-center col-lg-5">
-          <form className="form-signin" onSubmit={handleFormSubmit}>
+          <form className="form-signin" onSubmit={handleFormSubmit} autoComplete="off">
             <img className="mb-3" src={Logo_Black} alt="" width="80" />
             <h2 className="h4 mb-1 font-weight-normal">Cadastro</h2>
             <p className="mb-0 text-danger">{formError}</p>

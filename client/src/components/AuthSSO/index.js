@@ -3,6 +3,7 @@ import firebase from "firebase";
 export const authMethods = {
   GOOGLE: "google",
   FACEBOOK: "facebook",
+  GITHUB: "github"
 };
 
 export const providerObject = (provider) => {
@@ -11,6 +12,8 @@ export const providerObject = (provider) => {
       return new firebase.auth.GoogleAuthProvider();
     case authMethods.FACEBOOK:
       return new firebase.auth.FacebookAuthProvider();
+    case authMethods.GITHUB:
+      return new firebase.auth.GithubAuthProvider();
     default:
       return null;
   }

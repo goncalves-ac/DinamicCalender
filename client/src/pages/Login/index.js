@@ -111,7 +111,7 @@ export default function Login() {
   return (
     <div className="row no-gutters my-bg-orange-0" id="container-base-login">
       <div className="align-self-center container-md text-center col-lg-4 col-md-6 col-sm-12">
-        <form className="form-signin" onSubmit={handleLoginSubmit}>
+        <form className="form-signin" onSubmit={handleLoginSubmit} >
           <img className="mb-3" src={Logo_Black} alt="" width="80" />
           <h1 className="h4 mb-2 font-weight-normal">Calendário Dinâmico</h1>
           <p className="mb-0 text-danger">{formError}</p>
@@ -185,15 +185,16 @@ export default function Login() {
           )}
         </a>
         <a
+            Style="background-color:#24292E !important; border-color: #000000 !important;"
           href="#"
           onClick={() => {
-            authAux(authMethods.FACEBOOK);
+            authAux(authMethods.GITHUB);
           }}
           className="btn btn-lg btn-block btn-primary"
         >
           {(loading && <i className="fas fa-spinner" />) || (
             <>
-              <i className="fab fa-facebook"></i> Login Facebook
+              <i className="fab fa-github-alt"></i> Login GitHub
             </>
           )}
         </a>
