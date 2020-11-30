@@ -33,7 +33,7 @@ const FriendCard = ({ friend, mode, uninviteCallback, status }) => {
           src={friend.avatarUrl || AvatarPlaceholder}
           alt={`Avatar do Usuário`}
         />
-        <h3 className="carousel-card-user-name">{friend.nome}</h3>
+        <h3 className="carousel-card-user-name">{friend.nome.split(" ").slice(0, 1).join(" ")}</h3>
         <Link
           className="carousel-check-profile-btn"
           to={`/usuario/${friend.idUsuario}`}
