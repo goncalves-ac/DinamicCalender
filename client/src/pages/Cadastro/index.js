@@ -13,14 +13,20 @@ export default function Cadastro(props) {
     nome: "",
     sobrenome: "",
     email: "",
+    externalAvatarUrl: null
   };
+
+  try{
+    user.externalAvatarUrl = props.location.state.ssoData.avatarUrl;
+  } catch (e) {}
+
   try {
     user.nome = props.location.state.ssoData.nome;
     user.sobrenome = props.location.state.ssoData.sobrenome;
     user.email = props.location.state.ssoData.email;
   } catch (e) {}
 
-  const externalAvatarUrl = props.location.state.ssoData.avatarUrl;
+  const externalAvatarUrl = user.externalAvatarUrl;
 
   const [nome, setNome] = useState(user.nome);
   const [sobrenome, setSobrenome] = useState(user.sobrenome);
